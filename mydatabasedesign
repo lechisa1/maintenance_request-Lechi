@@ -1,0 +1,113 @@
+// Enhanced Institute Maintenance System with Dynamic Roles
+// Designed for Laravel + MySQL
+Table departments {
+  id int [pk, increment]
+  name varchar
+  description text [null]
+  created_at timestamp
+  updated_at timestamp
+}
+Table users {
+  id int [pk, increment]
+  name varchar
+  email varchar [unique]
+  email_verified_at timestamp [null]
+  password varchar
+  remember_token varchar [null]
+  phone varchar [null]
+department_id int [ref: > departments.id, null]
+  specialization text [null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table roles {
+  id int [pk, increment]
+  name varchar [unique, note: "'admin','director','technician','employer'"]
+  description varchar [null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table user_roles {
+  user_id int [ref: > users.id]
+  role_id int [ref: > roles.id]
+  created_at timestamp
+  updated_at timestamp
+  indexes {
+    (user_id, role_id) [pk]
+  }
+}
+
+Table maintenance_requests {
+  id int [pk, increment]
+  user_id int [ref: > users.id, note: "Employer who made the request"]
+  title varchar
+  description text
+  location varchar
+  priority varchar [note: "'low','medium','high','emergency'"]
+  status varchar [note: "'pending','assigned','in_progress','completed','rejected'"]
+  requested_at timestamp [default: `now()`]
+  completed_at timestamp [null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table assignments {
+  id int [pk, increment]
+  request_id int [ref: > maintenance_requests.id]
+  director_id int [ref: > users.id]
+  technician_id int [ref: > users.id]
+  director_notes text [null]
+  assigned_at timestamp [default: `now()`]
+  expected_completion_date timestamp [null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table work_logs {
+  id int [pk, increment]
+  request_id int [ref: > maintenance_requests.id]
+  technician_id int [ref: > users.id]
+  work_done text
+  materials_used text [null]
+  time_spent_minutes int [null]
+  log_date timestamp [default: `now()`]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table request_updates {
+  id int [pk, increment]
+  request_id int [ref: > maintenance_requests.id]
+  user_id int [ref: > users.id]
+  update_text text
+  update_type varchar [note: "'status_change','note', etc."]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table categories {
+  id int [pk, increment]
+  name varchar
+  description text [null]
+  created_at timestamp
+  updated_at timestamp
+}
+Table attachments {
+  id int [pk, increment]
+  request_id int [ref: > maintenance_requests.id]
+  user_id int [ref: > users.id]
+  file_path varchar
+  file_type varchar
+  original_name varchar
+  created_at timestamp
+  updated_at timestamp
+}
+Table maintenance_request_category {
+  maintenance_request_id int [ref: > maintenance_requests.id]
+  category_id int [ref: > categories.id]
+  indexes {
+    (maintenance_request_id, category_id) [pk]
+  }
+}

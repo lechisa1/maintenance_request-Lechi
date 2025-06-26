@@ -1,0 +1,318 @@
+<header id="header" class="sticky-top header">
+    <div class="header-nav d-flex align-items-center justify-content-between">
+        <!-- Left Section -->
+        <div class="d-flex align-items-center">
+            <button id="sidebarToggle" class="btn btn-link text-dark me-2" aria-label="Toggle sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+
+        <!-- Right Section -->
+        <div class="d-flex align-items-center">
+            <!-- Search -->
+            <div class="search-bar me-3">
+                <i class="bi bi-search"></i>
+                <input type="text" class="form-control ps-4" placeholder="Search..." aria-label="Search">
+            </div>
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" id="successAlert" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" role="alert">
+                    @foreach ($errors->all() as $error)
+                        {{ $error }}<br>
+                    @endforeach
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <!-- Notifications -->
+            <div class="dropdown me-3">
+                <a class="btn btn-link text-dark position-relative" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell" style="font-size: 20px;"></i>
+                    @if (auth()->user()->unreadNotifications->count() > 0)
+                        <span class="badge bg-danger rounded-circle ms-1">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                        </span>
+                    @endif
+                </a>
+                <div class="dropdown-menu dropdown-menu-end py-0 mt-2 notification-dropdown-menu" role="menu"
+                    aria-label="Notifications menu" style="margin-left:30%">
+
+
+                    <div class="dropdown-header bg-light py-2">
+                        <strong>Notifications</strong>
+                        @if (auth()->user()->unreadNotifications->count() > 0)
+                            {{-- <a href="{{ route('notifications.markAllAsRead') }}" class="float-end small">Mark all as
+                                read</a> --}}
+                        @endif
+                    </div>
+
+                    @forelse(auth()->user()->unreadNotifications as $notification)
+                        <a class="dropdown-item py-2" href="{{ route('notifications.redirect', $notification->id) }}">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="bi bi-envelope-fill text-danger"></i>
+                                </div>
+                                <div>
+                                    <div>{{ $notification->data['message'] ?? 'New Notification' }}</div>
+                                    <div class="text-muted small">{{ $notification->created_at->diffForHumans() }}</div>
+                                </div>
+                            </div>
+                        </a>
+                    @empty
+                        <div class="dropdown-item py-2 text-muted text-center">
+                            No unread notifications
+                        </div>
+                    @endforelse
+
+
+
+                    @if (auth()->user()->readNotifications->count() > 0)
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header bg-light py-2">
+                            <strong>Earlier</strong>
+                        </div>
+                        @foreach (auth()->user()->readNotifications->take(3) as $notification)
+                            <a class="dropdown-item py-2" href="#">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="bi bi-envelope-open text-success"></i>
+                                    </div>
+                                    <div>
+                                        <div>{{ $notification->data['message'] ?? 'Notification' }}</div>
+                                        <div class="text-muted small">{{ $notification->created_at->diffForHumans() }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+
+            <div class="nav-item-divider d-none d-lg-flex"></div>
+
+            <!-- User Profile -->
+            <div class="dropdown">
+                <a class="btn btn-link text-dark dropdown-toggle d-flex align-items-center" href="#"
+                    role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;">
+                    <div class="user-avatar me-2">
+                        <img src="{{ auth()->user()->avatar_url ?? 'https://static.vecteezy.com/system/resources/previews/006/487/917/original/man-avatar-icon-free-vector.jpg' }}"
+                            alt="{{ auth()->user()->name }}" class="profile-image" style="text-decoration:none">
+                    </div>
+                    <span class="d-none d-lg-inline" style="text-decoration:none">{{ auth()->user()->name }}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end py-0 mt-2" role="menu" aria-label="Notifications menu">
+
+                    <div class="dropdown-header bg-light py-2 d-flex align-items-center">
+                        <div class="user-avatar me-2">
+                            <img src="{{ auth()->user()->avatar_url ?? 'https://static.vecteezy.com/system/resources/previews/006/487/917/original/man-avatar-icon-free-vector.jpg' }}"
+                                alt="{{ auth()->user()->name }}" class="profile-image"
+                                style="text-decoration-line: none">
+                        </div>
+                        <div>
+                            <strong>{{ auth()->user()->name }}</strong>
+                            <div class="text-muted small">{{ auth()->user()->email }}</div>
+                        </div>
+                    </div>
+
+                    <a class="dropdown-item py-2" href="{{ route('profile.show') }}">
+                        <i class="bi bi-person me-2"></i> Profile
+                    </a>
+                    <a class="dropdown-item py-2" href="#" id="toggleThemeBtn">
+                        <i class="bi bi-moon me-2"></i> Change Theme
+                    </a>
+
+                    <!-- Theme Color Options -->
+                    <div id="themeOptions" class="px-3 pb-2 d-flex flex-wrap gap-2" style="display: none;">
+                        <!-- Light -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#ffffff" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #ffffff;" title="Light"></span> Light
+                        </label>
+
+                        <!-- Dark -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#121212" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #121212;" title="Dark"></span> Dark
+                        </label>
+
+                        <!-- Blue -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#1E90FF" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #1E90FF;" title="Dodger Blue"></span>
+                            Blue
+                        </label>
+
+                        <!-- Green -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#198754" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #198754;"
+                                title="Emerald Green"></span> Green
+                        </label>
+
+                        <!-- Purple -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#6f42c1" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #6f42c1;" title="Purple"></span>
+                            Purple
+                        </label>
+
+                        <!-- Orange -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#fd7e14" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #fd7e14;" title="Orange"></span>
+                            Orange
+                        </label>
+
+                        <!-- Teal -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#20c997" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #20c997;" title="Teal"></span> Teal
+                        </label>
+
+                        <!-- Pink -->
+                        <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value="#e83e8c" class="form-check-input">
+                            <span class="color-swatch" style="background-color: #e83e8c;" title="Pink"></span> Pink
+                        </label>
+                    </div>
+
+
+
+
+                    <a class="dropdown-item py-2" href="#">
+                        <i class="bi bi-list-check me-2"></i> Activity Log
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item py-2">
+                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-dismiss alerts after 3 seconds
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        if (successAlert) {
+            setTimeout(() => {
+                const alert = new bootstrap.Alert(successAlert);
+                alert.close();
+            }, 3000);
+        }
+
+        if (errorAlert) {
+            setTimeout(() => {
+                const alert = new bootstrap.Alert(errorAlert);
+                alert.close();
+            }, 3000);
+        }
+
+        // Sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        let debounceTimeout;
+
+        const toggleSidebar = () => {
+            document.body.classList.toggle('sidebar-collapsed');
+
+            const icon = sidebarToggle.querySelector('i');
+            icon.classList.toggle('bi-list');
+            icon.classList.toggle('bi-justify');
+
+            localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-collapsed'));
+        };
+
+        sidebarToggle.addEventListener('click', () => {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(toggleSidebar, 100);
+        });
+
+        // Initialize sidebar state
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            document.body.classList.add('sidebar-collapsed');
+            const icon = sidebarToggle.querySelector('i');
+            icon.classList.replace('bi-list', 'bi-justify');
+        }
+
+        // Pusher notifications
+        @if (config('broadcasting.default') === 'pusher')
+            Echo.private(`App.Models.User.{{ auth()->id() }}`)
+                .notification((notification) => {
+                    window.dispatchEvent(new Event('new-notification'));
+                });
+        @endif
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+        const themeOptions = document.getElementById('themeOptions');
+
+        const headers = document.querySelectorAll('.header');
+        const sidebars = document.querySelectorAll('.sidebar');
+
+        toggleThemeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            themeOptions.style.display = themeOptions.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.querySelectorAll('input[name="themeColor"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const selectedColor = this.value;
+
+
+
+                // Change header background only
+                headers.forEach(header => {
+                    header.style.backgroundColor = selectedColor;
+                    header.classList.remove('bg-light', 'bg-dark');
+                });
+
+                // Change sidebar background only
+                sidebars.forEach(sidebar => {
+                    sidebar.style.backgroundColor = selectedColor;
+                    sidebar.classList.remove('bg-light', 'bg-dark');
+                });
+
+                // Save selected color
+                localStorage.setItem('themeColor', selectedColor);
+            });
+        });
+
+        // Load theme color from localStorage
+        const savedColor = localStorage.getItem('themeColor');
+        if (savedColor) {
+            headers.forEach(header => {
+                header.style.backgroundColor = savedColor;
+                header.classList.remove('bg-light', 'bg-dark');
+            });
+
+            sidebars.forEach(sidebar => {
+                sidebar.style.backgroundColor = savedColor;
+                sidebar.classList.remove('bg-light', 'bg-dark');
+            });
+
+            const selectedInput = document.querySelector(`input[name="themeColor"][value="${savedColor}"]`);
+            if (selectedInput) {
+                selectedInput.checked = true;
+            }
+        }
+    });
+</script>
