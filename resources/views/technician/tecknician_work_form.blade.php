@@ -1,63 +1,4 @@
-{{-- @extends('admin.layout.app')
-@section('title', 'My Assigned Requests')
 
-@section('content')
-    @if ($request->status === 'assigned' && auth()->user()->id === $request->assignment->technician_id)
-    <div class="card mt-4">
-        <div class="card-header bg-white">
-            <h5>Complete Task</h5>
-        </div>
-        <div class="card-body">
-            <form method="POST" action="{{ route('tecknician_work_save', $request->id) }}">
-                @csrf
-
-                <div class="mb-3">
-                    <label class="form-label">Work Performed*</label>
-                    <textarea class="form-control @error('work_done') is-invalid @enderror" name="work_done" rows="4" required>{{ old('work_done') }}</textarea>
-                    @error('work_done')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Materials Used</label>
-                        <input type="text" class="form-control @error('materials_used') is-invalid @enderror"
-                            name="materials_used" value="{{ old('materials_used') }}">
-                        @error('materials_used')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Time Spent (minutes)*</label>
-                        <input type="number" class="form-control @error('time_spent') is-invalid @enderror"
-                            name="time_spent" value="{{ old('time_spent') }}" min="1" required>
-                        @error('time_spent')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Status</label>
-                    <select class="form-control @error('Status') is-invalid @enderror" name="Status" id="status">
-                        <option selected>Status</option>
-                        <option value="in_progress">Inprogress</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                    @error('Status')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <button type="submit" class="btn btn-success w-100">
-                    <i class="fas fa-check-circle me-2"></i> Mark as Completed
-                </button>
-            </form>
-        </div>
-    </div>
-    {{-- @endif --}}
-{{-- @endsection  --}}
 @extends('technician.dashboard.layout')
 @section('title', 'My Assigned Requests')
 
@@ -72,15 +13,7 @@
             </div>
         </div>
     </div>
-    {{-- <div class="card shadow-sm" style="margin-top: 1%">
-        <div class="alert alert-info mb-4">
-            <div class="d-flex">
-                <strong>Request Details:</strong> {{ $request->title }}<br>
-                <strong style="margin-left: 10%">Department:</strong> {{ $request->user->department->name }}<br>
-            </div>
 
-        </div>
-    </div> --}}
     <div class="card-body"style="margin-top:3%">
         <form method="POST" action="{{ route('tecknician_work_save', $request->id) }}">
             @csrf

@@ -71,7 +71,11 @@ class TechnicianController extends Controller
 
     public function show(MaintenanceRequest $request)
     {
-
+                    $isDirector = User::where('id', $value)
+                        ->whereHas('roles', function ($q) {
+                            $q->where('name', 'director');
+                        })
+                        ->exists();
         $request->load([
             'user',
             'categories',
@@ -103,7 +107,8 @@ class TechnicianController extends Controller
 
         return view('technician.requests.show', [
             'request' => $request,
-            'technicians' => $technicians
+            'technicians' => $technicians,
+            'isDirector'=>$isDirector
         ]);
     }
     public function assignedRequests()
@@ -149,6 +154,7 @@ class TechnicianController extends Controller
                 'work_done' => $validated['work_done'],
                 'materials_used' => $validated['materials_used'] ?? $workLog->materials_used, // Keep existing if not provided
                 'time_spent_minutes' => $validated['time_spent_minutes'],
+                'completion_notes'=> $validated['completion_notes']
             ]);
         } else {
             // Create a new WorkLog
@@ -157,6 +163,7 @@ class TechnicianController extends Controller
                 'work_done' => $validated['work_done'],
                 'materials_used' => $validated['materials_used'] ?? null,
                 'time_spent_minutes' => $validated['time_spent_minutes'],
+                'completion_notes'=> $validated['completion_notes']
             ]);
         }
 

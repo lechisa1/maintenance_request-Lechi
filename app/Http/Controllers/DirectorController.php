@@ -81,15 +81,15 @@ class DirectorController extends Controller
         $director = auth()->user();
         $departmentId = $director->department_id;
 
-       
+
         $departmentRequests = MaintenanceRequest::whereHas('user', function ($query) use ($departmentId) {
             $query->where('department_id', $departmentId);
         });
 
-   
+
         $maintenances = $departmentRequests->latest()->paginate(5);
 
-      
+
         $total = (clone $departmentRequests)->count();
         $completed = (clone $departmentRequests)->where('status', 'completed')->count();
         $pending = (clone $departmentRequests)->where('status', 'pending')->count();
@@ -97,7 +97,7 @@ class DirectorController extends Controller
         $notFixed = (clone $departmentRequests)->where('status', 'not_fixed')->count();
         $rejected = (clone $departmentRequests)->where('status', 'rejected')->count();
         $assigned = (clone $departmentRequests)->where('status', 'assigned')->count();
-     
+
         $statusCounts = (clone $departmentRequests)
             ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
@@ -321,6 +321,7 @@ class DirectorController extends Controller
             'updates.user'
         ])->findOrFail($id);
 
+        
         return view('maintenance_requests.show', compact('maintenanceRequest'));
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
     $table->text('work_done');
     $table->text('materials_used')->nullable();
     $table->integer('time_spent_minutes')->nullable();
+    $table->text('completion_notes')->nullable();
     $table->timestamp('log_date')->useCurrent();
     $table->timestamps();
         });

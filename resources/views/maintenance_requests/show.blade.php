@@ -131,7 +131,7 @@
 
 
                                 <li class="list-group-item"><strong>Activity Performed: </strong>{{ $log->work_done }}</li>
-                                @if ($log->materials_used)
+                                @if ($log->materials_used )
                                     <li class="list-group-item"><strong>Material used: </strong>{{ $log->materials_used }}
                                     </li>
                                 @endif

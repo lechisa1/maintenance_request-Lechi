@@ -100,6 +100,9 @@ Route::delete(
     '/categories/{category}',
     [MaintenanceCategoryController::class, 'destroy']
 )->name('categories.destroy');
+
+    Route::get('/requests/detail/show/{id}', [DirectorController::class, 'show'])->name('requests.show');
+
 Route::middleware('auth', 'role:director')->group(function () {
     Route::get('director/dashboard', [DirectorController::class, 'directorDashboard'])->name('director.dashboard');
 
@@ -116,7 +119,7 @@ Route::middleware('auth', 'role:director')->group(function () {
     Route::get('maintenece/assigned', [DirectorController::class, 'getAssignedRequests'])->name('assigned_maintenance');
     // Show the assignment form
     Route::get('/requests/{id}/assign', [DirectorController::class, 'showAssignForm'])->name('requests.showAssignForm');
-    Route::get('/requests/{id}', [DirectorController::class, 'show'])->name('requests.show');
+
     Route::get('/item/index', [ItemController::class, 'itemIndex'])->name('item_index');
     Route::get('/item/registeration', [ItemController::class, 'itemRegisterationForm'])->name('item_registeration_form');
     Route::post('/item/register/save', [ItemController::class, 'itemRegisteration'])->name('item_store');

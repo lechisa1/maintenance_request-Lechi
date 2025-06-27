@@ -12,6 +12,7 @@ class WorkLog extends Model
         'technician_id',
         'work_done',
         'materials_used',
+        'completion_notes',
         'time_spent_minutes',
         'log_date'
     ];
