@@ -1,6 +1,6 @@
 @extends('director.layout.layout')
 @section('content')
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-4 card bg-white mt-5 shadow-2xl">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center ">
                 <h1 class="h3 mb-0 text-gray-800 me-3 ">Directors Dashboard</h1>
@@ -221,12 +221,6 @@
 
     </div>
 
-
-    <!-- Footer -->
-
-
-
-
     <style>
         .text-purple {
             color: #6610f2 !important;
@@ -327,7 +321,14 @@
 
 
         <!-- Charts -->
+        <div class="container-fluid px-4 card bg-white mt-5 shadow-2xl">
+            <div class="row">
+                <div class="col-md-12 card-header bg-gray-900 text-primary rounded-top-4 mb-5">
+                    <h2 class="text-center mb-4">Request Status Overview</h2>
+                </div>
+            </div>
         <div class="row">
+            
             <!-- Pie Chart -->
             <div class="col-md-4 d-flex justify-content-center mb-3">
                 <canvas id="statusPieChart" width="220" height="220" style="max-width: 220px;"></canvas>
@@ -345,7 +346,7 @@
             </div>
 
         </div>
-
+</div>
     </div>
 
 

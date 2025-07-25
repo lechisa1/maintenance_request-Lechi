@@ -50,10 +50,10 @@
 
                     {{-- Department --}}
                     <div class="col-md-4">
-                        <label for="department_id" class="form-label fw-semibold">Department</label>
+                        <label for="department_id" class="form-label fw-semibold">Division</label>
                         <select name="department_id" id="department_id"
                             class="form-select @error('department_id') is-invalid @enderror">
-                            <option value="" disabled selected>Select Department</option>
+                            <option value="" disabled selected>Select Division</option>
                             @foreach ($departments as $department)
                                 <option value="{{ $department->id }}"
                                     {{ old('department_id', $user->department_id) == $department->id ? 'selected' : '' }}>

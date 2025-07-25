@@ -107,11 +107,12 @@ public function supervisorRejectRequest(Request $request, $id)
     $req = MaintenanceRequest::findOrFail($id);
     $req->supervisor_status = 'rejected';
     $req->rejection_reason = $request->reason;
+    $req->rejected_by=auth()->user()->id;
     $req->save();
     // Notify the user
     $req->user->notify(new \App\Notifications\MaintenanceRequestRejected($req));
 
-    return back()->with('error', 'Request rejected with reason.');
+    return back()->with('success', 'Request rejected with reason.');
 }
 
   //this work fine 

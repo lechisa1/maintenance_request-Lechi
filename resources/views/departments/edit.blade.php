@@ -1,8 +1,8 @@
 @extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : (Auth::user()->roles->first()->name === 'employer' ? 'employeers.dashboard.layout' : 'employeers.dashboard.layout'))))
 @section('content')
     <div class="container py-4">
-        <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-header bg-success text-white rounded-top-4">
+        <div class="card shadow-lg border-0 rounded-4 mt-3">
+            <div class="card-header bg-gray-900 text-primary rounded-top-4 ">
                 <h4 class="mb-0 text-center fw-semibold">
                     <i class="bi bi-building-add me-2"></i> Edit Department
                 </h4>

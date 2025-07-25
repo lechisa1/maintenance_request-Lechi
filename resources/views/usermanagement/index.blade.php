@@ -23,7 +23,7 @@
                             <th>#</th>
                             <th>User Name</th>
                             <th>Email</th>
-                            <th>Department</th>
+                            <th>Division</th>
                             <th>Phone</th>
                             <th>Supervisor</th>
                             <th>Role</th>

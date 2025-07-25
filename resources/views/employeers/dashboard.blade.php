@@ -1,6 +1,6 @@
 @extends('employeers.dashboard.layout')
 @section('content')
-    <div class="container-fluid px-4 ">
+    <div class="container-fluid px-4 card bg-white mt-5 ">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center ">
                 <h1 class="h3 mb-0 text-gray-800 me-3 ">Employers Dashboard</h1>
@@ -121,7 +121,7 @@
         <div class="row">
             <div class="col-xl-6 mb-4">
                 <div class="card shadow">
-                    <div class="card-header text-primary fw-bold">
+                    <div class="card-header text-primary fw-bold text-center">
                         Request Status - Pie Chart
                     </div>
                     <div class="card-body">
@@ -132,7 +132,7 @@
 
             <div class="col-xl-6 mb-4">
                 <div class="card shadow">
-                    <div class="card-header text-primary fw-bold">
+                    <div class="card-header text-primary fw-bold text-center">
                         Request Status - Bar Chart
                     </div>
                     <div class="card-body">

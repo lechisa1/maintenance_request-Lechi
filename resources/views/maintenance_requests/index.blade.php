@@ -82,7 +82,7 @@
                                         </span>
                                     </td>
                                     <td class="d-flex">
-                                        @if ($request->user_feedback === 'pending' && $request->status === 'pending')
+                                        @if ($request->user_feedback === 'pending' && $request->status === 'pending' && $request->supervisor_status==='pending')
                                             <a href="{{ route('requests.edit', $request->id) }}"
                                                 class="btn btn-sm btn-outline-warning me-1">
                                                 <i class="bi bi-pencil-square"></i>

@@ -1,12 +1,12 @@
 @extends('admin.layout.app')
 
 @section('content')
-<div class="container py-4">
+<div class="container py-4 card bg-white mt-5 shadow-2xl">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card shadow-sm border-0 rounded-lg">
                 <!-- Card Header -->
-                <div class="card-header bg-success text-white py-3">
+                <div class="card-header bg-gray-800  py-3 text-primary">
                     <h3 class="mb-0 text-center">
                         <i class="bi bi-person-badge me-2"></i>Create New Role
                     </h3>

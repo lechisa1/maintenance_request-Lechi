@@ -6,9 +6,9 @@
 )
 
 @section('content')
-<div class="container py-4">
-    <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-header bg-success text-white rounded-top-4">
+<div class="container py-4 ">
+    <div class="card shadow-lg border-0 rounded-4 mt-3">
+        <div class="card-header bg-gray-900 text-primary rounded-top-4">
             <h4 class="mb-0 text-center fw-semibold">
                 <i class="bi bi-building-add me-2"></i> Add New Department
             </h4>

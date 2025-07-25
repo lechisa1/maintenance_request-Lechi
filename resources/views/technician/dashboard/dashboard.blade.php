@@ -1,6 +1,6 @@
 @extends('technician.dashboard.layout')
 @section('content')
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-4 mt-3 card bg-white">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center ">
                 <h1 class="h3 mb-0 text-gray-800 me-3 ">Technician Dashboard</h1>
@@ -78,28 +78,12 @@
                 </div>
             </div>
 
-            {{-- <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning h-100">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col me-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Inprogress Requests</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="bi bi-comments fs-2 text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
         <div class="row">
             <!-- Bar Chart (Weekly Requests) -->
             <div class="col-md-6 mb-4">
                 <div class="card">
-                    <div class="card-header">Requests This Week</div>
+                    <div class="card-header text-center">Requests This Week</div>
                     <div class="card-body">
                         <canvas id="weeklyBarChart"></canvas>
                     </div>
@@ -109,7 +93,7 @@
             <!-- Pie Chart (Status Breakdown) -->
             <div class="col-md-6 mb-4">
                 <div class="card">
-                    <div class="card-header">Requested Status</div>
+                    <div class="card-header text-center bg-green">Requested Status</div>
                     <div class="card-body" style="height: 300px;">
                         <canvas id="statusPieChart" style="max-height: 100%; max-width: 100%;"></canvas>
                     </div>

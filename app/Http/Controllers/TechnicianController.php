@@ -81,6 +81,9 @@ public function show(MaintenanceRequest $request)
         'workLogs.technician',
         'item',
         'item.categories',
+        'user.reportsTo',
+        'user.jobPosition',
+        'rejectedBy',
         'attachments',
         'updates.user'
     ]);

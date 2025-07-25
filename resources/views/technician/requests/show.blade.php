@@ -259,7 +259,23 @@
                                 <p class="text-muted small mb-0">Request was submitted by {{ $request->user->name }}</p>
                             </div>
                         </div>
-                        
+                        {{-- here if request rejected by supervisor --}}
+                        @if ($request->rejection_reason)
+                        <div class="timeline-item mb-4">
+                            <div class="timeline-badge bg-info"></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1 fw-semibold">Rejected By </h6>
+                                    <small class="text-muted">{{ $request->rejectedBy->name }}</small>
+                                </div>
+                                <p class="text-muted small mb-0">
+                                    Reason {{ $request->rejection_reason}} 
+                                </p>
+                            </div>
+                        </div>
+                        @endif
+
+
                         <!-- Assigned -->
                         @if ($request->latestAssignment)
                         <div class="timeline-item mb-4">

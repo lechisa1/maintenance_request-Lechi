@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Page Content -->
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-4  bg-white mt-5">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center ">
                 <h1 class="h3 mb-0 text-gray-800 me-3 ">Admin Dashboard</h1>
@@ -27,10 +27,11 @@
         </div>
 
         <!-- Stats Cards -->
+        <div class=" bg-white">
         <div class="row">
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary h-100">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <div class="row no-gutters align-items-center">
                             <div class="col me-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
@@ -64,49 +65,73 @@
 
 
         </div>
-
+</div>
 
         <!-- Charts Row -->
 
 
         <!-- Required CSS -->
-        <style>
-            /* Expand/collapse row styling */
-            td.details-control {
-                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>') no-repeat center center;
-                cursor: pointer;
-                width: 30px;
-            }
+<style>
+    body {
+        background-color: #f8f9fc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-            tr.shown td.details-control {
-                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/></svg>') no-repeat center center;
-            }
+    .card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-            /* DataTables styling */
-            .dataTables_wrapper .dataTables_paginate .paginate_button {
-                padding: 0.25rem 0.5rem;
-                margin-left: 2px;
-            }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
 
-            .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-                background: var(--primary-color);
-                color: white !important;
-                border: none;
-            }
-        </style>
+    .h3, h4 {
+        font-weight: 600;
+        color: #343a40;
+    }
+
+    #date-time {
+        font-size: 16px;
+    }
+
+    .badge {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        border-radius: 50px;
+        padding: 8px 20px;
+    }
+
+    canvas {
+        max-height: 400px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 0.5rem !important;
+        background-color: #e9ecef;
+        border: none;
+        margin: 2px;
+        padding: 6px 12px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #0d6efd;
+        color: #fff !important;
+    }
+</style>
+
 
         <!-- Required JavaScript -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     </div>
-
-
-    <!-- Footer -->
-
-
-
-
 
     <script>
         // Toggle sidebar
@@ -132,34 +157,49 @@
             });
     </script>
     </body>
+ 
     <div class="container mt-5">
+        <div class="card bg-white m-3">
         <h4 class="text-center">Users per Division</h4>
-        <canvas id="usersChart"></canvas>
+        <div class="m-5">
+            <canvas id="usersChart"></canvas></div>
+        </div>
     </div>
 
     <script>
         const ctx = document.getElementById('usersChart').getContext('2d');
-        const usersChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: {!! json_encode($usersPerDepartment->pluck('name')) !!},
-                datasets: [{
-                    label: 'Number of Users',
-                    data: {!! json_encode($usersPerDepartment->pluck('users_count')) !!},
-                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+const usersChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($usersPerDepartment->pluck('name')) !!},
+        datasets: [{
+            label: 'Users',
+            data: {!! json_encode($usersPerDepartment->pluck('users_count')) !!},
+            backgroundColor: [
+                '#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#20c997', '#fd7e14'
+            ],
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
                 }
             }
-        });
+        }
+    }
+});
+
     </script>
     <script>
         function updateDateTime() {

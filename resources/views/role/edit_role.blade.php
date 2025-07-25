@@ -1,7 +1,7 @@
 @extends('admin.layout.app')
 
 @section('content')
-<div class="container py-4">
+<div class="container py-4 card bg-white mt-5 shadow-2xl">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card shadow-sm border-0">
