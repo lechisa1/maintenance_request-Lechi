@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use App\Models\MaintenanceRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Attachment;
 use App\Notifications\CompletionRejectedNotification;
 use App\Notifications\RequestAcceptedByUserNotification;
 
@@ -36,65 +37,222 @@ class MaintenanceRequestController extends Controller
         $items = Item::all();
         return view('maintenance_requests.create', compact('categories', 'items'));
     }
+    public function addSupervisorLetter()
+{
+    $user = Auth::user();
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
+    // Fetch the ID of the "hardware replacement" category
+    $hardwareCategory = Category::where('name', 'Hardware Replecement')->first();
 
-            'item_id' => 'required|exists:items,id',
-            'description' => 'required|string',
+    // Skip if not found
+    if (!$hardwareCategory) {
+        return redirect()->back()->with('error', 'Hardware replacement category not found.');
+    }
 
-            'priority' => 'required|in:low,medium,high,emergency',
-            'categories' => 'nullable|array',
-            'attachments.*' => 'file|max:2048|mimes:jpg,jpeg,png,pdf,doc,docx',
-        ]);
-        $randomId = rand(10000, 99999);
+    // Fetch requests where:
+    // - category is "hardware replacement" (via pivot)
+    // - user reports to this supervisor
+    // - status is "awaiting_supervisor_letter"
+    $requests = MaintenanceRequest::with('categories')->where('status', 'pending')
+        ->whereHas('categories', function ($q) use ($hardwareCategory) {
+            $q->where('category_id', $hardwareCategory->id);
+        })
+        ->whereHas('user', function ($q) use ($user) {
+            $q->where('reports_to', $user->id);
+        })
+        ->with('user.department')
+        ->get();
 
-        $ticketNumber = 'REQ-' . now()->format('Ymd') . '-' . auth()->id() . '-' . mt_rand(1000, 9999);
-        $maintenanceRequest = auth()->user()->maintenanceRequests()->create([
+    return view('supervisor_requests', compact('requests'));
+}
 
-            'item_id' => $validated['item_id'],
-            'description' => $validated['description'],
+public function approveAndForward(Request $request, $id)
+{
+    $request->validate([
+        'letter' => 'required|file|mimes:pdf,docx|max:2048',
+    ]);
 
-            'priority' => $validated['priority'],
-            'status' => 'pending',
-            'ticket_number' => $randomId,
-        ]);
+    $req = MaintenanceRequest::findOrFail($id);
 
-        if (isset($validated['categories'])) {
+    $file = $request->file('letter');
+    $path = $file->store('letters', 'public');
 
-            $selectedCategories = array_diff($validated['categories'], ['unknown']);
+    // Save attachment
+    Attachment::create([
+        'maintenance_request_id' => $req->id,
+        'user_id' => auth()->id(),
+        'file_path' => $path,
+        'file_type' => $file->getMimeType(),
+        'original_name' => $file->getClientOriginalName(),
+    ]);
 
-            $maintenanceRequest->categories()->sync($selectedCategories);
+    // Update request status
+    $req->supervisor_status = 'approved';
+    $req->save();
+        $directors = \App\Models\User::whereHas('roles', function ($query) {
+            $query->where('name', 'director');
+        })->get();
+
+        foreach ($directors as $director) {
+            $director->notify(new \App\Notifications\RequestCreatedNotification($req));
+        }
+    return back()->with('success', 'Letter uploaded and request forwarded to ICT Director.');
+}
+public function supervisorRejectRequest(Request $request, $id)
+{
+    $request->validate([
+        'reason' => 'required|string|max:1000',
+    ]);
+
+    $req = MaintenanceRequest::findOrFail($id);
+    $req->supervisor_status = 'rejected';
+    $req->rejection_reason = $request->reason;
+    $req->save();
+    // Notify the user
+    $req->user->notify(new \App\Notifications\MaintenanceRequestRejected($req));
+
+    return back()->with('error', 'Request rejected with reason.');
+}
+
+  //this work fine 
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+
+    //         'item_id' => 'required|exists:items,id',
+    //         'description' => 'required|string',
+
+    //         'priority' => 'required|in:low,medium,high,emergency',
+    //         'categories' => 'nullable|array',
+    //         'attachments.*' => 'file|max:2048|mimes:jpg,jpeg,png,pdf,doc,docx',
+    //     ]);
+    //     $randomId = rand(10000, 99999);
+
+    //     $ticketNumber = 'REQ-' . now()->format('Ymd') . '-' . auth()->id() . '-' . mt_rand(1000, 9999);
+    //     $maintenanceRequest = auth()->user()->maintenanceRequests()->create([
+
+    //         'item_id' => $validated['item_id'],
+    //         'description' => $validated['description'],
+
+    //         'priority' => $validated['priority'],
+    //         'status' => 'pending',
+    //         'ticket_number' => $randomId,
+    //     ]);
+
+    //     if (isset($validated['categories'])) {
+
+    //         $selectedCategories = array_diff($validated['categories'], ['unknown']);
+
+    //         $maintenanceRequest->categories()->sync($selectedCategories);
 
 
-            if (in_array('unknown', $validated['categories'])) {
+    //         if (in_array('unknown', $validated['categories'])) {
 
-                $maintenanceRequest->update(['has_unknown_cause' => true]);
-            }
+    //             $maintenanceRequest->update(['has_unknown_cause' => true]);
+    //         }
+    //     }
+
+
+    //     if ($request->hasFile('attachments')) {
+    //         foreach ($request->file('attachments') as $file) {
+    //             $path = $file->store('attachments', 'public');
+
+    //             $maintenanceRequest->attachments()->create([
+    //                 'user_id' => auth()->id(),
+    //                 'file_path' => $path,
+    //                 'file_type' => $file->getMimeType(),
+    //                 'original_name' => $file->getClientOriginalName(),
+    //             ]);
+    //         }
+    //     }
+    //     // Log the creation
+    //     $maintenanceRequest->updates()->create([
+    //         'user_id' => auth()->id(),
+    //         'update_text' => 'Request created',
+    //         'update_type' => 'creation',
+    //         'request_id' => $maintenanceRequest->id,
+    //     ]);
+    //     // Notify the Director(s)
+    //     $directors = \App\Models\User::whereHas('roles', function ($query) {
+    //         $query->where('name', 'director');
+    //     })->get();
+
+    //     foreach ($directors as $director) {
+    //         $director->notify(new \App\Notifications\RequestCreatedNotification($maintenanceRequest));
+    //     }
+
+    //     return redirect()->route('requests_indexs', $maintenanceRequest)
+    //         ->with('success', 'Maintenance request submitted successfully!');
+    // }
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'item_id' => 'required|exists:items,id',
+        'description' => 'required|string',
+        'priority' => 'required|in:low,medium,high,emergency',
+        'categories' => 'nullable|array',
+        'attachments.*' => 'file|max:2048|mimes:jpg,jpeg,png,pdf,doc,docx',
+    ]);
+
+    $randomId = rand(10000, 99999);
+    $ticketNumber = 'REQ-' . now()->format('Ymd') . '-' . auth()->id() . '-' . mt_rand(1000, 9999);
+
+    // Create request first
+    $maintenanceRequest = auth()->user()->maintenanceRequests()->create([
+        'item_id' => $validated['item_id'],
+        'description' => $validated['description'],
+        'priority' => $validated['priority'],
+        'status' => 'pending',
+        'ticket_number' => $randomId,
+        'supervisor_status' => 'pending',
+    ]);
+     $isHardwareReplacement = false;
+
+    // Attach categories and check conditions
+    if (isset($validated['categories'])) {
+        $selectedCategories = array_diff($validated['categories'], ['unknown']);
+        $maintenanceRequest->categories()->sync($selectedCategories);
+
+        if (in_array('unknown', $validated['categories'])) {
+            $maintenanceRequest->update(['has_unknown_cause' => true]);
         }
 
-
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('attachments', 'public');
-
-                $maintenanceRequest->attachments()->create([
-                    'user_id' => auth()->id(),
-                    'file_path' => $path,
-                    'file_type' => $file->getMimeType(),
-                    'original_name' => $file->getClientOriginalName(),
-                ]);
-            }
+        // Check if 'hardware replacement' is one of the selected categories
+        $hardwareReplacementId = Category::where('name', 'Hardware Replecement')->value('id');
+        if ($hardwareReplacementId && in_array($hardwareReplacementId, $selectedCategories)) {
+            $maintenanceRequest->update(['supervisor_status' => 'pending']);
+            $isHardwareReplacement = true;
         }
-        // Log the creation
-        $maintenanceRequest->updates()->create([
-            'user_id' => auth()->id(),
-            'update_text' => 'Request created',
-            'update_type' => 'creation',
-            'request_id' => $maintenanceRequest->id,
-        ]);
-        // Notify the Director(s)
+    }
+
+    // Handle attachments
+    if ($request->hasFile('attachments')) {
+        foreach ($request->file('attachments') as $file) {
+            $path = $file->store('attachments', 'public');
+            $maintenanceRequest->attachments()->create([
+                'user_id' => auth()->id(),
+                'file_path' => $path,
+                'file_type' => $file->getMimeType(),
+                'original_name' => $file->getClientOriginalName(),
+            ]);
+        }
+    }
+
+    // Log creation
+    $maintenanceRequest->updates()->create([
+        'user_id' => auth()->id(),
+        'update_text' => 'Request created',
+        'update_type' => 'creation',
+        'request_id' => $maintenanceRequest->id,
+    ]);
+
+    // Notify directors
+    if ($isHardwareReplacement) {
+        $supervisor = auth()->user()->reportsTo; // assumes relationship or reports_to field
+        if ($supervisor) {
+            $supervisor->notify(new \App\Notifications\RequestCreatedNotification($maintenanceRequest));
+        }
+    } else {
         $directors = \App\Models\User::whereHas('roles', function ($query) {
             $query->where('name', 'director');
         })->get();
@@ -102,17 +260,19 @@ class MaintenanceRequestController extends Controller
         foreach ($directors as $director) {
             $director->notify(new \App\Notifications\RequestCreatedNotification($maintenanceRequest));
         }
-
-        return redirect()->route('requests_indexs', $maintenanceRequest)
-            ->with('success', 'Maintenance request submitted successfully!');
     }
+
+    return redirect()->route('requests_indexs', $maintenanceRequest)
+        ->with('success', 'Maintenance request submitted successfully!');
+}
+
     public function edit($id)
     {
         $maintenanceRequest = MaintenanceRequest::findOrFail($id);
         $categories = Category::all();
         $items = Item::all();
         // Add "Unknown Cause" manually
-        $categories->push((object) ['id' => 'unknown', 'name' => 'Unknown Cause']);
+        // $categories->push((object) ['id' => 'unknown', 'name' => 'Unknown Cause']);
         return view('maintenance_requests.edit', compact('maintenanceRequest', 'categories', 'items'));
     }
 
@@ -121,7 +281,6 @@ class MaintenanceRequestController extends Controller
         $validated = $request->validate([
             'item_id' => 'required|exists:items,id',
             'description' => 'required|string',
-
             'priority' => 'required|in:low,medium,high,emergency',
             'categories' => 'nullable|array',
             'attachments.*' => 'file|max:2048|mimes:jpg,jpeg,png,pdf,doc,docx',
@@ -134,6 +293,7 @@ class MaintenanceRequestController extends Controller
             // 'location' => $validated['location'],
             'priority' => $validated['priority'],
             'status' => "pending",
+            'supervisor_status' => 'pending',
         ]);
 
         if (isset($validated['categories'])) {
@@ -248,7 +408,8 @@ class MaintenanceRequestController extends Controller
             'latestAssignment',
             'rejectedBy',
             'categories',
-            'item'
+            'item',
+            'user.jobPosition'
         ])->findOrFail($id);
 
         return view('maintenance_requests.show', compact('maintenanceRequest'));

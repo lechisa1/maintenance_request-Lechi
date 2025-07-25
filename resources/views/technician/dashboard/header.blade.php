@@ -105,17 +105,24 @@
                     role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;">
                     <div class="user-avatar me-2">
                         <img src="{{ auth()->user()->avatar_url ?? 'https://static.vecteezy.com/system/resources/previews/006/487/917/original/man-avatar-icon-free-vector.jpg' }}"
-                            alt="{{ auth()->user()->name }}" class="profile-image" style="text-decoration:none">
+                            alt="{{ auth()->user()->name }}" class="profile-image rounded-circle"
+                            style="width: 32px; height: 32px; object-fit: cover; text-decoration:none">
                     </div>
                     <span class="d-none d-lg-inline" style="text-decoration:none">{{ auth()->user()->name }}</span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end py-0 mt-2" role="menu" aria-label="Notifications menu">
-
+                <div class="dropdown-menu dropdown-menu-end py-0 mt-2" role="menu" aria-label="User menu">
                     <div class="dropdown-header bg-light py-2 d-flex align-items-center">
-                        <div class="user-avatar me-2">
-                            <img src="{{ auth()->user()->avatar_url ?? 'https://static.vecteezy.com/system/resources/previews/006/487/917/original/man-avatar-icon-free-vector.jpg' }}"
-                                alt="{{ auth()->user()->name }}" class="profile-image"
-                                style="text-decoration-line: none">
+                        <div class="user-avatar me-2 position-relative">
+                            <img id="profileImagePreview"
+                                src="{{ auth()->user()->avatar_url ?? 'https://static.vecteezy.com/system/resources/previews/006/487/917/original/man-avatar-icon-free-vector.jpg' }}"
+                                alt="{{ auth()->user()->name }}" class="profile-image rounded-circle"
+                                style="width: 48px; height: 48px; object-fit: cover;">
+                            <label for="profileImageUpload"
+                                class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle p-0"
+                                style="width: 20px; height: 20px;">
+                                <i class="bi bi-camera-fill" style="font-size: 10px;"></i>
+                            </label>
+                            <input type="file" id="profileImageUpload" accept="image/*" style="display: none;">
                         </div>
                         <div>
                             <strong>{{ auth()->user()->name }}</strong>
@@ -135,7 +142,8 @@
                         <!-- Light -->
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#ffffff" class="form-check-input">
-                            <span class="color-swatch" style="background-color: #ffffff;" title="Light"></span> Light
+                            <span class="color-swatch" style="background-color: #ffffff;" title="Light"></span>
+                            Light
                         </label>
 
                         <!-- Dark -->
@@ -315,4 +323,106 @@
             }
         }
     });
+    // here profile image upload
+    
 </script>
+<script>
+    const csrfToken = '{{ csrf_token() }}';
+    const uploadRoute = '{{ route('profile.image.upload') }}';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileImageUpload = document.getElementById('profileImageUpload');
+        const profileImagePreview = document.getElementById('profileImagePreview');
+
+        if (profileImageUpload) {
+            profileImageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profileImagePreview.src = event.target.result;
+                        uploadProfileImage(file);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function uploadProfileImage(file) {
+            console.log('Selected file:', file.name, file.size, file.type);
+
+            const formData = new FormData();
+            formData.append('profile_image', file);
+            formData.append('_token', csrfToken);
+
+            fetch(uploadRoute, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || 'Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Upload response:', data);
+                if (data.success) {
+                    document.querySelectorAll('.profile-image').forEach(img => {
+                        img.src = data.avatar_url + '?t=' + Date.now();
+                    });
+                    showToast(data.message, 'success');
+                } else {
+                    showToast(data.message || 'Upload failed', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                showToast('Upload failed: ' + error.message, 'error');
+            });
+        }
+
+function showToast(message, type) {
+            // Implement your toast notification here or use an existing one
+            const toast = document.createElement('div');
+            toast.className = toast align-items-center text-white bg-${type} border-0;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            toast.innerHTML = 
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        ;
+
+            const toastContainer = document.getElementById('toastContainer') || createToastContainer();
+            toastContainer.appendChild(toast);
+
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'position-fixed bottom-0 end-0 p-3';
+            container.style.zIndex = '11';
+            document.body.appendChild(container);
+            return container;
+        }
+    });
+</script>
+

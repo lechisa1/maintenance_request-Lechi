@@ -12,187 +12,95 @@ use App\Notifications\TechnicianAssignedNotification;
 
 class DirectorController extends Controller
 {
-    //
+public function directorDashboard()
+{
+    // Changed: Remove department filter to get ALL requests
+    $departmentRequests = MaintenanceRequest::query();  // Now gets all requests
+    
+    $maintenances = $departmentRequests->latest()->paginate(5);
+
+    // All these counts will now be for ALL requests
+    $total = (clone $departmentRequests)->count();
+    $completed = (clone $departmentRequests)->where('status', 'completed')->count();
+    $pending = (clone $departmentRequests)->where('status', 'pending')->count();
+    $inProgress = (clone $departmentRequests)->where('status', 'in_progress')->count();
+    $notFixed = (clone $departmentRequests)->where('status', 'not_fixed')->count();
+    $rejected = (clone $departmentRequests)->where('status', 'rejected')->count();
+    $assigned = (clone $departmentRequests)->where('status', 'assigned')->count();
+
+    $statusCounts = (clone $departmentRequests)
+        ->selectRaw('status, COUNT(*) as count')
+        ->groupBy('status')
+        ->pluck('count', 'status')
+        ->toArray();
+
+    return view('director.dashboard', compact(
+        'maintenances',
+        'total',
+        'assigned',
+        'notFixed',
+        'rejected',
+        'completed',
+        'pending',
+        'inProgress',
+        'statusCounts'
+    ));
+}
     // public function directorDashboard()
     // {
-    //     $director = auth()->user(); // logged-in director
+    //     $director = auth()->user();
     //     $departmentId = $director->department_id;
-    //     // Filter maintenance requests where the requester (user) is in the same department
-    //     $maintenances = MaintenanceRequest::whereHas('user', function ($q) use ($departmentId) {
-    //         $q->where('department_id', $departmentId);
-    //     })->latest()->paginate(10);
 
-    //     // Counts for stats - also filtered by department
-    //     $total = MaintenanceRequest::whereHas('user', fn($q) => $q->where('department_id', $departmentId))->count();
-    //     $completed = MaintenanceRequest::where('status', 'completed')
-    //         ->whereHas('user', fn($q) => $q->where('department_id', $departmentId))->count();
-    //     $pending = MaintenanceRequest::where('status', 'pending')
-    //         ->whereHas('user', fn($q) => $q->where('department_id', $departmentId))->count();
-    //     $inProgress = MaintenanceRequest::where('status', 'in_progress')
-    //         ->whereHas('user', fn($q) => $q->where('department_id', $departmentId))->count();
-    //     // Fetch counts grouped by status
-    //     $statusCounts = MaintenanceRequest::whereHas('user', function ($query) use ($departmentId) {
+
+    //     $departmentRequests = MaintenanceRequest::whereHas('user', function ($query) use ($departmentId) {
     //         $query->where('department_id', $departmentId);
-    //     })
-    //         ->selectRaw('status, count(*) as count')
+    //     });
+
+
+    //     $maintenances = $departmentRequests->latest()->paginate(5);
+
+
+    //     $total = (clone $departmentRequests)->count();
+    //     $completed = (clone $departmentRequests)->where('status', 'completed')->count();
+    //     $pending = (clone $departmentRequests)->where('status', 'pending')->count();
+    //     $inProgress = (clone $departmentRequests)->where('status', 'in_progress')->count();
+    //     $notFixed = (clone $departmentRequests)->where('status', 'not_fixed')->count();
+    //     $rejected = (clone $departmentRequests)->where('status', 'rejected')->count();
+    //     $assigned = (clone $departmentRequests)->where('status', 'assigned')->count();
+
+    //     $statusCounts = (clone $departmentRequests)
+    //         ->selectRaw('status, COUNT(*) as count')
     //         ->groupBy('status')
     //         ->pluck('count', 'status')
     //         ->toArray();
 
-    //     // Debugging the raw counts
-    //     // dd($statusCounts);
-
-
-    //     // Ensure all statuses are represented, even if their count is zero
-    //     $statuses = ['completed', 'pending', 'in_progress'];
-    //     foreach ($statuses as $status) {
-    //         if (!isset($statusCounts[$status])) {
-    //             $statusCounts[$status] = 0;
-    //         }
-    //     }
-    //     // dd($statusCounts); 
-
-    //     // Prepare data for the chart
-    //     $chartData = [
-    //         'labels' => $statuses,  // ["completed", "pending", "in_progress"]
-    //         'datasets' => [
-    //             [
-    //                 'label' => 'Requests by Status',
-    //                 'data' => array_values($statusCounts),  // [0, 2, 0]
-    //                 'backgroundColor' => [
-    //                     'rgba(40, 167, 69, 0.5)', // Green for completed
-    //                     'rgba(255, 193, 7, 0.5)', // Yellow for pending
-    //                     'rgba(23, 162, 184, 0.5)', // Teal for in_progress
-    //                 ],
-    //                 'borderColor' => [
-    //                     'rgba(40, 167, 69, 1)',
-    //                     'rgba(255, 193, 7, 1)',
-    //                     'rgba(23, 162, 184, 1)',
-    //                 ],
-    //                 'borderWidth' => 1,
-    //             ],
-    //         ],
-    //     ];
-
-    //     return view('director.dashboard', compact('maintenances', 'total', 'completed', 'pending', 'inProgress', 'chartData'));
+    //     return view('director.dashboard', compact(
+    //         'maintenances',
+    //         'total',
+    //         'assigned',
+    //         'notFixed',
+    //         'rejected',
+    //         'completed',
+    //         'pending',
+    //         'inProgress',
+    //         'statusCounts'
+    //     ));
     // }
-    public function directorDashboard()
-    {
-        $director = auth()->user();
-        $departmentId = $director->department_id;
-
-
-        $departmentRequests = MaintenanceRequest::whereHas('user', function ($query) use ($departmentId) {
-            $query->where('department_id', $departmentId);
-        });
-
-
-        $maintenances = $departmentRequests->latest()->paginate(5);
-
-
-        $total = (clone $departmentRequests)->count();
-        $completed = (clone $departmentRequests)->where('status', 'completed')->count();
-        $pending = (clone $departmentRequests)->where('status', 'pending')->count();
-        $inProgress = (clone $departmentRequests)->where('status', 'in_progress')->count();
-        $notFixed = (clone $departmentRequests)->where('status', 'not_fixed')->count();
-        $rejected = (clone $departmentRequests)->where('status', 'rejected')->count();
-        $assigned = (clone $departmentRequests)->where('status', 'assigned')->count();
-
-        $statusCounts = (clone $departmentRequests)
-            ->selectRaw('status, COUNT(*) as count')
-            ->groupBy('status')
-            ->pluck('count', 'status')
-            ->toArray();
-
-        return view('director.dashboard', compact(
-            'maintenances',
-            'total',
-            'assigned',
-            'notFixed',
-            'rejected',
-            'completed',
-            'pending',
-            'inProgress',
-            'statusCounts'
-        ));
-    }
 
     public function maintenenceRequestPending()
     {
         $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item'])->where('status', 'pending')->latest()->paginate(10);
         return view('maintenance_requests.pending_maintenance', compact('pendingRequest'));
     }
-    // public function showAssignForm($id)
-    // {
-    //     $maintenanceRequest = MaintenanceRequest::findOrFail($id);
-    //     $technicians = User::whereHas('roles', function ($query) {
-    //         $query->where('name', 'technician'); // Assuming 'name' is the column for role names
-    //     })->get();
-    //     // $technicians = User::where('role', 'technician')->get(); // Fetch all technicians
 
-    //     return view('maintenance_requests.assign', compact('maintenanceRequest', 'technicians'));
-    // }
-    // public function assign(Request $request, MaintenanceRequest $maintenanceRequest)
-    // {
-    //     // $this->authorize('assign', $maintenanceRequest);
-
-    //     $validated = $request->validate([
-    //         'technician_id' => 'required|exists:users,id',
-    //         'director_notes' => 'nullable|string',
-    //         'expected_completion_date' => 'nullable|date',
-    //     ]);
-
-    //     $assignment = $maintenanceRequest->assignments()->create([
-    //         'director_id' => auth()->id(),
-    //         'technician_id' => $validated['technician_id'],
-    //         'director_notes' => $validated['director_notes'] ?? null,
-    //         'expected_completion_date' => $validated['expected_completion_date'] ?? null,
-    //     ]);
-
-    //     $maintenanceRequest->update(['status' => 'assigned']);
-
-    //     // Log the assignment
-    //     $maintenanceRequest->updates()->create([
-    //         'user_id' => auth()->id(),
-    //         'update_text' => 'Request assigned to technician',
-    //         'update_type' => 'assignment',
-    //     ]);
-
-    //     // Notify the technician (you would implement this)
-    //     $technician = User::find($validated['technician_id']);
-    //     $technician->notify(new TechnicianAssignedNotification($maintenanceRequest));
-
-
-    //     return redirect()->route('requests.show', $maintenanceRequest)
-    //         ->with('success', 'Request assigned successfully!');
-    // }
-    // public function showAssignForm($id)
-    // {
-    //     $maintenanceRequest = MaintenanceRequest::with(['user'])
-    //         ->findOrFail($id);
-
-    //     // Get technicians from the same department as the request
-    //     $technicians = User::whereHas('roles', function ($q) use ($maintenanceRequest) {
-    //         $q->where('name', 'technician')
-    //             ->where('department_id', $maintenanceRequest->user->department_id);
-    //     })->get();
-
-    //     return view('maintenance_requests.assign', [
-    //         'maintenanceRequest' => $maintenanceRequest,
-    //         'technicians' => $technicians
-    //     ]);
-    // }
     public function showAssignForm($id)
     {
         $maintenanceRequest = MaintenanceRequest::with(['user'])
             ->findOrFail($id);
 
         $technicians = User::whereHas('roles', function ($q) use ($maintenanceRequest) {
-            $q->where('name', 'technician')
-                ->whereIn('department_id', [
-                    $maintenanceRequest->user->department_id,
-                    auth()->user()->department_id
-                ]);
+            $q->where('name', 'technician');
+
         })
             ->withCount(['assignedRequests' => function ($query) {
                 $query->whereHas('maintenanceRequest', function ($q) {
@@ -231,14 +139,7 @@ class DirectorController extends Controller
                         })
                         ->exists();
 
-                    // Check if user is in same department
-                    $sameDepartment = User::where('id', $value)
-                        ->where('department_id', $maintenanceRequest->user->department_id)
-                        ->exists();
 
-                    if (!$isTechnician || !$sameDepartment) {
-                        $fail("User ID {$value} is not an available technician for this department.");
-                    }
                 }
             ],
             'director_notes' => 'nullable|string|max:500',
@@ -275,7 +176,7 @@ class DirectorController extends Controller
                 'director_id' => auth()->id(),
                 'technician_id' => $techId,
                 'director_notes' => $validated['director_notes'],
-                'expected_completion_date' => $validated['expected_completion_date'],
+                'expected_completion_date' =>now(),
                 'assigned_at' => now(),
             ]);
 
@@ -313,6 +214,7 @@ class DirectorController extends Controller
             'assignments.director',
             'categories',
             'rejectedBy',
+            'attachments',
             'updates',
             'latestAssignment.director',
             'latestAssignment.technician',
@@ -347,9 +249,7 @@ class DirectorController extends Controller
         $departmentId = $director->department_id;
 
 
-        $statusCounts = MaintenanceRequest::whereHas('user', function ($query) use ($departmentId) {
-            $query->where('department_id', $departmentId);
-        })
+        $statusCounts = MaintenanceRequest::all()
             ->selectRaw('status, count(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
@@ -400,10 +300,7 @@ class DirectorController extends Controller
         // auth()->user()->department->name;
         $completedRequests = MaintenanceRequest::with('item', 'user', 'latestAssignment', 'categories')->where('status', 'completed')
             ->where('user_feedback', 'accepted')
-            ->whereHas('user', function ($query) use ($directorDepartmentId) {
 
-                $query->where('department_id', $directorDepartmentId);
-            })
             ->latest()->paginate(10);
 
 
@@ -422,10 +319,7 @@ class DirectorController extends Controller
 
         $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item', 'item.categories', 'latestAssignment'])->where('status', 'pending')
             ->where('user_feedback', 'pending')
-            ->whereHas('user', function ($query) use ($directorDepartmentId) {
 
-                $query->where('department_id', $directorDepartmentId);
-            })
             ->latest()->paginate(10);
 
 
@@ -445,10 +339,7 @@ class DirectorController extends Controller
         $pendingRequest = MaintenanceRequest::with(['user', 'item', 'latestAssignment', 'categories', 'item.categories', 'rejectedBy'])->where('status', 'rejected')
             ->where('user_feedback', 'pending')
             ->orWhere('user_feedback', 'rejected')
-            ->whereHas('user', function ($query) use ($directorDepartmentId) {
 
-                $query->where('department_id', $directorDepartmentId);
-            })
             ->latest()->paginate(10);
 
 
@@ -467,10 +358,7 @@ class DirectorController extends Controller
 
         $InProgressRequests = MaintenanceRequest::with('user', 'item', 'latestAssignment', 'categories', 'item.categories')->where('status', 'in_progress')
 
-            ->whereHas('user', function ($query) use ($directorDepartmentId) {
 
-                $query->where('department_id', $directorDepartmentId);
-            })
             ->latest()->paginate(10);
 
 
@@ -489,10 +377,7 @@ class DirectorController extends Controller
 
         $AssignedRequests = MaintenanceRequest::with('user', 'item', 'latestAssignment', 'categories', 'item.categories')->where('status', 'assigned')
 
-            ->whereHas('user', function ($query) use ($directorDepartmentId) {
 
-                $query->where('department_id', $directorDepartmentId);
-            })
             ->latest()->paginate(10);
 
 

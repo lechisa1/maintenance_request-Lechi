@@ -1,118 +1,120 @@
 <!-- resources/views/technician/requests/index.blade.php -->
 @extends('technician.dashboard.layout')
 
-@section('title', 'My Assigned Requests')
+{{-- @section('title', 'My Assigned Requests') --}}
 
 @section('content')
-    <div class="card shadow-sm">
-        <div class="card-header bg-white">
-            <h5 class="mb-0">My Assigned Requests</h5>
-        </div>
-        <div class="card">
-            <div class="mb-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="🔍 Search..." onkeyup="filterTable()"
-                    style="max-width: 250px; float: right;">
-            </div>
-            <div class="table-responsive">
-                <table id="requestsTable" class="table table-bordered table-hover" style="width:100%">
-                    <thead class="table-info ">
-                        <tr class="">
-                            <th>#</th>
-                            <th>Ticket No</th>
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 rounded-4 bg-white">
+            <div class="card-body px-4 py-4">
+                <div class="">
+                    <h5 class="mb-0">List of Request Assigned To You</h5>
+                </div>
 
-                            <th>Item Name</th>
-                            <th>Requester</th>
-                            {{-- <th>Department</th>
+                <div class="d-flex justify-content-end mb-3">
+                    <input type="text" class="form-control w-25 shadow-sm rounded-pill" id="searchInput"
+                        placeholder="🔍 Search..." onkeyup="filterTable()">
+                </div>
+
+                <div class="table-responsive rounded-3 shadow-sm">
+                    <table class="table table-hover align-middle mb-0" id="requestsTable">
+                        <thead class="bg-blue text-white text-center"
+                            style="background: linear-gradient(90deg, #0d6efd, #6610f2); position: sticky; top: 0; z-index: 1;">
+                            <tr class="">
+                                <th>#</th>
+                                <th>Ticket No</th>
+
+                                <th>Item Name</th>
+                                <th>Requester</th>
+                                {{-- <th>Department</th>
                             <th>Requester Phone</th> --}}
-                            <th>Priority</th>
-                            <th>Status</th>
+                                <th>Priority</th>
+                                <th>Status</th>
 
-                            <th>Actions</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($requests as $key=> $request)
-                            <tr>
-                                <td class="text-center fw-bold">
-                                    <button class="btn btn-sm btn-outline-primary"
-                                        onclick="toggleDetails({{ $request->id }})">
-                                        <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
-                                    </button>{{ $key + 1 }}{{ $key + 1 }}
-                                </td>
-                                <td>{{ $request->ticket_number }}</td>
+                                <th>Actions</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($requests as $key=> $request)
+                                <tr>
+                                    <td class="text-center fw-bold">
+                                        <button class="btn btn-sm btn-outline-primary"
+                                            onclick="toggleDetails({{ $request->id }})">
+                                            <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
+                                        </button>{{ $key + 1 }}{{ $key + 1 }}
+                                    </td>
+                                    <td>{{ $request->ticket_number }}</td>
 
-                                <td>{{ $request->item ? $request->item->name : 'N/A' }}</td>
-                                <td>{{ $request->user->name }}</td>
-                                {{-- <td>{{ $request->user->department->name }}</td>
+                                    <td>{{ $request->item ? $request->item->name : 'N/A' }}</td>
+                                    <td>{{ $request->user->name }}</td>
+                                    {{-- <td>{{ $request->user->department->name }}</td>
                                 <td>{{ $request->user->phone }}</td> --}}
-                                <td>
-                                    <span
-                                        class="badge bg-{{ $request->priority == 'high' ? 'danger' : ($request->priority == 'medium' ? 'warning' : 'success') }}">
-                                        {{ ucfirst($request->priority) }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span
-                                        class="badge bg-{{ $request->status == 'completed' ? 'success' : ($request->status == 'in_progress' ? 'info' : 'warning') }}">
-                                        {{ ucfirst(str_replace('_', ' ', $request->status)) }}
-                                    </span>
-                                </td>
-                                {{-- <td>{{ $request->assignments->assigned_at->format('M d, Y') }}</td> --}}
-                                {{-- <td>{{ $request->assignments->expected_completion_date->format('M d, Y') }}</td> --}}
-                                <td class="d-flex">
-                                    {{-- <a href="{{ route('technician.show', $request->id) }}"
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $request->priority == 'high' ? 'danger' : ($request->priority == 'medium' ? 'warning' : 'success') }}">
+                                            {{ ucfirst($request->priority) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $request->status == 'completed' ? 'success' : ($request->status == 'in_progress' ? 'info' : 'warning') }}">
+                                            {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                        </span>
+                                    </td>
+                                    {{-- <td>{{ $request->assignments->assigned_at->format('M d, Y') }}</td> --}}
+                                    {{-- <td>{{ $request->assignments->expected_completion_date->format('M d, Y') }}</td> --}}
+                                    <td class="d-flex">
+                                        {{-- <a href="{{ route('technician.show', $request->id) }}"
                                         class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-eye fs-5"></i>
                                     </a> --}}
-                                    @if ($request->status != 'completed')
-                                        <a href="{{ route('tecknician_work_form', $request->id) }}"
-                                            class="btn btn-sm btn-outline-primary" style="margin-left: 3px">
-                                            <i class="bi bi-plus text-warning fs-5"></i> Progress
+                                        @if ($request->status != 'completed')
+                                            <a href="{{ route('tecknician_work_form', $request->id) }}"
+                                                class="btn btn-sm btn-outline-primary" style="margin-left: 3px">
+                                                <i class="bi bi-plus text-warning fs-5"></i> Progress
+                                            </a>
+                                        @endif
+                                    </td>
+                                    <td><a href="{{ route('technician.show', $request->id) }}" class="btn btn-sm btn-info">
+                                            <i class="bi bi-eye"></i> View Details
                                         </a>
-                                    @endif
-                                </td>
-                                <td><a href="{{ route('technician.show', $request->id) }}" class="btn btn-sm btn-info">
-                                        <i class="bi bi-eye"></i> View Details
-                                    </a>
-                                </td>
+                                    </td>
 
-                            </tr>
-                            <tr id="details-{{ $request->id }}" class="d-none bg-light">
-                                <td colspan="8">
-                                    <div class="row g-2 p-3 text-start" style="list-style: none;">
-                                        <div class="col-12 border-bottom py-1"><strong>Assigned At:</strong>
-                                            {{ $request->latestAssignment->assigned_at->format('M d, Y h:i A') }}</div>
-                                        {{-- <div class="col-md-4"><strong>Rejection Reason:</strong>
+                                </tr>
+                                <tr id="details-{{ $request->id }}" class="d-none bg-light">
+                                    <td colspan="8">
+                                        <div class="row g-2 p-3 text-start" style="list-style: none;">
+                                            <div class="col-12 border-bottom py-1"><strong>Assigned At:</strong>
+                                                {{ $request->latestAssignment->assigned_at->format('M d, Y h:i A') }}</div>
+                                            {{-- <div class="col-md-4"><strong>Rejection Reason:</strong>
                                             {{ $request->rejection_reason }}</div> --}}
-                                        <div class="col-12 border-bottom py-1"><strong>Requester Phone:</strong>
-                                            {{ $request->user->phone }}
+                                            <div class="col-12 border-bottom py-1"><strong>Requester Phone:</strong>
+                                                {{ $request->user->phone }}
+                                            </div>
+                                            <div class="col-12 border-bottom py-1"><strong>Description:</strong>
+                                                {{ $request->description }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
+                                                {{ $request->requested_at->format('M d, Y h:i A') }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Requester Department:</strong>
+                                                {{ $request->user->department->name }}</div>
                                         </div>
-                                        <div class="col-12 border-bottom py-1"><strong>Description:</strong>
-                                            {{ $request->description }}</div>
-                                        <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
-                                            {{ $request->requested_at->format('M d, Y h:i A') }}</div>
-                                        <div class="col-12 border-bottom py-1"><strong>Requester Department:</strong>
-                                            {{ $request->user->department->name }}</div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center">No requests assigned to you yet.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="text-center">No requests assigned to you yet.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+ 
+                @include('components.pagination', ['paginator' => $requests])
+
             </div>
-
-            <!-- Pagination -->
-            {{-- <div class="mt-3">
-                {{ $requests->links() }}
-            </div> --}}
-            @include('components.pagination', ['paginator' => $requests])
         </div>
-
     </div>
     <script>
         function toggleDetails(id) {

@@ -10,7 +10,7 @@
 
     body {
         font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        background-color: #f8f9fc;
+        background-color: white;
         overflow-x: hidden;
      }
     
@@ -27,8 +27,9 @@
         /* Dark gray text for readability */
         transition: all 0.3s;
         z-index: 1000;
-        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
-        border-right: 1px solid #eaeaea;
+        
+        box-shadow: 8px 0 15px rgba(0, 0, 0, 0.05);
+        border-right: 4px solid #eaeaea;
         /* Subtle border */
     }
 /* Logo Styles */
@@ -68,11 +69,21 @@
     justify-content: center;
     transition: all 0.3s ease;
 }
+#profileImageUpload {
+    display: none;
+}
 
+.toast {
+    min-width: 250px;
+}
 .profile-image {
     width: 100%;
     height: 100%;
+     transition: all 0.3s ease;
     object-fit: cover;
+}
+.profile-image:hover {
+    opacity: 0.9;
 }
                 #searchInput {
                     border-radius: 10px;
@@ -283,6 +294,7 @@
     #main-content {
         margin-left: var(--sidebar-width);
         transition: all 0.3s;
+        box-shadow: #ccc 0 0 10px;
         min-height: calc(100vh - var(--footer-height));
     }
 
@@ -290,7 +302,7 @@
     #header {
         height: var(--header-height);
         background: white;
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        box-shadow: 0 0.25rem 1.75rem 0 rgba(58, 59, 69, 0.15);
         z-index: 100;
     }
 

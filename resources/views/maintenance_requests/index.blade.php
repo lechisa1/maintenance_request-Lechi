@@ -7,173 +7,179 @@
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
-    <div class="card shadow-sm p-4 rounded-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="text-primary fw-bold mb-0">✨ Maintenance Request List</h4>
-            <a href="{{ route('requests.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i> Maintenance Request
-            </a>
-        </div>
-        <div class="mb-3">
-            <input type="text" class="form-control" id="searchInput" placeholder="🔍 Search..." onkeyup="filterTable()"
-                style="max-width: 250px; float: right;">
-        </div>
-        <div class="table-responsive rounded-3" id="requestsTable">
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-primary">
-                    <tr>
-                        <th>#</th>
-                        <th>Ticket ID</th>
-                        <th>Item</th>
-                        {{-- <th>Description</th> --}}
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 rounded-4 bg-white">
+            <div class="card-body px-4 py-4">
 
-                        <th>Requester</th>
-                        {{-- <th>Department</th> --}}
-                        {{-- <th>Requester Phone</th> --}}
-                        <th>Priority</th>
-                        <th>Category Issue</th>
-                        {{-- <th>Requested At</th> --}}
-                        <th>Status</th>
-                        <th class="text-center">Actions</th>
-                        <th class="text-center">Feedback</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($maintenances as $key => $request)
-                        <tr>
-                            <td class="text-center fw-bold">
-                                <button class="btn btn-sm btn-outline-primary" onclick="toggleDetails({{ $request->id }})">
-                                    <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
-                                </button>{{ $key + 1 }}
-                            </td>
-                            <td>{{ $request->ticket_number }}</td>
-                            <td>{{ $request->item ? $request->item->name : 'N/A' }}</td>
-                            {{-- <td class="text-truncate" style="max-width: 200px;">{{ $request->description }}</td> --}}
-                            <td>{{ $request->user->name }}</td>
-                            {{-- <td>{{ $request->user->department->name }}</td> --}}
-                            {{-- <td>{{ $request->user->phone }}</td> --}}
-                            <td>
-                                <span
-                                    class="badge bg-{{ $request->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
-                                    {{ ucfirst($request->priority) }}
-                                </span>
-                            </td>
-                            <td>
-                                @if ($request->categories && $request->categories->count())
-                                    @foreach ($request->categories as $category)
-                                        <span class="badge bg-info text-dark">{{ $category->name }}</span>
-                                    @endforeach
-                                @else
-                                    <span class="badge bg-info text-dark">Uknown Cause</span>
-                                @endif
-                            </td>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-primary fw-bold mb-0">Maintenance Request List</h3>
+                    <a href="{{ route('requests.create') }}" class="btn btn-primary rounded-pill shadow-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Maintenance Request
+                    </a>
+                </div>
 
-                            {{-- <td>{{ $request->requested_at->format('Y-m-d') }}</td> --}}
-                            <td>
-                                <span
-                                    class="badge bg-{{ $request->status === 'pending' ? 'warning' : ($request->status === 'in_progress' ? 'primary' : ($request->status === 'completed' ? 'success' : 'secondary')) }}">
-                                    {{ ucfirst(str_replace('_', ' ', $request->status)) }}
-                                </span>
-                            </td>
-                            <td class="d-flex">
-                                @if ($request->user_feedback === 'pending' && $request->status === 'pending')
-                                    <a href="{{ route('requests.edit', $request->id) }}"
-                                        class="btn btn-sm btn-outline-warning me-1">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal-{{ $request->id }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                <div class="d-flex justify-content-end mb-3">
+                    <input type="text" class="form-control w-25 shadow-sm rounded-pill" id="searchInput"
+                        placeholder="🔍 Search..." onkeyup="filterTable()">
+                </div>
 
-                                    <!-- Delete Modal -->
-                                    <div class="modal fade" id="deleteModal-{{ $request->id }}" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title text-danger">Confirm Delete</h5>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure you want to delete this maintenance request? This cannot be
-                                                    undone.
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cancel</button>
-                                                    <form action="{{ route('requests.delete', $request->id) }}"
-                                                        method="POST">
-                                                        @csrf @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                                                    </form>
+            <div class="table-responsive rounded-3 shadow-sm">
+                <table class="table table-hover align-middle mb-0" id="requestsTable">
+                    <thead class="bg-blue text-white text-center" style="background: linear-gradient(90deg, #0d6efd, #6610f2); position: sticky; top: 0; z-index: 1;">
+                            <tr>
+                                <th>#</th>
+                                <th>Ticket ID</th>
+                                <th>Item</th>
+                                {{-- <th>Description</th> --}}
+
+                                <th>Requester</th>
+                                {{-- <th>Department</th> --}}
+                                {{-- <th>Requester Phone</th> --}}
+                                <th>Priority</th>
+                                <th>Category Issue</th>
+                                {{-- <th>Requested At</th> --}}
+                                <th>Status</th>
+                                <th class="text-center">Actions</th>
+                                <th class="text-center">Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($maintenances as $key => $request)
+                                <tr class="text-center">
+                                    <td class="text-center fw-bold">
+                                        <button class="btn btn-sm btn-outline-primary"
+                                            onclick="toggleDetails({{ $request->id }})">
+                                            <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
+                                        </button>{{ $key + 1 }}
+                                    </td>
+                                    <td>{{ $request->ticket_number }}</td>
+                                    <td>{{ $request->item ? $request->item->name : 'N/A' }}</td>
+                                    {{-- <td class="text-truncate" style="max-width: 200px;">{{ $request->description }}</td> --}}
+                                    <td>{{ $request->user->name }}</td>
+                                    {{-- <td>{{ $request->user->department->name }}</td> --}}
+                                    {{-- <td>{{ $request->user->phone }}</td> --}}
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $request->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
+                                            {{ ucfirst($request->priority) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if ($request->categories && $request->categories->count())
+                                            @foreach ($request->categories as $category)
+                                                <span class="badge bg-info text-dark">{{ $category->name }}</span>
+                                            @endforeach
+                                        @else
+                                            <span class="badge bg-info text-dark">Uknown Cause</span>
+                                        @endif
+                                    </td>
+
+                                    {{-- <td>{{ $request->requested_at->format('Y-m-d') }}</td> --}}
+                                    <td>
+                                        <span
+                                            class="badge bg-{{ $request->status === 'pending' ? 'warning' : ($request->status === 'in_progress' ? 'primary' : ($request->status === 'completed' ? 'success' : 'secondary')) }}">
+                                            {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                        </span>
+                                    </td>
+                                    <td class="d-flex">
+                                        @if ($request->user_feedback === 'pending' && $request->status === 'pending')
+                                            <a href="{{ route('requests.edit', $request->id) }}"
+                                                class="btn btn-sm btn-outline-warning me-1">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal-{{ $request->id }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+
+                                            <!-- Delete Modal -->
+                                            <div class="modal fade" id="deleteModal-{{ $request->id }}" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-danger">Confirm Delete</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to delete this maintenance request? This
+                                                            cannot be
+                                                            undone.
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancel</button>
+                                                            <form action="{{ route('requests.delete', $request->id) }}"
+                                                                method="POST">
+                                                                @csrf @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Yes,
+                                                                    Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                @else
-                                    <span class="text-muted">—</span>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                @if ($request->status === 'completed' && $request->user_feedback === 'pending' && auth()->id() === $request->user_id)
-                                    <form action="{{ route('requests.respond', $request) }}" method="POST">
-                                        @csrf
-                                        <button name="action" value="accept"
-                                            class="btn btn-sm btn-success me-1">Accept</button>
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                            onclick="document.getElementById('reject-form-{{ $request->id }}').style.display='block'">Reject</button>
-                                    </form>
-                                    <form id="reject-form-{{ $request->id }}"
-                                        action="{{ route('requests.respond', $request) }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                        <input type="hidden" name="action" value="reject">
-                                        <textarea name="rejection_reason" required class="form-control mt-2 mb-2" placeholder="Reason for rejection..."></textarea>
-                                        <button type="submit" class="btn btn-warning btn-sm">Submit Rejection</button>
-                                    </form>
-                                @else
-                                    <span
-                                        class="badge bg-{{ $request->user_feedback === 'accepted' ? 'success' : 'secondary' }}">
-                                        @if ($request->user_feedback === 'pending')
-                                            <h6>No Feedback yet</h6>
                                         @else
-                                            {{ ucfirst($request->user_feedback ?? 'Waiting') }}
+                                            <div class="btn btn-sm btn-outline-secondary disabled">N/A</div>
                                         @endif
-                                    </span>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr id="details-{{ $request->id }}" class="d-none bg-light">
-                            <td colspan="8">
-                                <div class="row g-2 p-3 text-start" style="list-style: none;">
-                                    {{-- <div class="col-md-4"><strong>Rejected By:</strong>
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($request->status === 'completed' && $request->user_feedback === 'pending' && auth()->id() === $request->user_id)
+                                            <form action="{{ route('requests.respond', $request) }}" method="POST">
+                                                @csrf
+                                                <button name="action" value="accept"
+                                                    class="btn btn-sm btn-success me-1">Accept</button>
+                                                <button type="button" class="btn btn-sm btn-danger"
+                                                    onclick="document.getElementById('reject-form-{{ $request->id }}').style.display='block'">Reject</button>
+                                            </form>
+                                            <form id="reject-form-{{ $request->id }}"
+                                                action="{{ route('requests.respond', $request) }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                                <input type="hidden" name="action" value="reject">
+                                                <textarea name="rejection_reason" required class="form-control mt-2 mb-2" placeholder="Reason for rejection..."></textarea>
+                                                <button type="submit" class="btn btn-warning btn-sm">Submit
+                                                    Rejection</button>
+                                            </form>
+                                        @else
+                                            <span
+                                                class="badge bg-{{ $request->user_feedback === 'accepted' ? 'success' : ($request->user_feedback === 'pending' ? 'warning text-dark' : 'secondary') }}">
+                                                {{ $request->user_feedback === 'pending' ? 'Pending' : ucfirst($request->user_feedback ?? 'Waiting') }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr id="details-{{ $request->id }}" class="d-none bg-light">
+                                    <td colspan="8">
+                                        <div class="row g-2 p-3 text-start" style="list-style: none;">
+                                            {{-- <div class="col-md-4"><strong>Rejected By:</strong>
                                         {{ $request->rejectedBy?->name ?? 'N/A' }}</div>
                                     <div class="col-md-4"><strong>Rejection Reason:</strong>
                                         {{ $request->rejection_reason }}</div> --}}
-                                    <div class="col-12 border-bottom py-1"><strong>Requester Phone:</strong>
-                                        {{ $request->user->phone }}
-                                    </div>
-                                    <div class="col-12 border-bottom py-1"><strong>Description:</strong>
-                                        {{ $request->description }}</div>
-                                    <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
-                                        {{ $request->requested_at->format('Y-m-d') }}</div>
-                                    <div class="col-12 border-bottom py-1"><strong>Requester Department:</strong>
-                                        {{ $request->user->department->name }}</div>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="11" class="text-center text-muted py-4">
-                                <i class="bi bi-exclamation-circle me-1"></i> No Maintenance Requests Found
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                            <div class="col-12 border-bottom py-1"><strong>Requester Phone:</strong>
+                                                {{ $request->user->phone }}
+                                            </div>
+                                            <div class="col-12 border-bottom py-1"><strong>Description:</strong>
+                                                {{ $request->description }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
+                                                {{ $request->requested_at->format('Y-m-d') }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Requester Department:</strong>
+                                                {{ $request->user->department->name }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="11" class="text-center text-muted py-4">
+                                        <i class="bi bi-exclamation-circle me-1"></i> No Maintenance Requests Found
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
         @include('components.pagination', ['paginator' => $maintenances])
     </div>
     <script>
@@ -229,7 +235,7 @@
             });
         });
     </script>
-        <script>
+    <script>
         // Show spinner on page load
         window.onload = function() {
             document.getElementById('loading-spinner').style.display = 'none'; // Hide it once the page is loaded

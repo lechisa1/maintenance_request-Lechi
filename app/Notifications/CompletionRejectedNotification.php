@@ -36,7 +36,7 @@ class CompletionRejectedNotification extends Notification
         //     'message' => 'Your completed maintenance request "' . $this->maintenanceRequest->title . '" was rejected. Reason: ' . $this->maintenanceRequest->rejection_reason,
         // ];
         return [
-            'message' => $userName . "" . 'reject completion of your work on  "' . $this->maintenanceRequest->description . " " . "reason" . ":" . $reason,
+            'message' => $userName . "" . 'reject completion of your work from  "' .$userName. " " . "reason" . ":" . $reason,
             'url' => route('requests.show', $this->maintenanceRequest->id),
         ];
     }

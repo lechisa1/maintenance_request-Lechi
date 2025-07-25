@@ -1,17 +1,26 @@
 @extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : (Auth::user()->roles->first()->name === 'employer' ? 'employeers.dashboard.layout' : 'employeers.dashboard.layout'))))
 
 @section('content')
-    <div class="card shadow-sm p-4 rounded-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="text-primary fw-bold mb-0">✨ Completed Maintenance Request List</h4>
-            <a href="{{ route('requests.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i> Add Maintenance
-            </a>
-        </div>
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 rounded-4 bg-white">
+            <div class="card-body px-4 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-primary fw-bold mb-0">Completed Maintenance Request List</h3>
+                    <a href="{{ route('requests.create') }}" class="btn btn-primary rounded-pill shadow-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Maintenance Request
+                    </a>
+                </div>
 
-        <div class="table-responsive rounded-3">
-            <table class="table table-bordered table-striped table-hover align-middle">
-                <thead class="table-primary">
+
+                <div class="d-flex justify-content-end mb-3">
+                    <input type="text" class="form-control w-25 shadow-sm rounded-pill" id="searchInput"
+                        placeholder="🔍 Search..." onkeyup="filterTable()">
+                </div>
+
+                <div class="table-responsive rounded-3 shadow-sm">
+                    <table class="table table-hover align-middle mb-0" id="requestsTable">
+                        <thead class="bg-blue text-white text-center"
+                            style="background: linear-gradient(90deg, #0d6efd, #6610f2); position: sticky; top: 0; z-index: 1;">
                     <tr>
                         <th>#</th>
                         <th>Ticket ID</th>
@@ -28,7 +37,7 @@
                 </thead>
                 <tbody>
                     @forelse($completedRequest as $key => $request)
-                        <tr>
+                        <tr class="text-center">
                             <td class="text-center fw-bold">
                                 <button class="btn btn-sm btn-outline-primary" onclick="toggleDetails({{ $request->id }})">
                                     <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
@@ -89,7 +98,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-muted">—</span>
+                                                                        <div class="btn btn-sm btn-outline-secondary disabled">N/A</div>
                                 @endif
                             </td>
                             <td class="text-center">
@@ -110,14 +119,10 @@
                                         <button type="submit" class="btn btn-warning btn-sm">Submit Rejection</button>
                                     </form>
                                 @else
-                                    <span
-                                        class="badge bg-{{ $request->user_feedback === 'accepted' ? 'success' : 'secondary' }}">
-                                        @if ($request->user_feedback === 'pending')
-                                            <h5>Waiting feddback</h5>
-                                        @else
-                                            {{ ucfirst($request->user_feedback ?? 'Waiting') }}
-                                        @endif
-                                    </span>
+<span class="badge bg-{{ $request->user_feedback === 'accepted' ? 'success' : ($request->user_feedback === 'pending' ? 'warning text-dark' : 'secondary') }}">
+    {{ $request->user_feedback === 'pending' ? 'Pending' : ucfirst($request->user_feedback ?? 'Waiting') }}
+</span>
+
                                 @endif
                             </td>
                         </tr>
@@ -161,15 +166,53 @@
                     @empty
                         <tr>
                             <td colspan="11" class="text-center text-muted py-4">
-                                <i class="bi bi-exclamation-circle me-1"></i> No Maintenance Requests Found
+                                <i class="bi bi-exclamation-circle me-1"></i> No  Requests Found
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
+                </div>
         </div>
-
+</div>
         @include('components.pagination', ['paginator' => $completedRequest])
     </div>
     <script src="/js/for_table.js"></script>
+        <script>
+        function filterTable() {
+            let input = document.getElementById("searchInput");
+            let filter = input.value.toLowerCase();
+            let table = document.querySelector("#requestsTable");
+            let tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let row = tr[i];
+                let text = row.textContent.toLowerCase();
+
+                if (text.includes(filter)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
+
+        $(document).ready(function() {
+            $('#requestsTable').DataTable({
+                responsive: true,
+                columnDefs: [{
+                        orderable: false,
+                        targets: [0, 8]
+                    },
+                    {
+                        className: "dt-center",
+                        targets: [0, 5, 6, 7, 8]
+                    }
+                ],
+                order: [
+                    [1, 'asc']
+                ]
+            });
+        });
+    </script>
 @endsection

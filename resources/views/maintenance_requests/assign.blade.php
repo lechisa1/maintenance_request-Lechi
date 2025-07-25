@@ -2,57 +2,70 @@
 @section('title', 'Assign Technician')
 
 @section('content')
-    <div class="card p-5 bg-light">
-        <h4 class="mb-4 text-center text-primary">Assign Technician to Request </h4>
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 rounded-4 bg-white">
+            <div class="card-body px-4 py-4">
 
-        @if (isset($noTechniciansMessage))
-            <div class="alert alert-warning text-center">{{ $noTechniciansMessage }}</div>
-        @else
-            <form action="{{ route('requests.assign', $maintenanceRequest->id) }}" method="POST" id="assignForm">
-                @csrf
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <label for="technician_id" class="form-label">Select Technician</label>
-                        <div id="technician-list" class="form-check" style="max-height: 200px; overflow-y: auto;">
-                            @foreach ($technicians as $technician)
-                                <div class="form-check mb-1">
-                                    <input class="form-check-input technician-checkbox" type="checkbox"
-                                        name="technician_ids[]" value="{{ $technician->id }}" id="tech{{ $technician->id }}"
-                                        data-workload="{{ $technician->assigned_requests_count }}">
-                                    <label class="form-check-label" for="tech{{ $technician->id }}"
-                                        style="color: {{ $technician->assigned_requests_count >= 5 ? 'red' : 'inherit' }}">
-                                        {{ $technician->name }} ({{ $technician->assigned_requests_count }} current tasks)
-                                        @if ($technician->assigned_requests_count >= 5)
-                                            <strong> (OVERLOADED)</strong>
-                                        @endif
-                                    </label>
-                                </div>
-                            @endforeach
+                <div class="text-center mb-5 card-header bg-white text-primary  rounded-top-4">
+                    {{-- <h3 class="fw-bold text-primary">Maintenance Request Form</h3> --}}
+                    <h3 class="fw-bold ">Assign Technicians to Request</h3>
 
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="director_notes" class="form-label">Director Notes</label>
-                        <textarea class="form-control" id="director_notes" name="director_notes" rows="2"></textarea>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="expected_completion_date" class="form-label">Expected Completion Date</label>
-                        <input type="date" class="form-control" id="expected_completion_date"
-                            name="expected_completion_date" required>
-                    </div>
-
-                    <div class="col-12 text-end mt-3">
-                        <button type="button" class="btn btn-primary btn-lg rounded-pill" id="assignButton">
-                            <i class="bi bi-person-check-fill"></i> Assign Technician
-                        </button>
-                    </div>
                 </div>
-            </form>
-        @endif
+                @if (isset($noTechniciansMessage))
+                    <div class="alert alert-warning text-center fs-5">
+                        {{ $noTechniciansMessage }}
+                    </div>
+                @else
+                    <form action="{{ route('requests.assign', $maintenanceRequest->id) }}" method="POST" id="assignForm">
+                        @csrf
+                        <div class="row g-4">
+
+                            {{-- Technician List --}}
+                            <div class="col-md-6">
+                                <label for="technician_id" class="form-label fw-semibold">Select Technician(s)</label>
+                                <div class="border rounded p-3" id="technician-list"
+                                    style="max-height: 250px; overflow-y: auto;">
+                                    @foreach ($technicians as $technician)
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input technician-checkbox" type="checkbox"
+                                                name="technician_ids[]" value="{{ $technician->id }}"
+                                                id="tech{{ $technician->id }}"
+                                                data-workload="{{ $technician->assigned_requests_count }}">
+                                            <label class="form-check-label" for="tech{{ $technician->id }}"
+                                                style="color: {{ $technician->assigned_requests_count >= 5 ? '#dc3545' : '#212529' }}">
+                                                <strong>{{ $technician->name }}</strong>
+                                                <span class="small text-muted">
+                                                    ({{ $technician->assigned_requests_count }} tasks)
+                                                </span>
+                                                @if ($technician->assigned_requests_count >= 5)
+                                                    <span class="badge bg-danger ms-2">Overloaded</span>
+                                                @endif
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            {{-- Director Remarks --}}
+                            <div class="col-md-6">
+                                <label for="director_notes" class="form-label fw-semibold">Director Remarks</label>
+                                <textarea class="form-control rounded-3" id="director_notes" name="director_notes" rows="2"
+                                    placeholder="Optional note or comment for the assigned technician(s)...">{{ old('director_notes') }}</textarea>
+                            </div>
+
+                            {{-- Submit Button --}}
+                            <div class="col-12 text-end mt-3">
+                                <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill" id="assignButton">
+                                    <i class="bi bi-person-check-fill me-1"></i> Assign Technician
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        </div>
     </div>
+
 
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

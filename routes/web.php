@@ -18,14 +18,17 @@ use App\Http\Controllers\MaintenanceCategoryController;
 
 Route::middleware('web')->group(function () {
 
-
     Route::get('/', [LoginController::class, 'showLoginForm'])->name('loginForm');
     Route::post('login/post', [LoginController::class, 'loginMethod'])->name('login');
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('/profile/image/upload', [ProfileController::class, 'uploadImage'])->name('profile.image.upload');
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-});
+Route::get('/supervisor/requests', [MaintenanceRequestController::class, 'addSupervisorLetter'])->name('supervisor_requests');
+Route::post('/supervisor/approve/{id}', [MaintenanceRequestController::class, 'approveAndForward'])->name('supervisor.approve');
+Route::post('/supervisor/reject/{id}', [MaintenanceRequestController::class, 'supervisorRejectRequest'])->name('supervisor.reject');
+
 Route::get('/maintenance/create', [MaintenanceRequestController::class, 'create'])->name('requests.create');
 Route::post('/maintenance/post', [MaintenanceRequestController::class, 'store'])->name('requests.store');
 Route::get('/maintenance/index', [MaintenanceRequestController::class, 'index'])->name('requests_indexs');
@@ -38,15 +41,15 @@ Route::get('/notifications/redirect/{id}', [NotificationController::class, 'redi
 Route::post('/maintenance-requests/{id}', [MaintenanceRequestController::class, 'show'])->name('maintenance_requests.show');
 Route::post('/requests/{maintenanceRequest}/respond', [MaintenanceRequestController::class, 'respondToCompletion'])->name('requests.respond');
 Route::get('/attachments/{attachment}/download', [MaintenanceRequestController::class, 'download'])->name('attachments.download');
-Route::get('/technician/requests/{request}/work', [TechnicianController::class, 'technicianWorkProgress'])->name('tecknician_work_form');
+Route::get('/technician/request/{request}/work', [TechnicianController::class, 'technicianWorkProgress'])->name('tecknician_work_form');
 Route::post('/technician/requests/{maintenanceRequest}/work', [TechnicianController::class, 'updateWork'])->name('tecknician_work_save');
 Route::get('/technician/assigned-requests', [TechnicianController::class, 'assignedRequests'])->name('technician.requests');
 Route::get('/tecknician/{request}/show', [TechnicianController::class, 'show'])->name('technician.show');
 Route::get('/tecknician/completedTask/completed', [TechnicianController::class, 'completedTask'])->name('completed_task');
 Route::get('/tecknician/inprogress/inprogress', [TechnicianController::class, 'inProgressTask'])->name('inProgress_task');
-Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-Route::middleware('auth', 'role:admin')->group(function () {
-    // Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+// Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('department/create', [DepartmentController::class, 'create'])->name('create_department');
     Route::post('department/posting', [DepartmentController::class, 'store'])->name('save_department');
     Route::get('department/index', [DepartmentController::class, 'index'])->name('department_index');
@@ -57,16 +60,16 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::get('users/index', [UserController::class, 'index'])->name('users_index');
     Route::get('users/', [UserController::class, 'create'])->name('create_users');
 
-    Route::post('users/create', [UserController::class, 'store'])->name('save_users');
+    Route::post('users/create', [UserController::class, 'store'])->middleware('permission:manage_user_roles')->name('save_users');
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('edit_user');
     Route::post('users/{user}/edit', [UserController::class, 'update'])->name('update_user');
-    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('delete_user');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->middleware('permission:manage_user_role')->name('delete_user');
+    Route::get('user/roles/create', [RoleController::class, 'addRoleForm'])->name('roles_create');
+    Route::post('user/roles', [RoleController::class, 'saveRole'])->name('roles_store');
+    Route::get('users/roles/with_permission', [RoleController::class, 'listOfRoles'])->name('roles_with_permission');
+    Route::get('user_roles/{role}/edit', [RoleController::class,'editRole'])->name('edit_role');
+    Route::put('user_roles/{role}/edit', [RoleController::class,'updateRole'])->name('update_role');
 
-    Route::get('role/create', [RoleController::class, 'addRoleForm'])->name('create_role');
-    Route::get('role/create', [RoleController::class, 'saveRole'])->name('save_role');
-    // For marking all notifications as read
-
-    // Handle the assignment assignedRequests
 
 });
 Route::post('/requests/{maintenanceRequest}/assign', [DirectorController::class, 'assign'])->name('requests.assign');
@@ -103,16 +106,16 @@ Route::delete(
 
     Route::get('/requests/detail/show/{id}', [DirectorController::class, 'show'])->name('requests.show');
 
-Route::middleware('auth', 'role:director')->group(function () {
+Route::middleware( ['auth', 'role:director'])->prefix('director')->group(function () {
     Route::get('director/dashboard', [DirectorController::class, 'directorDashboard'])->name('director.dashboard');
 
-    Route::get('maintenece/pending', [DirectorController::class, 'maintenenceRequestPending'])->name('maintenance_request_pending');
+    Route::get('maintenance/pending', [DirectorController::class, 'maintenenceRequestPending'])->name('maintenance_request_pending');
     Route::get('maintenece/assign', [DirectorController::class, 'assign'])->name('assign_request_to_technician
     ');
     Route::get('maintenece/completed', [DirectorController::class, 'getCompletedRequests'])->name('completed_maintenance');
 
     Route::get('maintenece/in_progress', [DirectorController::class, 'getInProgressRequests'])->name('in_progress_maintenance');
-    Route::get('maintenece/pending', [DirectorController::class, 'getPendingRequests'])->name('pending_maintenance');
+    Route::get('maintenance/pendings', [DirectorController::class, 'getPendingRequests'])->name('pending_maintenance');
     Route::get('maintenece/rejected', [DirectorController::class, 'getRejectedRequests'])->name('rejected_maintenance');
 
 
@@ -129,7 +132,7 @@ Route::middleware('auth', 'role:director')->group(function () {
     Route::post('/items/{id}', [ItemController::class, 'updateItem'])->name('update_item');
 });
 
-Route::middleware('auth', 'role:technician')->group(function () {
+Route::middleware( ['auth', 'role:technician'])->prefix('technician')->group(function () {
     Route::get('technician/dashboard', [TechnicianController::class, 'dashboard'])->name('technician.dashboard');
     // here is tecknician controllers
     // Route::get('/technician/requests/{request}/work', [TechnicianController::class, 'technicianWorkProgress'])->name('tecknician_work_form');
@@ -139,12 +142,13 @@ Route::middleware('auth', 'role:technician')->group(function () {
     // Route::get('/tecknician/completedTask/completed', [TechnicianController::class, 'completedTask'])->name('completed_task');
     // Route::get('/tecknician/inprogress/inprogress', [TechnicianController::class, 'inProgressTask'])->name('inProgress_task');
 });
-Route::middleware('auth', 'role:employer')->group(function () {
+Route::middleware( 'role:Employee')->group(function () {
     Route::get('employees/dashboard', [EmployeeController::class, 'employeeDashboard'])->name('employer.dashboard');
     Route::get('employeers/maintenance/index', [EmployeeController::class, 'index'])->name('employer.index');
     Route::get('employeers/maintenance/pending', [EmployeeController::class, 'pendingRequests'])->name('employer.pending');
     Route::get('employeers/maintenance/completed', [EmployeeController::class, 'completedRequests'])->name('employer.completed');
     Route::get('employeers/maintenance/in_progress', [EmployeeController::class, 'inProgressRequests'])->name('employer.in_progress');
     Route::get('employeers/maintenance/assigned', [EmployeeController::class, 'assignedRequests'])->name('employer.assigned');
+});
 });
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

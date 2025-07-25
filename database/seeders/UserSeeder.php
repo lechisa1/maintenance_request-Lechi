@@ -12,31 +12,36 @@ class UserSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+public function run(): void
     {
-        //
-        $admin=User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-        ]);
-        $admin->roles()->attach(Role::where('name','admin')->first()->id);
-        
-        $director=User::create([
-            'name'=>' Director',
-            'email'=>'director@gmail.com',
-            'password'=>Hash::make('password'),
-            'email_verified_at'=>now(),
-        ]);
-        $director->roles()->attach(Role::where('name','director')->first()->id);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $admin->assignRole('admin');
 
-        $technician=User::create([
-            "name"=>"Technician",
-            "email"=>"technician@gmail.com",
-            "password"=>Hash::make('password'),
-            "email_verified_at"=>now(),
-        ]);
-        $technician->roles()->attach(Role::where('name','technician')->first()->id);
+        $director = User::firstOrCreate(
+            ['email' => 'director@gmail.com'],
+            [
+                'name' => 'Director',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $director->assignRole('director');
+
+        $technician = User::firstOrCreate(
+            ['email' => 'technician@gmail.com'],
+            [
+                'name' => 'Technician',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $technician->assignRole('technician');
     }
 }

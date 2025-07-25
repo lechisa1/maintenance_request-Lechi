@@ -51,7 +51,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col me-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Total Departments</div>
+                                    Total Divisions</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalDepartments }}</div>
                             </div>
                             <div class="col-auto">
@@ -133,7 +133,7 @@
     </script>
     </body>
     <div class="container mt-5">
-        <h4 class="text-center">Users per Department</h4>
+        <h4 class="text-center">Users per Division</h4>
         <canvas id="usersChart"></canvas>
     </div>
 

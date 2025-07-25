@@ -13,7 +13,10 @@
                 <i class="bi bi-x"></i>
             </button>
         </div>
-
+        @php
+            use Illuminate\Support\Facades\Auth;
+            $isSupervisor = \App\Models\User::where('reports_to', Auth::id())->exists();
+        @endphp
         <div class="px-3 pt-3">
             <div class="mb-2">
                 <div class="text-white fw-bold text-uppercase text-xs mb-2">Home</div>
@@ -119,10 +122,29 @@
                             </ul>
                         </div>
                     </li>
+                    @if ($isSupervisor)
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
+                                <i class="bi bi-people"></i>
+                                <span>Request From Staff</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="pendingMenu">
+                                <ul class="nav flex-column ps-3">
+                                    <li class="nav-item">
+                                        <a href="{{ route('supervisor_requests') }}" class="nav-link active">
+                                            <i class="bi bi-clipboard-data"></i>
+                                            <span>Pending Requests</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    @endif
                 </ul>
             </div>
 
-            <div class="mb-2">
+            {{-- <div class="mb-2">
                 <div class="text-white fw-bold text-uppercase text-xs mb-2">System</div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -139,6 +161,6 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
         </div>
     </div>

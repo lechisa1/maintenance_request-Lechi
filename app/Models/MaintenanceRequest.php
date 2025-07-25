@@ -11,7 +11,9 @@ class MaintenanceRequest extends Model
         'requested_at' => 'datetime',
         'assigned_at' => 'datetime',
         'completed_at' => 'datetime',
+        //  'attachments' => 'array',
     ];
+    
 
 
     protected $fillable = [
@@ -25,8 +27,9 @@ class MaintenanceRequest extends Model
         'completed_at',
         'ticket_number',
         'user_feedback',
-
+         'supervisor_status',
         'rejection_reason',
+        'category_id'
     ];
 
     public function user()

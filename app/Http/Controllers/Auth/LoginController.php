@@ -38,46 +38,42 @@ class LoginController extends Controller
     {
         return view('auth.login');
     }
-    public function loginMethod(Request $request)
-    {
-        
-        $incomingFields = $request->validate([
-            "email" => ['required', 'email'],
-            "password" => "required",
 
-        ]);
+public function loginMethod(Request $request)
+{
+    $incomingFields = $request->validate([
+        "email" => ['required', 'email'],
+        "password" => "required",
+    ]);
 
+    if (auth()->attempt(['email' => $incomingFields['email'], 'password' => $incomingFields['password']])) {
+        $user = Auth::user();
 
-        
+        $role = $user->getRoleNames()->first(); // Spatie method, returns string like 'admin'
 
-        if (auth()->attempt(['email' => $incomingFields['email'], 'password' => $incomingFields['password']])) {
-            $user = Auth::user();
-
-            $roles = $user->roles()->first()->name ?? null;
-            if (!$roles) {
-                return redirect()->route('loginForm')->with('error', 'No role assigned.');
-            }
-
-            if ($roles === 'admin') {
-
-                $request->session()->regenerate();
-                return redirect()->route('admin.dashboard')->with('success', 'Loggedin Successfully!!!');
-            } elseif ($roles === 'director') {
-                $request->session()->regenerate();
-                return redirect()->route('director.dashboard')->with('success', 'Loggedin Successfully!!!');
-            } elseif ($roles === 'technician') {
-                $request->session()->regenerate();
-                return redirect()->route('technician.dashboard')->with('success', 'Loggedin Successfully!!!');
-            } elseif ($roles === 'employer') {
-                $request->session()->regenerate();
-                return redirect()->route('employer.dashboard')->with('success', 'Loggedin Successfully!!!');
-            } else {
-                return redirect()->back()->with("error", "Oops!! login failed try again");
-            }
+        if (!$role) {
+            return redirect()->route('loginForm')->with('error', 'No role assigned.');
         }
-        // dd($incomingFields);
-        return redirect()->route('loginForm')->with('error', 'Invalid email or password.');
+
+        $request->session()->regenerate();
+
+        switch ($role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully!');
+            case 'director':
+                return redirect()->route('director.dashboard')->with('success', 'Logged in Successfully!');
+            case 'technician':
+                return redirect()->route('technician.dashboard')->with('success', 'Logged in Successfully!');
+            case 'Employee':
+                return redirect()->route('employer.dashboard')->with('success', 'Logged in Successfully!');
+            default:
+                return redirect()->route('loginForm')->with('error', 'Unknown role.');
+        }
     }
+
+    return redirect()->route('loginForm')->with('error', 'Invalid email or password.');
+}
+
 
 
     protected function handleInvalidRole()

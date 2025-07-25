@@ -1,23 +1,24 @@
 
 @extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : (Auth::user()->roles->first()->name === 'employer' ? 'employeers.dashboard.layout' : 'employeers.dashboard.layout'))))
 @section('content')
-    <div class="card shadow-sm p-4 rounded-4">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-            <h4 class="text-primary mb-0">✨ In Progress Maintenance Request Lists</h4>
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 rounded-4 bg-white">
+            <div class="card-body px-4 py-4">
+        <div >
+            <h4 class="text-primary m-3 text-center">In Progress  Requests List</h4>
             {{-- <a href="{{ route('requests.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle me-1"></i> Add Req
             </a> --}}
 
         </div>
+                <div class="gap-3 mb-3"><input type="text" class="form-control" id="searchInput" placeholder="🔍 Search..."
+                        onkeyup="filterTable()" style="max-width: 250px;margin-left:70%">
+                </div>
 
-        <div class="gap-3 mb-3"><input type="text" class="form-control" id="searchInput" placeholder="🔍 Search..."
-                onkeyup="filterTable()" style="max-width: 250px;margin-left:70%">
-        </div>
-
-        <div class="table-responsive rounded-3 border border-2 p-2">
-            <table class="table table-hover table-bordered table-striped align-middle text-center mb-0 shadow-sm">
-
-                <thead class="table-primary">
+                <div class="table-responsive rounded-3 shadow-sm">
+                    <table class="table table-hover align-middle mb-0" id="requestsTable">
+                        <thead class="bg-blue text-white text-center"
+                            style="background: linear-gradient(90deg, #0d6efd, #6610f2); position: sticky; top: 0; z-index: 1;">
                     <tr>
 
                         <th>#</th>
@@ -37,7 +38,8 @@
                 </thead>
                 <tbody>
                     @forelse($InProgressRequests  as $key => $request)
-                        <tr>
+                        <tr class="text-center">
+                            {{-- <td class="text-center fw-bold">{{ $key + 1 }}</td> --}}
 
                             <td class="text-center fw-bold">
                                 <button class="btn btn-sm btn-outline-primary" onclick="toggleDetails({{ $request->id }})">
@@ -123,6 +125,8 @@
                                     <div class="col-12 border-bottom py-1"><strong>Phone:</strong>
                                         {{ $request->user->phone }}
                                     </div>
+                                                                                    <div class="col-12 border-bottom py-1"><strong>Job Position:</strong>
+                                                    {{ $request->user->job_position }}</div>
                                     <div class="col-12 border-bottom py-1"><strong>Item:</strong>
                                         {{ $request->item?->name ?? 'N/A' }}</div>
                                     <div class="col-12 border-bottom py-1"><strong>Issue:</strong>
@@ -149,7 +153,7 @@
                     @empty
                         <tr>
                             <td colspan="4" class="text-center text-danger">
-                                <i class="bi bi-exclamation-circle"></i> No Maintenance found
+                                <i class="bi bi-exclamation-circle"></i> No Request found
                             </td>
                         </tr>
                     @endforelse
@@ -160,7 +164,8 @@
         </div>
         @include('components.pagination', ['paginator' => $InProgressRequests])
     </div>
-
+        </div>
+    </div>
 
     <script>
         function toggleDetails(id) {

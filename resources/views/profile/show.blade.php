@@ -45,5 +45,35 @@
                 </div>
             </div>
         </div>
+        <div class="card mt-4 shadow-sm">
+    <div class="card-header bg-secondary text-white col-6">
+        <h5 class="mb-0">Update Profile Picture</h5>
+    </div>
+    <div class="card-body col-6">
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+        @if ($errors->has('profile_image'))
+            <div class="alert alert-danger">
+                {{ $errors->first('profile_image') }}
+            </div>
+        @endif
+
+        <form action="{{ route('profile.image.upload') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label for="profile_image" class="form-label">Choose a new profile image:</label>
+                <input type="file" name="profile_image" id="profile_image" class="form-control" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-upload me-1"></i> Upload Image
+            </button>
+        </form>
+    </div>
+</div>
+
     </div>
 @endsection

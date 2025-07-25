@@ -3,167 +3,128 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login – Smart Inventory System</title>
+    <title>Login – Maintenance Request System</title>
 
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-    <style>
-        body {
-            background: linear-gradient(to right, #e0e1e2, #e5e7eb);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-        }
-
-        .header {
-            width: 100%;
-            height: 100px; /* Set a fixed height for the header */
-            padding: 40px 20px;
-            text-align: center;
-            background: url('https://th.bing.com/th/id/OIP.4Y3TLWhFProqRzO1ed30ewHaDj?rs=1&pid=ImgDetMain&cb=idpwebpc2') no-repeat center center;
-            background-size: cover;
-            color: palevioletred;
-            position: relative; /* Allow absolute positioning of content */
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .header i {
-            font-size: 60px;
-            color: white;
-        }
-
-        .header h1 {
-            font-weight: 800;
-            font-size: 2.5rem;
-            margin-top: 10px;
-        }
-
-        .header .login-label {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-left: 15px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* Absolute positioning for content inside header */
-        .header-content {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Center content vertically and horizontally */
-        }
-
-        .login-card {
-            max-width: 400px;
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            background: white;
-        }
-
-        .form-control {
-            border-radius: 10px;
-        }
-
-        .btn-primary {
-            background-color: #4e73df;
-            border: none;
-            border-radius: 10px;
-        }
-
-        .btn-primary:hover {
-            background-color: #2e59d9;
-        }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #4e73df;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="{{ asset('css/login.css') }}" rel="stylesheet">
 
 </head>
 
 <body>
-    <div class="header">
-        <div class="header-content">
-            <i class="bi bi-box-seam-fill"></i>
-            <h1 style="margin-bottom: 5px"><marquee>Maintenance Request System</marquee></h1>
-            {{-- <div class="login-label">Login</div> --}}
-        </div>
-    </div>
-
-    <div class="login-card">
-        <div class="text-center mb-3">
-            <img src="https://th.bing.com/th/id/OIP.fXgYUVPqjNT-LJDpgiKoVAHaHa?rs=1&pid=ImgDetMain" class="logo" alt="Logo">
-            <h4 class="mt-3 text-primary">Maintenance Request System</h4>
+    <div class="login-container">
+        <div class="header">
+            <h1>Maintenance Request System</h1>
+            <p>Streamline your facility maintenance workflow</p>
         </div>
 
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                    name="email" value="{{ old('email') }}" required autofocus>
-                @error('email')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+        <div class="card login-card">
+            <div class="logo-container">
+                <img src="{{asset('image/logo.png')}}" class="logo" alt="Maintenance System Logo">
+                <h4 class="text-center mb-0" style="color: var(--primary-color)">Welcome Back</h4>
+                <p class="text-muted text-center">Please login to your account</p>
             </div>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input id="password" type="password"
-                    class="form-control @error('password') is-invalid @enderror" name="password" required>
-                @error('password')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>
+                            @foreach ($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                    {{ old('remember') ? 'checked' : '' }}>
-                <label class="form-check-label" for="remember"> Remember Me </label>
-            </div>
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>{{ session('error') }}</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-envelope-fill text-muted"></i>
+                        </span>
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
+                            placeholder="Enter your email">
+                    </div>
+                    @error('email')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
 
-            <div class="mt-3 text-center">
-                <a href="#" class="text-decoration-none small">Forgot Password?</a>
-            </div>
-        </form>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-lock-fill text-muted"></i>
+                        </span>
+                        <input id="password" type="password"
+                            class="form-control @error('password') is-invalid @enderror" name="password" required
+                            autocomplete="current-password" placeholder="Enter your password">
+                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                            <i class="bi bi-eye-fill"></i>
+                        </button>
+                    </div>
+                    @error('password')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                            {{ old('remember') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="remember">Remember Me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary btn-login">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </button>
+                </div>
+
+                <div class="divider">
+                    <span class="divider-text">or continue with</span>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-outline-primary">
+                        <i class="bi bi-google me-2"></i>Google
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="footer">
+            <p>© {{ date('Y') }} Maintenance Request System. All rights reserved.</p>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/login.js') }}"></script>
+
 </body>
 
 </html>

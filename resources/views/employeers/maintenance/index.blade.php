@@ -1,17 +1,20 @@
 @extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : (Auth::user()->roles->first()->name === 'employer' ? 'employeers.dashboard.layout' : 'employeers.dashboard.layout'))))
 
 @section('content')
-    <div class="card shadow-sm p-4 rounded-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="text-primary fw-bold mb-0">✨ Maintenance Request List</h4>
+    <div class="card shadow-none border-0">
+        <div class="d-flex justify-content-between align-items-center m-3">
+            <h4 class="text-primary fw-bold mb-0">Maintenance Request List</h4>
             <a href="{{ route('requests.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i> Add Maintenance
+                <i class="bi bi-plus-circle me-1"></i> Add Request
             </a>
         </div>
-
-        <div class="table-responsive rounded-3">
-            <table class="table table-bordered table-striped table-hover align-middle">
-                <thead class="table-primary">
+<div class="card border-0">
+      <div class="gap-3 m-3"><input type="text" class="form-control" id="searchInput" placeholder="🔍 Search..."
+                onkeyup="filterTable()" style="max-width: 250px;margin-left:70%">
+        </div>
+        <div class="table-responsive ">
+            <table id="requestsTable" class="table table-borderless">
+                <thead class="bg-blue">
                     <tr>
                         <th>#</th>
                         <th>Ticket ID</th>
@@ -87,7 +90,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-muted">—</span>
+                                                                       <div class="btn btn-sm btn-outline-secondary disabled">N/A</div>
                                 @endif
                             </td>
                             <td class="text-center">
@@ -122,14 +125,51 @@
                     @empty
                         <tr>
                             <td colspan="11" class="text-center text-muted py-4">
-                                <i class="bi bi-exclamation-circle me-1"></i> No Maintenance Requests Found
+                                <i class="bi bi-exclamation-circle me-1"></i> No  Requests Found
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
+</div>
         @include('components.pagination', ['paginator' => $maintenances])
-    </div>
+    </>
+        <script>
+        function filterTable() {
+            let input = document.getElementById("searchInput");
+            let filter = input.value.toLowerCase();
+            let table = document.querySelector("#requestsTable");
+            let tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let row = tr[i];
+                let text = row.textContent.toLowerCase();
+
+                if (text.includes(filter)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
+
+        $(document).ready(function() {
+            $('#requestsTable').DataTable({
+                responsive: true,
+                columnDefs: [{
+                        orderable: false,
+                        targets: [0, 8]
+                    },
+                    {
+                        className: "dt-center",
+                        targets: [0, 5, 6, 7, 8]
+                    }
+                ],
+                order: [
+                    [1, 'asc']
+                ]
+            });
+        });
+    </script>
 @endsection

@@ -6,11 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable,HasRoles;
+    
 
     /**
      * The attributes that are mass assignable.
@@ -20,10 +22,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar_url',
         'password',
         'phone',
         'department_id',
         'specialization',
+        'job_position_id',
+        'reports_to'
 
     ];
 
@@ -42,11 +47,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Department::class);
     }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
-    }
+public function directedDepartment()
+{
+    return $this->hasOne(Department::class, 'director_id');
+}
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    // }
     public function maintenanceRequests()
     {
 
@@ -56,41 +64,35 @@ class User extends Authenticatable
     {
         return $this->hasMany(Assignment::class, 'technician_id');
     }
-    public function isDirector()
-    {
-        return $this->roles->contains('name', 'director');
-    }
-    public function isTechnician()
-    {
-        return $this->roles->contains('name', 'technician');
-    }
-    public function isEmployer()
-    {
-        return $this->roles->contains('name', 'employer');
-    }
+public function isDirector()
+{
+    return $this->hasRole('director');
+}
 
-    // public function isDirector()
-    // {
-    //     return $this->role === 'director';
-    // }
-    // public function isAdmin()
-    // {
-    //     return $this->roles->contains('name', 'admin');
-    // }
+public function isTechnician()
+{
+    return $this->hasRole('technician');
+}
 
-    // public function isTechnician()
-    // {
-    //     return $this->role === 'technician';
-    // }
-
-    // public function isEmployer()
-    // {
-    //     return $this->role === 'employer';
-    // }
-    public function hasRole($role)
-    {
-        return $this->roles->contains('name', $role);
-    }
+public function isEmployer()
+{
+    return $this->hasRole('employer');
+}
+// Supervisor (manager)
+// Who this user reports to (supervisor)
+public function reportsTo()
+{
+    return $this->belongsTo(User::class, 'reports_to');
+}
+    public function jobPosition()
+{
+    return $this->belongsTo(JobPosition::class,'job_position_id');
+}
+// Users who report to this user (subordinates)
+public function subordinates()
+{
+    return $this->hasMany(User::class, 'reports_to');
+}
 
     /**
      * Get the attributes that should be cast.

@@ -9,12 +9,28 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<style>
+    .table thead.bg-blue th {
+    background-color: green; /* Bootstrap's primary blue */
+    color: white;
+    border-bottom: 2px solid #0a58ca; /* Slightly darker blue for border */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px 8px; /* Slightly larger padding */
+}
 
+/* Hover effect for better interactivity */
+.table thead.bg-blue th:hover {
+    background-color: #0bd79a; /* Slightly darker on hover */
+}
+</style>
 </head>
 
-<body>
+<body class="bg-white">
     <!-- Sidebar -->
 
     @include('technician.dashboard.sidebar')

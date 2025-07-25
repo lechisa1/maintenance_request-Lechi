@@ -16,11 +16,7 @@ use App\Notifications\NotFixedNotification;
 
 class TechnicianController extends Controller
 {
-    //
-    // public function dashboard()
-    // {
-    //     return view('technician.dashboard.dasboard');
-    // }
+
     public function dashboard()
     {
         $technicianId = auth()->id();
@@ -69,48 +65,51 @@ class TechnicianController extends Controller
         return view('technician.tecknician_work_form');
     }
 
-    public function show(MaintenanceRequest $request)
-    {
-                    $isDirector = User::where('id', $value)
-                        ->whereHas('roles', function ($q) {
-                            $q->where('name', 'director');
-                        })
-                        ->exists();
-        $request->load([
-            'user',
-            'categories',
-            'latestAssignment.director',
-            'latestAssignment.technician',
-            'workLogs.technician',
-            'item',
-            'item.categories',
-            'attachments',
-            'updates.user'
-        ]);
-        //  Block if technician is not assigned to this request
-        if (
-            auth()->user()->hasRole('technician') &&
-            !$request->assignments->contains('technician_id', auth()->id())
-        ) {
-            abort(403, 'You are not authorized to view this request.');
-        }
-        $technicians = [];
-        if (
-            auth()->user()->can('assign-requests') ||
-            (auth()->user()->hasRole('technician') && auth()->user()->id === $request->assignment?->technician_id)
-        ) {
-            $technicians = User::whereHas('roles', function ($q) use ($request) {
-                $q->where('name', 'technician')
-                    ->where('department_id', $request->department_id);
-            })->get();
-        }
+public function show(MaintenanceRequest $request)
+{
+    $isDirector = User::where('id', auth()->id())
+        ->whereHas('roles', function ($q) {
+            $q->where('name', 'technician');
+        })
+        ->exists();
 
-        return view('technician.requests.show', [
-            'request' => $request,
-            'technicians' => $technicians,
-            'isDirector'=>$isDirector
-        ]);
+    $request->load([
+        'user',
+        'categories',
+        'latestAssignment.director',
+        'latestAssignment.technician',
+        'workLogs.technician',
+        'item',
+        'item.categories',
+        'attachments',
+        'updates.user'
+    ]);
+    
+    // Block if technician is not assigned to this request
+    if (
+        auth()->user()->hasRole('technician') &&
+        !$request->assignments->contains('technician_id', auth()->id())
+    ) {
+        abort(403, 'You are not authorized to view this request.');
     }
+    
+    $technicians = [];
+    if (
+        auth()->user()->can('assign-requests') ||
+        (auth()->user()->hasRole('technician') && auth()->user()->id === $request->assignment?->technician_id)
+    ) {
+        $technicians = User::whereHas('roles', function ($q) use ($request) {
+            $q->where('name', 'technician');
+
+        })->get();
+    }
+
+    return view('technician.requests.show', [
+        'request' => $request,
+        'technicians' => $technicians,
+        'isDirector' => $isDirector
+    ]);
+}
     public function assignedRequests()
     {
         $requests = MaintenanceRequest::with(['user', 'assignments', 'item'])
@@ -126,9 +125,7 @@ class TechnicianController extends Controller
     }
     public function technicianWorkProgress(MaintenanceRequest $request)
     {
-        // if ($request->assignments->technician_id !== auth()->id()) {
-        //     abort(403);
-        // }
+      
         return view('technician.tecknician_work_form', [
             'request' => $request->load(['assignments'])
         ]);
@@ -140,7 +137,8 @@ class TechnicianController extends Controller
         $validated = $request->validate([
             'work_done' => 'required|string|min:10',
             'materials_used' => 'nullable|string|max:255',
-            'time_spent_minutes' => 'required|integer|min:1',
+            'time_spent_minutes' => 'nullable|numeric|min:0.1',
+
             'completion_notes' => 'nullable|string|max:500',
             'status' => ['required', Rule::in(['in_progress', 'not_fixed', 'completed'])]
         ]);

@@ -43,9 +43,10 @@ class MaintenanceRequestRejected extends Notification
      */
     public function toArray(object $notifiable): array
     {
+         $rejectedBy = $this->maintenanceRequest->rejectedBy->name ?? 'Supervisor';
         return [
-            'message' => "Your maintenance request rejected by " . $this->maintenanceRequest->rejectedBy->name ?? 'Unknown',
-            'url' => route('maintenance_requests.show', $this->maintenanceRequest->id),
+            'message' => "Your maintenance request was rejected by {$rejectedBy}.",
+            'url' => route('technician.show', $this->maintenanceRequest->id),
 
         ];
     }
