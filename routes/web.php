@@ -19,7 +19,7 @@ use App\Http\Controllers\MaintenanceCategoryController;
 Route::middleware('web')->group(function () {
 
     Route::get('/', [LoginController::class, 'showLoginForm'])->name('loginForm');
-    Route::post('login/post', [LoginController::class, 'loginMethod'])->name('login');
+    Route::post('user/login/page', [LoginController::class, 'loginMethod'])->name('login');
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::post('/profile/image/upload', [ProfileController::class, 'uploadImage'])->name('profile.image.upload');
 });
@@ -60,15 +60,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('users/index', [UserController::class, 'index'])->name('users_index');
     Route::get('users/', [UserController::class, 'create'])->name('create_users');
 
-    Route::post('users/create', [UserController::class, 'store'])->middleware('permission:manage_user_roles')->name('save_users');
-    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('edit_user');
-    Route::post('users/{user}/edit', [UserController::class, 'update'])->name('update_user');
-    Route::delete('users/{user}', [UserController::class, 'destroy'])->middleware('permission:manage_user_role')->name('delete_user');
-    Route::get('user/roles/create', [RoleController::class, 'addRoleForm'])->name('roles_create');
-    Route::post('user/roles', [RoleController::class, 'saveRole'])->name('roles_store');
+    Route::post('users/create', [UserController::class, 'store'])->middleware('permission:add_new_user')->name('save_users');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])->middleware('permission:edit_user')->name('edit_user');
+    Route::post('users/{user}/edit', [UserController::class, 'update'])->middleware('permission:edit_user')->name('update_user');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->middleware('permission:delete_user')->name('delete_user');
+    Route::get('user/roles/create', [RoleController::class, 'addRoleForm'])->middleware('permission:add_new_role')->name('roles_create');
+    Route::post('user/roles', [RoleController::class, 'saveRole'])->middleware('permission:add_new_role')->name('roles_store');
     Route::get('users/roles/with_permission', [RoleController::class, 'listOfRoles'])->name('roles_with_permission');
-    Route::get('user_roles/{role}/edit', [RoleController::class,'editRole'])->name('edit_role');
-    Route::put('user_roles/{role}/edit', [RoleController::class,'updateRole'])->name('update_role');
+    Route::get('user_roles/{role}/edit', [RoleController::class,'editRole'])->middleware('permission:edit_role')->name('edit_role');
+    Route::put('user_roles/{role}/edit', [RoleController::class,'updateRole'])->middleware('permission:edit_role')->name('update_role');
+    Route::delete('roles/{role}',[RoleController::class,'deleteRole'])->name('delete_role');
 
 
 });
@@ -149,6 +150,7 @@ Route::middleware( 'role:Employee')->group(function () {
     Route::get('employeers/maintenance/completed', [EmployeeController::class, 'completedRequests'])->name('employer.completed');
     Route::get('employeers/maintenance/in_progress', [EmployeeController::class, 'inProgressRequests'])->name('employer.in_progress');
     Route::get('employeers/maintenance/assigned', [EmployeeController::class, 'assignedRequests'])->name('employer.assigned');
+    Route::get('maintenance/pendings', [MaintenanceRequestController::class, 'division_director_request_view'])->name('division_director_request_view');
 });
 });
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

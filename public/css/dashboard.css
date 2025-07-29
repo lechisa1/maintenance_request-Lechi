@@ -190,6 +190,14 @@
     margin-bottom: 3px;
         position: relative;
     }
+#sidebar .nav-link span {
+    display: inline-block;
+    max-width: 160px; /* Adjust based on sidebar width */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
 
     .nav-link {
         color: #5a5c69;

@@ -26,12 +26,12 @@
 
                         <th>Requested By</th>
 
-                        <th>Job Position</th>
+                      
 
                         <th>Priority</th>
 
                         <th>Status</th>
-                        <th class="text-center">Actions</th>
+                        
                         <th>View</th>
                     </tr>
                 </thead>
@@ -51,7 +51,7 @@
                             {{-- <td>{{ $request->user->department->name }}</td>
                             <td>{{ $request->item ? $request->item->name : 'N/A' }}</td> --}}
 
-                            <td>{{ $request->user->job_position }}</td>
+                            
                             <td>
                                 <span
                                     class="badge 
@@ -71,66 +71,7 @@
                                     @else bg-secondary @endif">
                                     {{ ucfirst($request->status) }}
                                 </span>
-                            </td>
-                            <td class="d-flex justify-content-center gap-1">
-                                @if ($request->status === 'pending')
-                                    @if (Auth::user()->roles->first()->name === 'admin' || Auth::user()->roles->first()->name === 'director')
-                                        <a href="{{ route('requests.showAssignForm', $request->id) }}"
-                                            class="btn btn-primary ">
-                                            <span class="bi bi-person">Assign</span>
-                                        </a>
-                                    @endif
 
-                                    @if (Auth::id() === $request->user_id)
-                                        <button class="btn btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal-{{ $request->id }}">
-                                            <span class="bi bi-trash"></span>
-                                        </button>
-
-                                        <!-- Delete Modal for each request -->
-                                        <div class="modal fade" id="deleteModal-{{ $request->id }}" tabindex="-1"
-                                            aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title text-danger" id="deleteModalLabel">Confirm
-                                                            Delete</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Are you sure you want to delete this maintenance request? This
-                                                        action cannot be undone.
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
-                                                        <form action="{{ route('requests.delete', $request->id) }}"
-                                                            method="POST">
-                                                            @csrf @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal"
-                                        data-bs-target="#rejectModal{{ $request->id }}">
-                                        Reject
-                                    </button>
-                                    @if ($request->status === 'rejected')
-                                        <button disabled class="btn btn-danger me-2">
-                                            <span class="fas fa-tasks">rejected</span>
-                                        </button>
-                                    @endif
-                                @else
-                                    <button disabled class="btn btn-secondary me-2">
-                                        <span class="fas fa-tasks">Assign</span>
-                                    </button>
-                                @endif
-                            </td>
                             <td>
                                 <a href="{{ route('requests.show', $request->id) }}"
                                     class="btn btn-outline-primary btn-sm">
@@ -171,35 +112,7 @@
                             </td>
                         </tr>
 
-                        <!-- Reject Modal for each request -->
-                        <div class="modal fade" id="rejectModal{{ $request->id }}" tabindex="-1"
-                            aria-labelledby="rejectModalLabel{{ $request->id }}" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <form action="{{ route('requests.reject', $request->id) }}" method="POST">
-                                    @csrf
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-danger" id="rejectModalLabel{{ $request->id }}">
-                                                Reject Request</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <label for="rejection_reason" class="form-label">Reason for
-                                                    Rejection:</label>
-                                                <textarea class="form-control" name="rejection_reason" rows="3" required></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-danger">Reject</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+
 
                     @empty
                         <tr>

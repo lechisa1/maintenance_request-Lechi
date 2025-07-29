@@ -37,7 +37,7 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#usersMenu">
                             <i class="bi bi-list-task"></i>
-                            <span>Maintenance Tasks</span>
+                            <span>Track Requests</span>
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <div class="collapse" id="usersMenu">
@@ -45,41 +45,41 @@
                                 <li class="nav-item">
                                     <a href="{{ route('pending_maintenance') }}"
                                         class="nav-link  bi bi-hourglass-split text-info">
-                                        Pending </a>
+                                        Pending Approval</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('assigned_maintenance') }}"
-                                        class="nav-link bi bi-arrow-right-circle text-warning">Assigned</a>
+                                        class="nav-link bi bi-arrow-right-circle text-warning">Assigned To Technician</a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a href="{{ route('in_progress_maintenance') }}"
                                         class="nav-link bi bi-arrow-repeat text-primary">
-                                        In Progress </a>
+                                        Work in Progress </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('completed_maintenance') }}"
-                                        class="nav-link bi bi-check-circle text-success">Completed</a>
+                                        class="nav-link bi bi-check-circle text-success">Completed Tasks</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('rejected_maintenance') }}"
-                                        class="nav-link bi bi-slash-circle text-danger">Rejected</a>
+                                        class="nav-link bi bi-slash-circle text-danger">Rejected Requests</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#MaintenanceMenu">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <span>Maintenance Request</span>
+                            <i class="bi bi-send"></i>
+                            <span>Submit Requests</span>
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <div class="collapse" id="MaintenanceMenu">
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                     <a href="{{ route('requests_indexs') }}"
-                                        class="nav-link bi bi-arrow-right-circle text-warning">Requested
-                                        List</a>
+                                        class="nav-link bi bi-arrow-right-circle text-warning">Add New Request
+                                        </a>
                                 </li>
 
 
@@ -96,7 +96,7 @@
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                     <a href="{{ route('categories.index') }}"
-                                        class="nav-link bi bi-hammer text-info">Miantenance
+                                        class="nav-link bi bi-hammer text-info">Maintenance
                                         Category</a>
                                 </li>
 
@@ -108,14 +108,14 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#ItemRegister">
                             <i class="bi bi-laptop"></i>
-                            <span>Item Register</span>
+                            <span>Asset Managemen</span>
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <div class="collapse" id="ItemRegister">
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
-                                    <a href="{{ route('item_index') }}" class="nav-link bi bi-box text-info">Item
-                                        Register</a>
+                                    <a href="{{ route('item_index') }}" class="nav-link bi bi-box text-info">
+                                        Registered Items</a>
                                 </li>
 
 
@@ -126,7 +126,7 @@
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
                                 <i class="bi bi-people"></i>
-                                <span>Request From Staff</span>
+                                <span>Staff Requests</span>
                                 <i class="bi bi-chevron-down ms-auto"></i>
                             </a>
                             <div class="collapse" id="pendingMenu">
@@ -134,7 +134,13 @@
                                     <li class="nav-item">
                                         <a href="{{ route('supervisor_requests') }}" class="nav-link active">
                                             <i class="bi bi-clipboard-data"></i>
-                                            <span>Pending Requests</span>
+                                            <span>Need Approval(HW)</span>
+                                        </a>
+                                    </li>
+                                                <li class="nav-item">
+                                        <a href="{{ route('pending_maintenance') }}" class="nav-link active">
+                                            <i class="bi bi-eye"></i>
+                                            <span>View Staff Requests</span>
                                         </a>
                                     </li>
                                 </ul>

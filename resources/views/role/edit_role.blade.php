@@ -29,6 +29,7 @@
                             <div class="col-md-6">
                                 <label for="description" class="form-label">Description</label>
                                 <textarea name="description" id="description"
+                                placeholder="optional(if no need it leave it blank)"
                                           class="form-control @error('description') is-invalid @enderror"
                                           rows="2">{{ old('description', $role->description ?? '') }}</textarea>
                                 @error('description')

@@ -37,8 +37,8 @@
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#usersMenu">
-                            <i class="bi bi-wrench"></i>
-                            <span>Maintenance Requests</span>
+                            <i class="bi bi-clipboard-data"></i>
+                            <span>Track Requests</span>
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <div class="collapse" id="usersMenu">
@@ -47,52 +47,59 @@
                                 <li class="nav-item">
                                     <a href="{{ route('employer.pending') }}"
                                         class="nav-link text-primary bi bi-hourglass-split">
-                                        Pending</a>
+                                         Pending Approval</a>
                                 </li>
                                 <a href="{{ route('employer.assigned') }}"
                                     class="nav-link text-warning bi bi-clipboard-check">
-                                    Assigned</a>
+                                     Assigned to Technician</a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('employer.in_progress') }}" class="nav-link text-info bi bi-arrow-repeat">
-                            In progress</a>
+                            Work in Progress</a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('employer.completed') }}" class="nav-link text-success bi bi-check-circle">
-                            Completed</a>
+                            Completed Tasks</a>
                     </li>
                 </ul>
             </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#productsMenu">
-                    <i class="bi bi-gear-fill"></i>
-                    <span>Request Form</span>
+                    <i class="bi bi-send"></i>
+                    <span>Submit Request</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <div class="collapse" id="productsMenu">
                     <ul class="nav flex-column ps-3">
                         <li class="nav-item">
                             <a href="{{ route('requests_indexs') }}"
-                                class="nav-link bi bi-question-circle text-warning">Maintenance
+                                class="nav-link bi bi-question-circle text-warning">New
                                 Request</a>
                         </li>
 
                     </ul>
                 </div>
-            @if ($isSupervisor)
+                @if ($isSupervisor)
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
                     <i class="bi bi-people"></i>
-                    <span>Request From Staff</span>
+                    <span>Staff Requests</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <div class="collapse" id="pendingMenu">
                     <ul class="nav flex-column ps-3">
                         <li class="nav-item">
-                            <a href="{{ route('supervisor_requests') }}" class="nav-link active">
-                                <i class="bi bi-clipboard-data"></i>
-                                <span>Pending Requests</span>
+<a href="{{ route('supervisor_requests') }}" class="nav-link" title="Needs Approval (Hardware)">
+    <i class="bi bi-tools"></i>
+    <span>Needs Approval (Hardware)</span>
+</a>
+
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('division_director_request_view') }}" class="nav-link">
+                                <i class="bi bi-eye"></i>
+                                <span>View Staff Requests</span>
                             </a>
                         </li>
                     </ul>

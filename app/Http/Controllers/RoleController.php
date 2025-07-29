@@ -60,6 +60,6 @@ public function updateRole(Request $request, Role $role)
     public function deleteRole(Role $role)
     {
         $role->delete();
-        redirect()->route('roles_with_permission')->withSuccess(["message" => "deleted successfully"]);
+        return redirect()->route('roles_with_permission')->with(["success" => "Role deleted successfully"]);
     }
 }

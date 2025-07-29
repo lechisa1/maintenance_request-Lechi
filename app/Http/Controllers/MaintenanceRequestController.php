@@ -49,12 +49,29 @@ class MaintenanceRequestController extends Controller
         return redirect()->back()->with('error', 'Hardware replacement category not found.');
     }
 
-    // Fetch requests where:
-    // - category is "hardware replacement" (via pivot)
-    // - user reports to this supervisor
-    // - status is "awaiting_supervisor_letter"
+ 
     $requests = MaintenanceRequest::with('categories')->where('status', 'pending')
         ->whereHas('categories', function ($q) use ($hardwareCategory) {
+            $q->where('category_id', $hardwareCategory->id);
+        })
+        ->whereHas('user', function ($q) use ($user) {
+            $q->where('reports_to', $user->id);
+        })
+        ->with('user.department')
+        ->get();
+
+    return view('supervisor_requests', compact('requests'));
+}
+public function requestFromStaff()
+{
+    $user = Auth::user();
+
+    // Fetch the "Hardware Replacement" category
+    $hardwareCategory = Category::where('name', 'Hardware Replecement')->first();
+
+    $requests = MaintenanceRequest::with('categories')
+        ->where('status', 'pending')
+        ->whereDoesntHave('categories', function ($q) use ($hardwareCategory) {
             $q->where('category_id', $hardwareCategory->id);
         })
         ->whereHas('user', function ($q) use ($user) {
@@ -415,4 +432,27 @@ public function store(Request $request)
 
         return view('maintenance_requests.show', compact('maintenanceRequest'));
     }
+
+public function division_director_request_view()
+{
+    $supervisorId = auth()->user()->id;
+
+    $pendingRequest = MaintenanceRequest::with([
+            'user', 
+            'categories', 
+            'item', 
+            'item.categories', 
+            'latestAssignment'
+        ])
+        ->where('status', 'pending')
+        ->where('user_feedback', 'pending')
+        ->whereHas('user', function ($query) use ($supervisorId) {
+            $query->where('reports_to', $supervisorId);
+        })
+        ->latest()
+        ->paginate(10);
+
+    return view('division_director_view', compact('pendingRequest'));
+}
+
 }

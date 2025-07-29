@@ -2,22 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\MaintenanceRequest;
 
 class EmployeeController extends Controller
 {
     //
-    public function employeeDashboard()
-    {
-        $totalReq = MaintenanceRequest::with(['user', 'categories', 'assignments'])->where('user_id', auth()->id())->count();
-        $pending = MaintenanceRequest::with(['user', 'categories', 'assignments'])->where('status', 'pending')->where('user_id', auth()->id())->count();
-        $assigned = MaintenanceRequest::with(['user', 'categories', 'assignments'])->where('status', 'assigned')->where('user_id', auth()->id())->where('user_feedback', 'pending')->count();
-        $completed = MaintenanceRequest::with(['user', 'categories', 'assignments'])->where('status', 'completed')->where('user_id', auth()->id())->where('user_feedback', 'accepted')->count();
-        $in_progress = MaintenanceRequest::with(['user', 'categories', 'assignments'])->where('status', 'in_progress')->where('user_id', auth()->id())->count();
-        $rejected = MaintenanceRequest::with(['user', 'categories', 'assignments'])->where('status', 'rejected')->where('user_id', auth()->id())->count();
-        return view('employeers.dashboard', compact('totalReq', 'pending', 'assigned', 'completed', 'in_progress', 'rejected'));
-    }
+public function employeeDashboard()
+{
+    $loggedInUserId = auth()->id();
+
+    // Get users who report to this user
+    $reportingUserIds = User::where('reports_to', $loggedInUserId)->pluck('id')->toArray();
+
+    // Include the supervisor's own ID
+    $userIds = array_merge([$loggedInUserId], $reportingUserIds);
+
+    // Queries using whereIn to include both self and subordinates
+    $totalReq = MaintenanceRequest::with(['user', 'categories', 'assignments'])
+        ->whereIn('user_id', $userIds)
+        ->count();
+
+    $pending = MaintenanceRequest::with(['user', 'categories', 'assignments'])
+        ->where('status', 'pending')
+        ->whereIn('user_id', $userIds)
+        ->count();
+
+    $assigned = MaintenanceRequest::with(['user', 'categories', 'assignments'])
+        ->where('status', 'assigned')
+        ->where('user_feedback', 'pending')
+        ->whereIn('user_id', $userIds)
+        ->count();
+
+    $completed = MaintenanceRequest::with(['user', 'categories', 'assignments'])
+        ->where('status', 'completed')
+        ->where('user_feedback', 'accepted')
+        ->whereIn('user_id', $userIds)
+        ->count();
+
+    $in_progress = MaintenanceRequest::with(['user', 'categories', 'assignments'])
+        ->where('status', 'in_progress')
+        ->whereIn('user_id', $userIds)
+        ->count();
+
+    $rejected = MaintenanceRequest::with(['user', 'categories', 'assignments'])
+        ->where('status', 'rejected')
+        ->whereIn('user_id', $userIds)
+        ->count();
+
+    return view('employeers.dashboard', compact(
+        'totalReq', 'pending', 'assigned', 'completed', 'in_progress', 'rejected'
+    ));
+}
+
     public function index()
     {
         $maintenances = MaintenanceRequest::with(['user', 'categories', 'item'])->where('user_id', auth()->id())->latest()->paginate(10);
