@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 
 use Illuminate\Validation\ValidationException;
+
 class LoginController extends Controller
 {
 
@@ -39,40 +40,45 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-public function loginMethod(Request $request)
-{
-    $incomingFields = $request->validate([
-        "email" => ['required', 'email'],
-        "password" => "required",
-    ]);
+    public function loginMethod(Request $request)
+    {
+        $incomingFields = $request->validate([
+            "email" => ['required', 'email'],
+            "password" => "required",
+        ]);
 
-    if (auth()->attempt(['email' => $incomingFields['email'], 'password' => $incomingFields['password']])) {
-        $user = Auth::user();
+        if (auth()->attempt(['email' => $incomingFields['email'], 'password' => $incomingFields['password']])) {
+            $user = Auth::user();
 
-        $role = $user->getRoleNames()->first(); // Spatie method, returns string like 'admin'
+            $role = $user->getRoleNames()->first(); // Spatie method, returns string like 'admin'
 
-        if (!$role) {
-            return redirect()->route('loginForm')->with('error', 'No role assigned.');
+            if (!$role) {
+                return redirect()->route('loginForm')->with('error', 'No role assigned.');
+            }
+
+            $request->session()->regenerate();
+
+            switch ($role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully!');
+                case 'director':
+                    return redirect()->route('director.dashboard')->with('success', 'Logged in Successfully!');
+                case 'technician':
+                    return redirect()->route('technician.dashboard')->with('success', 'Logged in Successfully!');
+                case 'Employee':
+                case 'general_director':
+                case 'division_manager':
+                case 'department_manager':
+                    return redirect()->route('employer.dashboard')->with('success', 'Logged in Successfully!');
+                case 'Division Manager':
+                    return redirect()->route('employer.dashboard')->with('success', 'Logged in Successfully!');
+                default:
+                    return redirect()->route('loginForm')->with('error', 'Unknown role.');
+            }
         }
 
-        $request->session()->regenerate();
-
-        switch ($role) {
-            case 'admin':
-                return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully!');
-            case 'director':
-                return redirect()->route('director.dashboard')->with('success', 'Logged in Successfully!');
-            case 'technician':
-                return redirect()->route('technician.dashboard')->with('success', 'Logged in Successfully!');
-            case 'Employee':
-                return redirect()->route('employer.dashboard')->with('success', 'Logged in Successfully!');
-            default:
-                return redirect()->route('loginForm')->with('error', 'Unknown role.');
-        }
+        return redirect()->route('loginForm')->with('error', 'Invalid email or password.');
     }
-
-    return redirect()->route('loginForm')->with('error', 'Invalid email or password.');
-}
 
 
 

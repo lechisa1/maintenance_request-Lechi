@@ -49,7 +49,7 @@
                             {{-- Director Remarks --}}
                             <div class="col-md-6">
                                 <label for="director_notes" class="form-label fw-semibold">Director Remarks</label>
-                                <textarea class="form-control rounded-3" id="director_notes" name="director_notes" rows="2"
+                                <textarea class="form-control rounded-3" id="director_notes" name="director_notes" rows="3"
                                     placeholder="Optional note or comment for the assigned technician(s)...">{{ old('director_notes') }}</textarea>
                             </div>
 

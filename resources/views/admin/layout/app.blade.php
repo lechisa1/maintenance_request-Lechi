@@ -1,108 +1,4 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-</head>
-
-<body>
-    @include('admin.headers')
-
-    <div class="d-flex" style="height: 100vh;">
-        @include('admin.sidebar')
-
-        <main class="content flex-grow-2 p-5 mt-5">
-            @yield('content')
-        </main>
-    </div>
-
-    @include('admin.footer')
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-<style>
-    main {
-        margin-top: 20%;
-
-        /* same as header height */
-    }
-
-    .sidebar.collapsed {
-        width: 70px;
-    }
-
-    .sidebar .toggle-sidebar {
-        z-index: 1000;
-        /* Ensure it stays on top */
-    }
-
-    .sidebar ul.nav {
-        padding-left: 10px;
-    }
-
-    .sidebar ul.nav {
-        padding-left: 10px;
-    }
-
-    button.btn img {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-        /* Ensures the image doesn't distort */
-    }
-
-    button.btn span {
-        font-size: 14px;
-        /* Adjust font size if needed */
-        color: #fff;
-        /* Ensures text matches the header theme */
-    }
-
-    .sidebar ul li ul.list-unstyled {
-        padding-left: 15px;
-        /* Indent submenus */
-    }
-
-    .sidebar .collapse.show {
-        display: block !important;
-    }
-
-    .sidebar .dropdown-toggle::after {
-        content: ' ▼';
-        float: right;
-    }
-
-    .sidebar.collapsed .collapse {
-        display: none !important;
-    }
-
-    footer {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        padding: 10px;
-       
-    }
-
-    .sidebar {
-        margin-top: 4%;
-        width: 250px;
-        transition: width 0.3s ease-in-out;
-        height: 100vh;
-        overflow-y: auto;
-        max-height: 100vh;
-        background-color: #f8f9fa;
-    }
-</style>
-
-</html> --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -119,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 <style>
     .table thead.bg-blue th {
-    background-color: green; /* Bootstrap's primary blue */
+    background-color: #11245A; /* Bootstrap's primary blue */
     color: white;
     border-bottom: 2px solid #0a58ca; /* Slightly darker blue for border */
     position: sticky;
@@ -127,10 +23,90 @@
     z-index: 10;
     padding: 12px 8px; /* Slightly larger padding */
 }
-
+.btn-primary {
+    background-color: #11245A !important;
+    border-color: #11245A !important;
+}
+.text-primary {
+   
+    color: #11245A !important;
+}
+.bg-success{
+        background-color: #11245A !important;
+    border-color: #11245A !important;
+}
 /* Hover effect for better interactivity */
 .table thead.bg-blue th:hover {
     background-color: #0bd79a; /* Slightly darker on hover */
+}
+/* Main Content Adjustments */
+#main-content {
+    margin-left: var(--sidebar-width);
+    padding: 20px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+/* Card and Form Containers */
+.card {
+    overflow: visible !important;
+    position: relative;
+    z-index: 2;
+}
+
+.card-body {
+    overflow: visible !important;
+}
+
+/* Division and Department Forms */
+.division-form {
+    position: relative;
+    z-index: 3;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.division-departments {
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 15px;
+    border-left: 3px solid #0d6efd;
+}
+
+.department-form {
+    position: relative;
+    z-index: 4;
+    background-color: white;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    border-left: 3px solid #20c997;
+}
+
+/* Ensure nothing is hidden */
+.tab-content,
+.tab-pane,
+#divisionsContainer,
+#departmentsContainer {
+    overflow: visible !important;
+    position: relative;
+}
+
+/* Fix for accordion items */
+.accordion-item {
+    overflow: visible;
+}
+
+.accordion-body {
+    overflow: visible !important;
+    padding: 20px;
+    background-color: #f9f9f9;
 }
 </style>
 </head>
@@ -158,7 +134,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </body>
 

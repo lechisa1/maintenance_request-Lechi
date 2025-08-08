@@ -28,7 +28,7 @@
                     <thead class="bg-blue text-white text-center" style="background: linear-gradient(90deg, #0d6efd, #6610f2); position: sticky; top: 0; z-index: 1;">
                             <tr>
                                 <th>#</th>
-                                <th>Ticket ID</th>
+                                {{-- <th>Ticket ID</th> --}}
                                 <th>Item</th>
                                 {{-- <th>Description</th> --}}
 
@@ -46,13 +46,13 @@
                         <tbody>
                             @forelse($maintenances as $key => $request)
                                 <tr class="text-center">
-                                    <td class="text-center fw-bold">
-                                        <button class="btn btn-sm btn-outline-primary"
+                                    <td class="text-center ">
+                                        <button class="btn btn-sm "
                                             onclick="toggleDetails({{ $request->id }})">
-                                            <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
+                                            <i class="bi bi-plus-lg text-primary" id="icon-{{ $request->id }}"></i>
                                         </button>{{ $key + 1 }}
                                     </td>
-                                    <td>{{ $request->ticket_number }}</td>
+                                    {{-- <td>{{ $request->ticket_number }}</td> --}}
                                     <td>{{ $request->item ? $request->item->name : 'N/A' }}</td>
                                     {{-- <td class="text-truncate" style="max-width: 200px;">{{ $request->description }}</td> --}}
                                     <td>{{ $request->user->name }}</td>

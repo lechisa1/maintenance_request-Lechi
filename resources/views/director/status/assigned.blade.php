@@ -16,7 +16,7 @@
                 <div class="table-responsive rounded-3 shadow-sm">
                     <table class="table table-hover align-middle mb-0" id="requestsTable">
                         <thead class="bg-blue text-white text-center"
-                            style="background: linear-gradient(90deg, #0d6efd, #6610f2); position: sticky; top: 0; z-index: 1;">
+                            style="background: linear-gradient(90deg, #0d6efd,  #11245A); position: sticky; top: 0; z-index: 1;">
                             <tr>
 
                                 <th>#</th>
@@ -36,9 +36,9 @@
                                 <tr class="text-center">
 
                                     <td class="text-center fw-bold">
-                                        <button class="btn btn-sm btn-outline-primary"
+                                        <button class="btn btn-sm "
                                             onclick="toggleDetails({{ $request->id }})">
-                                            <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
+                                            <i class="bi bi-plus-lg text-primary" id="icon-{{ $request->id }}"></i>
                                         </button>
                                         {{ $key + 1 }}
                                     </td>
@@ -86,6 +86,8 @@
                                             </div>
                                             <div class="col-12 border-bottom py-1"><strong>Item:</strong>
                                                 {{ $request->item?->name ?? 'N/A' }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Description:</strong>
+                                                {{ $request->description }}</div>
                                             <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
                                                 {{ $request->requested_at->format('M d, Y h:i A') }}</div>
                                             <div class="col-12 border-bottom py-1"><strong>Job Position:</strong>

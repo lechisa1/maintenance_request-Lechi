@@ -68,7 +68,7 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#MaintenanceMenu">
                             <i class="bi bi-send"></i>
                             <span>Submit Requests</span>
@@ -85,7 +85,7 @@
 
                             </ul>
                         </div>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#productsMenu">
                             <i class="bi bi-tools"></i>
@@ -108,7 +108,7 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#ItemRegister">
                             <i class="bi bi-laptop"></i>
-                            <span>Asset Managemen</span>
+                            <span>Asset Management</span>
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <div class="collapse" id="ItemRegister">

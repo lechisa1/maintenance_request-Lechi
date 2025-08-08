@@ -23,6 +23,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'assign_request_to_technician',
             'resolve_maintenance',
             'approve_request',
+            'reject_staff_request',
+            'approve_staff_request',
             'view_maintenance_requests',
             'create_maintenance_request',
             'edit_maintenance_request',

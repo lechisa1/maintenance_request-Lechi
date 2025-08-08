@@ -31,7 +31,7 @@
             </ul>
         </div>
         <div class="mb-4">
-            <div class="text-white fw-bold text-uppercase text-xs mb-2">User Management</div>
+            <div class="text-white fw-bold text-uppercase text-xs mb-2">Settings</div>
             <ul class="nav flex-column">
                 @if (auth()->user()->can('manage_user_roles'))
                     <li class="nav-item">
@@ -65,12 +65,12 @@
                     <div class="collapse" id="productsMenu">
                         <ul class="nav flex-column ps-3">
                             <li class="nav-item">
-                                <a href="{{ route('department_index') }}"
+                                <a href="{{ route('organization.index') }}"
                                     class="nav-link bi bi-list text-primary fs-6">Organization Unit
                                     Lists</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('create_department') }}"
+                                <a href="{{ route('organization.create') }}"
                                     class="nav-link bi bi-plus text-info fs-6">Add
                                     Organization Unit
                                 </a>
@@ -91,17 +91,30 @@
                     <div class="collapse" id="rolesMenu">
                         <ul class="nav flex-column ps-3">
                             <li class="nav-item">
-                                <a href="{{ route('roles_create') }}"
+                                <a href="{{ route('roles_with_permission') }}"
                                     class="nav-link bi bi-list text-primary fs-6">Roles
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('roles_with_permission') }}"
+                                <a href="{{ route('roles_create') }}"
                                     class="nav-link bi bi-plus text-info fs-6">Add
                                     Roles
                                 </a>
                             </li>
 
+                            {{-- added for organization --}}
+                            {{-- <li class="nav-item">
+                                <a href="{{ route('organization.create') }}"
+                                    class="nav-link bi bi-plus text-info fs-6">Add
+                                    Organization
+                                </a>
+                            </li>
+                             <li class="nav-item">
+                                <a href="{{ route('organization.index') }}"
+                                    class="nav-link bi bi-plus text-info fs-6">
+                                    Organizations List
+                                </a>
+                            </li> --}}
 
 
                         </ul>
@@ -133,11 +146,3 @@
     </div>
 </div>
 
-
-
-{{-- <script>
-    document.querySelector('.toggle-sidebar').addEventListener('click', function() {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.classList.toggle('collapsed');
-    });
-</script> --}}

@@ -28,7 +28,9 @@ class User extends Authenticatable
         'department_id',
         'specialization',
         'job_position_id',
-        'reports_to'
+        'reports_to',
+        'sector_id',
+        'division_id'
 
     ];
 
@@ -46,6 +48,14 @@ class User extends Authenticatable
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+        public function sector()
+    {
+        return $this->belongsTo(Sector::class);
+    }
+        public function division()
+    {
+        return $this->belongsTo(Division::class);
     }
 public function directedDepartment()
 {

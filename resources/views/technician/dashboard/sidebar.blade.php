@@ -13,10 +13,10 @@
                 <i class="bi bi-x"></i>
             </button>
         </div>
-  @php
-                                    use Illuminate\Support\Facades\Auth;
-                                    $isSupervisor = \App\Models\User::where('reports_to', Auth::id())->exists();
-                                @endphp
+        @php
+            use Illuminate\Support\Facades\Auth;
+            $isSupervisor = \App\Models\User::where('reports_to', Auth::id())->exists();
+        @endphp
         <div class="px-3 pt-3">
             <div class="mb-4">
                 <div class="text-white fw-bold text-uppercase text-xs mb-2">Home</div>
@@ -46,7 +46,7 @@
                                     <a href="{{ route('technician.requests') }}"
                                         class="nav-link bi bi-clipboard-check text-warning">Recently Assigned</a>
                                 </li>
-                              
+
                                 {{-- @if ($isSupervisor)
                                     <li class="nav-item">
                                         <a href="{{ route('supervisor_requests') }}"
@@ -55,55 +55,47 @@
                                 @endif --}}
                                 <li class="nav-item ">
                                     <a href="{{ route('inProgress_task') }}"
-                                        class="nav-link bi bi-arrow-repeat text-info">In Progress</a>
+                                        class="nav-link bi bi-arrow-repeat text-info">Work in Progress</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('completed_task') }}"
-                                        class="nav-link bi bi-check-circle text-success">Completed</a>
+                                        class="nav-link bi bi-check-circle text-success">Completed Tasks</a>
                                 </li>
 
                             </ul>
                         </div>
                     </li>
-     @if ($isSupervisor)
+                @if (auth()->user()->hasRole('general_director') ||
+                        auth()->user()->hasRole('division_manager') ||
+                        auth()->user()->hasRole('department_manager'))
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
+                    <i class="bi bi-people"></i>
+                    <span>Staff Requests</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <div class="collapse" id="pendingMenu">
+                    <ul class="nav flex-column ps-3">
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
-                                <i class="bi bi-people"></i>
-                                <span>Request From Staff</span>
-                                <i class="bi bi-chevron-down ms-auto"></i>
+                            <a href="{{ route('supervisor_requests') }}" class="nav-link"
+                                title="Needs Approval (Hardware)">
+                                <i class="bi bi-tools"></i>
+                                <span>Needs Approval (Hardware)</span>
                             </a>
-                            <div class="collapse" id="pendingMenu">
-                                <ul class="nav flex-column ps-3">
-                                    <li class="nav-item">
-                                        <a href="{{ route('supervisor_requests') }}" class="nav-link active">
-                                            <i class="bi bi-clipboard-data"></i>
-                                            <span>Pending Requests</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
-                    @endif
+                        <li class="nav-item">
+                            <a href="{{ route('division_director_request_view') }}" class="nav-link">
+                                <i class="bi bi-eye"></i>
+                                <span>View Staff Requests</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            @endif
 
                 </ul>
             </div>
 
-            {{-- <div class="mb-4">
-                <div class="text-white fw-bold text-uppercase text-xs mb-2">System</div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="bi bi-gear"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="bi bi-question-circle"></i>
-                            <span>Help</span>
-                        </a>
-                    </li>
-                </ul>
-            </div> --}}
         </div>
     </div>

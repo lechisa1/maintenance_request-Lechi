@@ -11,7 +11,7 @@ d{{-- @extends('admin.layout.app') --}}
             <div class="card-body px-4 py-4">
             <div class="text-center mb-5 card-header bg-white text-primary  rounded-top-4">
                 {{-- <h3 class="fw-bold text-primary">Maintenance Request Form</h3> --}}
-                <h3 class="fw-bold ">Maintenance Request Form</h3>
+                <h3 class="fw-bold "> New Maintenance Request </h3>
 
             </div>
 

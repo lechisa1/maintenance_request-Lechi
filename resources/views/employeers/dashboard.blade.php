@@ -3,7 +3,21 @@
     <div class="container-fluid px-4 card bg-white mt-5 ">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center ">
-                <h1 class="h3 mb-0 text-gray-800 me-3 ">Employers Dashboard</h1>
+                <h1 class="h3 mb-0 text-gray-800 me-3 ">
+                    @if(auth()->user()->hasRole('Employee'))
+                    Employers Dashboard
+                    @elseif(auth()->user()->hasRole('Division Manager'))
+                    Division Manager Dashboard
+                     @elseif(auth()->user()->hasRole('general_director'))
+                    General Director Dashboard
+                     @elseif(auth()->user()->hasRole('division_manager'))
+                    Division Manager Dashboard
+                     @elseif(auth()->user()->hasRole('department_manager'))
+                    Department Manager Dashboard
+                    @else
+                    Dashboard
+                    @endif
+                </h1>
                 <div id="date-time" class="badge bg-light text-primary shadow-sm px-3 py-2 rounded-pill"
                     style="font-size: 18px;margin-left:120px;"></div>
 

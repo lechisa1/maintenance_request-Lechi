@@ -39,10 +39,10 @@
                             @forelse($requests as $key=> $request)
                                 <tr>
                                     <td class="text-center fw-bold">
-                                        <button class="btn btn-sm btn-outline-primary"
+                                        <button class="btn btn-sm "
                                             onclick="toggleDetails({{ $request->id }})">
-                                            <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
-                                        </button>{{ $key + 1 }}{{ $key + 1 }}
+                                            <i class="bi bi-plus-lg text-primary" id="icon-{{ $request->id }}"></i>
+                                        </button>{{ $key + 1 }}
                                     </td>
                                     <td>{{ $request->ticket_number }}</td>
 

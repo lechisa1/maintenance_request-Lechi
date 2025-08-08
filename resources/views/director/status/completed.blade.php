@@ -43,9 +43,9 @@
                                         </td> --}}
 
                                     <td class="text-center fw-bold">
-                                        <button class="btn btn-sm btn-outline-primary"
+                                        <button class="btn btn-sm "
                                             onclick="toggleDetails({{ $request->id }})">
-                                            <i class="bi bi-plus-lg" id="icon-{{ $request->id }}"></i>
+                                            <i class="bi bi-plus-lg text-primary" id="icon-{{ $request->id }}"></i>
                                         </button>
                                         {{ $key + 1 }}
                                     </td>

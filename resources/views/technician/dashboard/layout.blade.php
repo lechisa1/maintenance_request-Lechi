@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 <style>
     .table thead.bg-blue th {
-    background-color: green; /* Bootstrap's primary blue */
+    background-color:  #11245A; /* Bootstrap's primary blue */
     color: white;
     border-bottom: 2px solid #0a58ca; /* Slightly darker blue for border */
     position: sticky;
@@ -26,6 +26,17 @@
 /* Hover effect for better interactivity */
 .table thead.bg-blue th:hover {
     background-color: #0bd79a; /* Slightly darker on hover */
+}
+button{
+    background-color:  #11245A
+}
+.btn-primary {
+    background-color: #11245A !important;
+    border-color: #11245A !important;
+}
+.text-primary {
+   
+    color: #11245A !important;
 }
 </style>
 </head>

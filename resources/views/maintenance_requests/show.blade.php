@@ -200,6 +200,7 @@
                 </div>
 
                 <!-- Work Logs Section -->
+                @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('director'))
                 @if ($maintenanceRequest->workLogs->isNotEmpty())
                     <div class="card shadow-lg border-0 rounded-4 mt-4">
                         <div
@@ -233,6 +234,7 @@
                                                         <p class="mb-0">{{ $log->materials_used }}</p>
                                                     </div>
                                                 @endif
+                                                
 
                                                 @if ($log->completion_notes)
                                                     <div class="card bg-light border-0 rounded-3 p-3">
@@ -240,6 +242,7 @@
                                                         <p class="mb-0">{{ $log->completion_notes }}</p>
                                                     </div>
                                                 @endif
+                                             
                                             </div>
                                         </div>
                                     </div>
@@ -247,6 +250,7 @@
                             </div>
                         </div>
                     </div>
+                @endif
                 @endif
             </div>
 
@@ -322,7 +326,7 @@
                             </div>
                         </div>
                         @endif --}}
-
+@if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('director'))
                                 @if ($assignment->director_notes)
                                     <div class="col-12">
                                         <div class="card bg-light border-0 rounded-3 p-3">
@@ -331,7 +335,7 @@
                                         </div>
                                     </div>
                                 @endif
-
+@endif
                                 @if ($maintenanceRequest->completed_at)
                                     <div class="col-12">
                                         <div class="d-flex align-items-start">
@@ -394,6 +398,14 @@
                         <a href="{{ route('requests.showAssignForm', $maintenanceRequest->id) }}"
                             class="btn btn-primary btn-lg rounded-pill shadow-sm py-3">
                             <i class="fas fa-user-plus me-2"></i> Assign Technician
+                        </a>
+                    </div>
+                @endif
+                 @if ($maintenanceRequest->status === 'not_fixed' && auth()->user()->hasRole('director'))
+                    <div class="d-grid">
+                        <a href="{{ route('requests.showAssignForm', $maintenanceRequest->id) }}"
+                            class="btn btn-primary btn-lg rounded-pill shadow-sm py-3">
+                            <i class="fas fa-user-plus me-2"></i> Re assign Technician
                         </a>
                     </div>
                 @endif

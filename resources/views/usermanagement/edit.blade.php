@@ -49,25 +49,64 @@
                     </div>
 
                     {{-- Department --}}
-                    <div class="col-md-4">
-                        <label for="department_id" class="form-label fw-semibold">Division</label>
-                        <select name="department_id" id="department_id"
-                            class="form-select @error('department_id') is-invalid @enderror">
-                            <option value="" disabled selected>Select Division</option>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ old('department_id', $user->department_id) == $department->id ? 'selected' : '' }}>
-                                    {{ $department->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('department_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+{{-- Sector --}}
+<div class="col-md-4">
+    <label for="sector_id" class="form-label fw-semibold">Sector</label>
+    <select name="sector_id" id="sector_id" class="form-select @error('sector_id') is-invalid @enderror">
+        <option value="" disabled>Select Sector</option>
+        @foreach ($sectors as $sector)
+            <option value="{{ $sector->id }}"
+                {{ old('sector_id', $user->sector_id) == $sector->id ? 'selected' : '' }}>
+                {{ $sector->name }}
+            </option>
+        @endforeach
+    </select>
+    @error('sector_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+{{-- Division --}}
+<div class="col-md-4">
+    <label for="division_id" class="form-label fw-semibold">Division</label>
+    <select name="division_id" id="division_id" class="form-select @error('division_id') is-invalid @enderror">
+        <option value="" disabled>Select Division</option>
+        @foreach ($divisions as $division)
+            @if ($division->sector_id == old('sector_id', $user->sector_id))
+                <option value="{{ $division->id }}"
+                    {{ old('division_id', $user->division_id) == $division->id ? 'selected' : '' }}>
+                    {{ $division->name }}
+                </option>
+            @endif
+        @endforeach
+    </select>
+    @error('division_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+{{-- Department --}}
+<div class="col-md-4">
+    <label for="department_id" class="form-label fw-semibold">Department</label>
+    <select name="department_id" id="department_id" class="form-select @error('department_id') is-invalid @enderror">
+        <option value="" disabled>Select Department</option>
+        @foreach ($departments as $department)
+            @if ($department->division_id == old('division_id', $user->division_id))
+                <option value="{{ $department->id }}"
+                    {{ old('department_id', $user->department_id) == $department->id ? 'selected' : '' }}>
+                    {{ $department->name }}
+                </option>
+            @endif
+        @endforeach
+    </select>
+    @error('department_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
 
                     {{-- Supervisor --}}
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <label for="reports_to" class="form-label fw-semibold">Supervisor</label>
                         <select name="reports_to" id="reports_to"
                             class="form-select @error('reports_to') is-invalid @enderror">
@@ -82,7 +121,7 @@
                         @error('reports_to')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     {{-- Role --}}
                     <div class="col-md-4">
@@ -140,4 +179,53 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sectorSelect = document.getElementById("sector_id");
+        const divisionSelect = document.getElementById("division_id");
+        const departmentSelect = document.getElementById("department_id");
+
+        sectorSelect?.addEventListener("change", function () {
+            const sectorId = this.value;
+
+            divisionSelect.innerHTML = `<option selected disabled>Loading divisions...</option>`;
+            departmentSelect.innerHTML = `<option selected disabled>Select Department</option>`;
+
+            const divisionsUrl = `{{ route('get_division_name', ['id' => 'SECTOR_ID']) }}`.replace('SECTOR_ID', sectorId);
+
+            fetch(divisionsUrl)
+                .then(res => res.json())
+                .then(data => {
+                    divisionSelect.innerHTML = `<option selected disabled>Select Division</option>`;
+                    data.forEach(division => {
+                        const option = document.createElement("option");
+                        option.value = division.id;
+                        option.text = division.name;
+                        divisionSelect.appendChild(option);
+                    });
+                });
+        });
+
+        divisionSelect?.addEventListener("change", function () {
+            const divisionId = this.value;
+
+            departmentSelect.innerHTML = `<option selected disabled>Loading departments...</option>`;
+
+            const departmentsUrl = `{{ route('get_department_name', ['id' => 'DIVISION_ID']) }}`.replace('DIVISION_ID', divisionId);
+
+            fetch(departmentsUrl)
+                .then(res => res.json())
+                .then(data => {
+                    departmentSelect.innerHTML = `<option selected disabled>Select Department</option>`;
+                    data.forEach(department => {
+                        const option = document.createElement("option");
+                        option.value = department.id;
+                        option.text = department.name;
+                        departmentSelect.appendChild(option);
+                    });
+                });
+        });
+    });
+</script>
+
 @endsection

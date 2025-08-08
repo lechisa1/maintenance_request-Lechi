@@ -17,114 +17,111 @@
 
 </head>
 
-<body>
-    <div class="login-container">
-        <div class="header">
-            <h1>Maintenance Request System</h1>
-            <p>Streamline your facility maintenance workflow</p>
-        </div>
-
-        <div class="card login-card">
-            <div class="logo-container">
-                <img src="{{asset('image/logo.png')}}" class="logo" alt="Maintenance System Logo">
-                <h4 class="text-center mb-0" style="color: var(--primary-color)">Welcome Back</h4>
-                <p class="text-muted text-center">Please login to your account</p>
+<body class="vh-100 d-flex align-items-center justify-content-center bg-light border-2">
+    <div class="container">
+        <div class="row shadow rounded-3 overflow-hidden bg-white" style="max-width: 700px; margin: auto; min-height: 400px;">
+            
+            <!-- Left Section (Branding) -->
+            <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center bg-purple  p-4 border-end">
+                <img src="{{ asset('image/logo.png') }}" class="img-fluid mb-15" style="max-width: 120px;" alt="Logo">
+                <h2 class="fw-bold">Maintenance Request System</h2>
+             
             </div>
 
-            @if ($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div class="d-flex align-items-center">
+            <!-- Right Section (Login Form) -->
+            <div class="col-md-6 p-4">
+                <h4 class="text-center mb-0" style="color: var(--primary-color)"></h4>
+                <p class="text-muted text-center">Please login to your account</p>
+
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        <div>
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
+                        @foreach ($errors->all() as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-envelope-fill text-muted"></i>
+                            </span>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                name="email" value="{{ old('email') }}" required autofocus placeholder="Enter your email">
                         </div>
+                        @error('email')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
 
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        <div>{{ session('error') }}</div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-lock-fill text-muted"></i>
+                            </span>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                                name="password" required placeholder="Enter your password">
+                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                                <i class="bi bi-eye-fill"></i>
+                            </button>
+                        </div>
+                        @error('password')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email Address</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                            <i class="bi bi-envelope-fill text-muted"></i>
-                        </span>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
-                            placeholder="Enter your email">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                                {{ old('remember') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="remember">Remember Me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
                     </div>
-                    @error('email')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                </div>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                            <i class="bi bi-lock-fill text-muted"></i>
-                        </span>
-                        <input id="password" type="password"
-                            class="form-control @error('password') is-invalid @enderror" name="password" required
-                            autocomplete="current-password" placeholder="Enter your password">
-                        <button class="btn btn-outline-secondary toggle-password" type="button">
-                            <i class="bi bi-eye-fill"></i>
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-login">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
                         </button>
                     </div>
-                    @error('password')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                </div>
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                            {{ old('remember') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="remember">Remember Me</label>
+                    <div class="divider text-center my-3">
+                        <span class="divider-text text-muted">or continue with</span>
                     </div>
-                    <a href="#" class="forgot-password">Forgot Password?</a>
-                </div>
 
-                <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-primary btn-login">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
-                    </button>
-                </div>
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-outline-primary">
+                            <i class="bi bi-google me-2"></i>Google
+                        </button>
+                    </div>
+                </form>
 
-                <div class="divider">
-                    <span class="divider-text">or continue with</span>
-                </div>
+                {{-- <div class="text-center mt-4">
+                    <small class="text-muted">© {{ date('Y') }} Maintenance Request System. All rights reserved.</small>
+                </div> --}}
+            </div>
 
-                <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-outline-primary">
-                        <i class="bi bi-google me-2"></i>Google
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="footer">
-            <p>© {{ date('Y') }} Maintenance Request System. All rights reserved.</p>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/login.js') }}"></script>
-
 </body>
+
 
 </html>

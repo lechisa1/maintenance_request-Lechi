@@ -168,11 +168,16 @@
 
                         <!-- Purple -->
                         <label class="form-check d-flex align-items-center gap-1">
+                            <input type="radio" name="themeColor" value=" #11245A" class="form-check-input">
+                            <span class="color-swatch" style="background-color:  #11245A;" title="Match"></span>
+                            Match
+                        </label>
+                        {{-- match --}}
+                        <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#6f42c1" class="form-check-input">
                             <span class="color-swatch" style="background-color: #6f42c1;" title="Purple"></span>
                             Purple
                         </label>
-
                         <!-- Orange -->
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#fd7e14" class="form-check-input">
@@ -196,8 +201,8 @@
 
 
 
-                    <a class="dropdown-item py-2" href="#">
-                        <i class="bi bi-list-check me-2"></i> Activity Log
+                    <a class="dropdown-item py-2" href="{{route('change_password_form')}}">
+                        <i class="bi bi-list-check me-2"></i> Change Password
                     </a>
 
                     <div class="dropdown-divider"></div>
@@ -214,6 +219,20 @@
 </header>
 
 <script>
+    function isDarkColor(hexColor) {
+    // Remove hash if present
+    const color = hexColor.replace('#', '');
+
+    const r = parseInt(color.substr(0, 2), 16);
+    const g = parseInt(color.substr(2, 2), 16);
+    const b = parseInt(color.substr(4, 2), 16);
+
+    // Standard luminance formula
+    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+
+    return luminance < 128; // Adjust this threshold if needed
+}
+
     document.addEventListener('DOMContentLoaded', function() {
         // Auto-dismiss alerts after 3 seconds
         const successAlert = document.getElementById('successAlert');
@@ -281,47 +300,60 @@
             themeOptions.style.display = themeOptions.style.display === 'none' ? 'block' : 'none';
         });
 
-        document.querySelectorAll('input[name="themeColor"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const selectedColor = this.value;
+document.querySelectorAll('input[name="themeColor"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        const selectedColor = this.value;
+        const isDark = isDarkColor(selectedColor);
 
+        headers.forEach(header => {
+            header.style.backgroundColor = selectedColor;
+            header.style.color = isDark ? '#ffffff' : '#000000';
+            header.classList.remove('bg-light', 'bg-dark');
+        });
 
+        sidebars.forEach(sidebar => {
+            sidebar.style.backgroundColor = selectedColor;
+            sidebar.style.color = isDark ? '#ffffff' : '#000000';
+            sidebar.classList.remove('bg-light', 'bg-dark');
 
-                // Change header background only
-                headers.forEach(header => {
-                    header.style.backgroundColor = selectedColor;
-                    header.classList.remove('bg-light', 'bg-dark');
-                });
-
-                // Change sidebar background only
-                sidebars.forEach(sidebar => {
-                    sidebar.style.backgroundColor = selectedColor;
-                    sidebar.classList.remove('bg-light', 'bg-dark');
-                });
-
-                // Save selected color
-                localStorage.setItem('themeColor', selectedColor);
+            // Optional: also change sidebar link or icon colors
+            sidebar.querySelectorAll('a, i, span, li, .nav-link, .nav-item').forEach(el => {
+                el.style.color = isDark ? '#ffffff' : '#000000';
             });
         });
 
+        localStorage.setItem('themeColor', selectedColor);
+    });
+});
+
+
         // Load theme color from localStorage
-        const savedColor = localStorage.getItem('themeColor');
-        if (savedColor) {
-            headers.forEach(header => {
-                header.style.backgroundColor = savedColor;
-                header.classList.remove('bg-light', 'bg-dark');
-            });
+const savedColor = localStorage.getItem('themeColor');
+if (savedColor) {
+    const isDark = isDarkColor(savedColor);
 
-            sidebars.forEach(sidebar => {
-                sidebar.style.backgroundColor = savedColor;
-                sidebar.classList.remove('bg-light', 'bg-dark');
-            });
+    headers.forEach(header => {
+        header.style.backgroundColor = savedColor;
+        header.style.color = isDark ? '#ffffff' : '#000000';
+        header.classList.remove('bg-light', 'bg-dark');
+    });
 
-            const selectedInput = document.querySelector(`input[name="themeColor"][value="${savedColor}"]`);
-            if (selectedInput) {
-                selectedInput.checked = true;
-            }
-        }
+    sidebars.forEach(sidebar => {
+        sidebar.style.backgroundColor = savedColor;
+        sidebar.style.color = isDark ? '#ffffff' : '#000000';
+        sidebar.classList.remove('bg-light', 'bg-dark');
+
+        sidebar.querySelectorAll('a, i, span, li, .nav-link, .nav-item').forEach(el => {
+            el.style.color = isDark ? '#ffffff' : '#000000';
+        });
+    });
+
+    const selectedInput = document.querySelector(`input[name="themeColor"][value="${savedColor}"]`);
+    if (selectedInput) {
+        selectedInput.checked = true;
+    }
+}
+
     });
     // here profile image upload
     

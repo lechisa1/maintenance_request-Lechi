@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="col-12 d-flex justify-content-between pt-4">
-                    <button type="submit" class="btn btn-success px-4 py-2">
+                    <button type="submit" class="btn btn-primary px-4 py-2">
                         <i class="fas fa-save me-2"></i> Save Progress
                     </button>
                     <a href="{{ route('requests.show', $request->id) }}" class="btn btn-outline-secondary px-4 py-2">

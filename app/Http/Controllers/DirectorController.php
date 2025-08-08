@@ -89,7 +89,7 @@ public function directorDashboard()
 
     public function maintenenceRequestPending()
     {
-        $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item'])->where('status', 'pending')->latest()->paginate(10);
+        $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item'])->whereIn('status', ['pending','not_fixed'])->latest()->paginate(10);
         return view('maintenance_requests.pending_maintenance', compact('pendingRequest'));
     }
 
@@ -317,7 +317,7 @@ public function directorDashboard()
         $directorDepartmentId = $director->department->id;
 
 
-        $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item', 'item.categories', 'latestAssignment'])->where('status', 'pending')
+        $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item', 'item.categories', 'latestAssignment'])->whereIn('status', ['pending','not_fixed'])
             ->where('user_feedback', 'pending')
 
             ->latest()->paginate(10);

@@ -47,11 +47,11 @@
                                 <li class="nav-item">
                                     <a href="{{ route('employer.pending') }}"
                                         class="nav-link text-primary bi bi-hourglass-split">
-                                         Pending Approval</a>
+                                        Pending Approval</a>
                                 </li>
                                 <a href="{{ route('employer.assigned') }}"
                                     class="nav-link text-warning bi bi-clipboard-check">
-                                     Assigned to Technician</a>
+                                    Assigned to Technician</a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('employer.in_progress') }}" class="nav-link text-info bi bi-arrow-repeat">
@@ -80,7 +80,9 @@
 
                     </ul>
                 </div>
-                @if ($isSupervisor)
+                @if (auth()->user()->hasRole('general_director') ||
+                        auth()->user()->hasRole('division_manager') ||
+                        auth()->user()->hasRole('department_manager'))
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
                     <i class="bi bi-people"></i>
@@ -90,11 +92,11 @@
                 <div class="collapse" id="pendingMenu">
                     <ul class="nav flex-column ps-3">
                         <li class="nav-item">
-<a href="{{ route('supervisor_requests') }}" class="nav-link" title="Needs Approval (Hardware)">
-    <i class="bi bi-tools"></i>
-    <span>Needs Approval (Hardware)</span>
-</a>
-
+                            <a href="{{ route('supervisor_requests') }}" class="nav-link"
+                                title="Needs Approval (Hardware)">
+                                <i class="bi bi-tools"></i>
+                                <span>Needs Approval (Hardware)</span>
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('division_director_request_view') }}" class="nav-link">
@@ -106,6 +108,7 @@
                 </div>
             </li>
             @endif
+
             </li>
 
             </ul>
