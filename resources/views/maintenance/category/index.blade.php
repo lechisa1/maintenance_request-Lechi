@@ -4,7 +4,7 @@
         <div class="card shadow-lg border-0 rounded-4 bg-white">
             <div class="card-body px-4 py-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-primary fw-bold mb-0">Categories</h3>
+                    <h3 class="text-primary fw-bold mb-0">Issue Categories</h3>
                     <a href="{{ route('categories.create') }}" class="btn btn-primary rounded-pill shadow-sm">
                         <i class="bi bi-plus-circle me-1"></i> Category Issue
                     </a>
@@ -34,11 +34,11 @@
                                     <td>{{ $category->description }}</td>
                                     <td>
                                         <a href="{{ route('categories.edit', $category) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
+                                            class="btn btn-warning btn-sm bi bi-pencil"></a>
                                         <!-- Trigger Modal Button -->
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        <button type="button" class="btn btn-danger btn-sm bi bi-trash" data-bs-toggle="modal"
                                             data-bs-target="#deleteModal{{ $category->id }}">
-                                            Delete
+                                            
                                         </button>
 
                                         <!-- Delete Modal -->

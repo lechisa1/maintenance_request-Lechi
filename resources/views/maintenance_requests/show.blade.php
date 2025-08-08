@@ -13,7 +13,7 @@
 @extends($layout)
 
 @section('content')
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-4 mt-5 card bg-white shadow-lg">
         <div class="row">
             <!-- Main Content Area -->
             <div class="col-lg-8">
