@@ -54,7 +54,7 @@
 
                                 <li class="nav-item">
                                     <a href="{{ route('in_progress_maintenance') }}"
-                                        class="nav-link bi bi-arrow-repeat text-primary">
+                                        class="nav-link bi bi-arrow-repeat text-pink">
                                         Work in Progress </a>
                                 </li>
                                 <li class="nav-item">

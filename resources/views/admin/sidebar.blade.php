@@ -44,7 +44,7 @@
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                 <li class="nav-item">
-                                    <a href="{{ route('users_index') }}" class="nav-link text-primary bi bi-list fs-6">
+                                    <a href="{{ route('users_index') }}" class="nav-link text-info bi bi-list fs-6">
                                         User Lists</a>
                                 </li>
                                 <a href="{{ route('create_users') }}" class="nav-link text-warning bi bi-plus fs-6">
@@ -66,7 +66,7 @@
                         <ul class="nav flex-column ps-3">
                             <li class="nav-item">
                                 <a href="{{ route('organization.index') }}"
-                                    class="nav-link bi bi-list text-primary fs-6">Organization Unit
+                                    class="nav-link bi bi-list text-info fs-6">Organization Unit
                                     Lists</a>
                             </li>
                             <li class="nav-item">
@@ -85,14 +85,14 @@
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#rolesMenu">
                         <i class="bi bi-shield-lock"></i>
-                        <span>Roles</span>
+                        <span>Role Management</span>
                         <i class="bi bi-chevron-down ms-auto"></i>
                     </a>
                     <div class="collapse" id="rolesMenu">
                         <ul class="nav flex-column ps-3">
                             <li class="nav-item">
                                 <a href="{{ route('roles_with_permission') }}"
-                                    class="nav-link bi bi-list text-primary fs-6">Roles
+                                    class="nav-link bi bi-list text-info fs-6">Roles
                                 </a>
                             </li>
                             <li class="nav-item">

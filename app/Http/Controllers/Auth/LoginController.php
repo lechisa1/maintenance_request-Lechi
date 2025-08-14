@@ -61,7 +61,7 @@ class LoginController extends Controller
             switch ($role) {
                 case 'admin':
                     return redirect()->route('admin.dashboard')->with('success', 'Logged in Successfully!');
-                case 'director':
+                case 'Ict_director':
                     return redirect()->route('director.dashboard')->with('success', 'Logged in Successfully!');
                 case 'technician':
                     return redirect()->route('technician.dashboard')->with('success', 'Logged in Successfully!');

@@ -60,17 +60,17 @@
                                     {{-- <td>{{ $request->user->phone }}</td> --}}
                                     <td>
                                         <span
-                                            class="badge bg-{{ $request->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
+                                            class="text-{{ $request->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
                                             {{ ucfirst($request->priority) }}
                                         </span>
                                     </td>
                                     <td>
                                         @if ($request->categories && $request->categories->count())
                                             @foreach ($request->categories as $category)
-                                                <span class="badge bg-info text-dark">{{ $category->name }}</span>
+                                                <span class="text-black">{{ $category->name }}</span>
                                             @endforeach
                                         @else
-                                            <span class="badge bg-info text-dark">Uknown Cause</span>
+                                            <span class="text-primary">Uknown Cause</span>
                                         @endif
                                     </td>
 

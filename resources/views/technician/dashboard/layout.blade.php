@@ -38,6 +38,15 @@ button{
    
     color: #11245A !important;
 }
+#password-requirements input[type="checkbox"] {
+  accent-color: lightgray; /* default color */
+  pointer-events: none; /* prevent interaction even though not disabled */
+}
+
+#password-requirements input[type="checkbox"]:checked {
+  accent-color: green;
+}
+
 </style>
 </head>
 

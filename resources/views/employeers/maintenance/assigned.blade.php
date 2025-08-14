@@ -52,7 +52,7 @@
 
                                 <td>
                                     <span
-                                        class="badge bg-{{ $request->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
+                                        class="text-{{ $request->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
                                         {{ ucfirst($request->priority) }}
                                     </span>
                                 </td>

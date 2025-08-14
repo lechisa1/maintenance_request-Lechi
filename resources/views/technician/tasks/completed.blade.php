@@ -47,14 +47,14 @@
                                         {{-- <td>{{ $request->maintenanceRequest->user->department->name }}</td> --}}
                                         <td>
                                             <span
-                                                class="badge bg-{{ $request->maintenanceRequest->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
+                                                class="text-{{ $request->maintenanceRequest->priority === 'high' ? 'danger' : ($request->priority === 'medium' ? 'warning' : 'success') }}">
                                                 {{ ucfirst($request->maintenanceRequest->priority) }}
                                             </span>
                                         </td>
                                         {{-- <td>{{ $request->maintenanceRequest->requested_at }}</td> --}}
                                         <td>
                                             <span
-                                                class="badge bg-{{ $request->maintenanceRequest->status === 'pending' ? 'warning' : ($request->maintenanceRequest->status === 'in_progress' ? 'primary' : ($request->maintenanceRequest->status === 'completed' ? 'success' : 'secondary')) }}">
+                                                class="text-{{ $request->maintenanceRequest->status === 'pending' ? 'warning' : ($request->maintenanceRequest->status === 'in_progress' ? 'primary' : ($request->maintenanceRequest->status === 'completed' ? 'success' : 'secondary')) }}">
                                                 {{ ucfirst(str_replace('_', ' ', $request->maintenanceRequest->status)) }}
                                             </span>
                                         </td>

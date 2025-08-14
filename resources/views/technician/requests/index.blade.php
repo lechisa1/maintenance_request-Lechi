@@ -52,13 +52,13 @@
                                 <td>{{ $request->user->phone }}</td> --}}
                                     <td>
                                         <span
-                                            class="badge bg-{{ $request->priority == 'high' ? 'danger' : ($request->priority == 'medium' ? 'warning' : 'success') }}">
+                                            class="text-{{ $request->priority == 'high' ? 'danger' : ($request->priority == 'medium' ? 'warning' : 'success') }}">
                                             {{ ucfirst($request->priority) }}
                                         </span>
                                     </td>
                                     <td>
                                         <span
-                                            class="badge bg-{{ $request->status == 'completed' ? 'success' : ($request->status == 'in_progress' ? 'info' : 'warning') }}">
+                                            class="text-{{ $request->status == 'completed' ? 'success' : ($request->status == 'in_progress' ? 'info' : 'warning') }}">
                                             {{ ucfirst(str_replace('_', ' ', $request->status)) }}
                                         </span>
                                     </td>

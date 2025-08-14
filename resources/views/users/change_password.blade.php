@@ -46,7 +46,17 @@
                                 @error('new_password')
                                     <span class="text-danger small">{{ $message }}</span>
                                 @enderror
-                                <div id="password-strength" class="mt-1 small text-muted"></div>
+<ul id="password-requirements" class="list-unstyled small mt-2">
+  <li><input type="checkbox" id="length" readonly> <label for="length">At least 8 characters</label></li>
+  <li><input type="checkbox" id="uppercase" readonly> <label for="uppercase">At least one uppercase letter</label></li>
+  <li><input type="checkbox" id="lowercase" readonly> <label for="lowercase">At least one lowercase letter</label></li>
+  <li><input type="checkbox" id="number" readonly> <label for="number">At least one number</label></li>
+  <li><input type="checkbox" id="special" readonly> <label for="special">At least one special character (@$!%*?&)</label></li>
+</ul>
+
+
+
+
                             </div>
 
                             <div class="mb-3">
@@ -86,19 +96,23 @@
             }
         }
 
-        function checkPasswordStrength(password) {
-            const strengthBar = document.getElementById("password-strength");
-            let strength = 0;
-            if (password.length >= 8) strength++;
-            if (/[A-Z]/.test(password)) strength++;
-            if (/[a-z]/.test(password)) strength++;
-            if (/[0-9]/.test(password)) strength++;
-            if (/[@$!%*?&]/.test(password)) strength++;
+function checkPasswordStrength(password) {
+    const requirements = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[@$!%*?&]/.test(password),
+    };
 
-            const levels = ["Very Weak", "Weak", "Medium", "Strong", "Very Strong"];
-            const colors = ["#dc3545", "#fd7e14", "#ffc107", "#0d6efd", "#198754"];
-            strengthBar.textContent = "Strength: " + levels[strength - 1] ?? '';
-            strengthBar.style.color = colors[strength - 1] ?? '';
-        }
+    for (const key in requirements) {
+        const checkbox = document.getElementById(key);
+        checkbox.checked = requirements[key];
+    }
+}
+
+
+
     </script>
+    
 @endsection

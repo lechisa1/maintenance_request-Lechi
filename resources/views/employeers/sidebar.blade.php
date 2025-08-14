@@ -46,7 +46,7 @@
                                 <li class="nav-item">
                                 <li class="nav-item">
                                     <a href="{{ route('employer.pending') }}"
-                                        class="nav-link text-primary bi bi-hourglass-split">
+                                        class="nav-link text-info bi bi-hourglass-split">
                                         Pending Approval</a>
                                 </li>
                                 <a href="{{ route('employer.assigned') }}"
@@ -54,7 +54,7 @@
                                     Assigned to Technician</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('employer.in_progress') }}" class="nav-link text-info bi bi-arrow-repeat">
+                        <a href="{{ route('employer.in_progress') }}" class="nav-link text-purple bi bi-arrow-repeat">
                             Work in Progress</a>
                     </li>
                     <li class="nav-item">

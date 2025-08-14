@@ -54,21 +54,21 @@
                             
                             <td>
                                 <span
-                                    class="badge 
-                                    @if ($request->priority === 'high') bg-danger 
-                                    @elseif($request->priority === 'medium') bg-warning text-dark 
-                                    @else bg-secondary @endif">
+                                    class="text 
+                                    @if ($request->priority === 'high') text-danger 
+                                    @elseif($request->priority === 'medium') text-warning  
+                                    @else text-secondary @endif">
                                     {{ ucfirst($request->priority) }}
                                 </span>
                             </td>
                             {{-- <td>{{ $request->requested_at->format('Y-m-d') }}</td> --}}
                             <td>
                                 <span
-                                    class="badge 
-                                    @if ($request->status === 'pending') bg-warning text-dark 
-                                    @elseif ($request->status === 'in_progress') bg-primary 
-                                    @elseif ($request->status === 'completed') bg-success 
-                                    @else bg-secondary @endif">
+                                    class="text 
+                                    @if ($request->status === 'pending') text-warning  
+                                    @elseif ($request->status === 'in_progress') text-primary 
+                                    @elseif ($request->status === 'completed') text-success 
+                                    @else text-secondary @endif">
                                     {{ ucfirst($request->status) }}
                                 </span>
 

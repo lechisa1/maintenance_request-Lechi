@@ -35,6 +35,15 @@
 .table thead.bg-blue th:hover {
     background-color: #0bd79a; /* Slightly darker on hover */
 }
+#password-requirements input[type="checkbox"] {
+  accent-color: lightgray; /* default color */
+  pointer-events: none; /* prevent interaction even though not disabled */
+}
+
+#password-requirements input[type="checkbox"]:checked {
+  accent-color: green;
+}
+
 </style>
 </head>
 

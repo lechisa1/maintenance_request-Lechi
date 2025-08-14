@@ -56,21 +56,21 @@
                                         <td>{{ $request->user->phone }}</td> --}}
                                     <td>
                                         <span
-                                            class="badge 
-                                                @if ($request->priority === 'high') bg-danger 
-                                                @elseif($request->priority === 'medium') bg-warning text-dark 
-                                                @else bg-secondary @endif">
+                                            class="text 
+                                                @if ($request->priority === 'high') text-danger 
+                                                @elseif($request->priority === 'medium') text-warning 
+                                                @else text-secondary @endif">
                                             {{ ucfirst($request->priority) }}
                                         </span>
                                     </td>
                                     {{-- <td>{{ $request->requested_at->format('Y-m-d') }}</td> --}}
                                     <td>
                                         <span
-                                            class="badge 
-                                                @if ($request->status === 'pending') bg-warning text-dark 
-                                                @elseif ($request->status === 'in_progress') bg-primary 
-                                                @elseif ($request->status === 'completed') bg-success 
-                                                @else bg-secondary @endif">
+                                            class="text
+                                                @if ($request->status === 'pending') text-warning 
+                                                @elseif ($request->status === 'in_progress') text-primary 
+                                                @elseif ($request->status === 'completed') text-success 
+                                                @else text-secondary @endif">
                                             {{ ucfirst($request->status) }}
                                         </span>
                                     </td>
@@ -92,7 +92,7 @@
                                                 {{ $request->user->phone }}
                                             </div>
                                             <div class="col-12 border-bottom py-1"><strong>Job Position:</strong>
-                                                {{ $request->user->job_position }}</div>
+                                                {{ $request->user->jobPosition->title ?? 'N/A' }}</div>
                                             <div class="col-12 border-bottom py-1"><strong>Item:</strong>
                                                 {{ $request->item?->name ?? 'N/A' }}</div>
                                             <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
@@ -103,10 +103,10 @@
                                             <div class="col-12 border-bottom py-1"><strong>Issue:</strong>
                                                 @if ($request->categories && $request->categories->count())
                                                     @foreach ($request->categories as $category)
-                                                        <span class="badge bg-info text-dark">{{ $category->name }}</span>
+                                                        <span class="text-dark">{{ $category->name }}</span>
                                                     @endforeach
                                                 @else
-                                                    <span class="badge bg-info text-dark">Uknown Cause</span>
+                                                    <span class="text-dark">Uknown Cause</span>
                                                 @endif
                                             </div>
                                             <div class="col-12 border-bottom py-1"><strong>Assigned At:</strong>

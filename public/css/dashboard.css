@@ -205,8 +205,8 @@
 
     .nav-link:hover,
     .nav-link.active {
-        color: var(--primary-color);
-        background-color: var(--secondary-color);
+        color:var(--secondary-color);
+        background-color:var(--primary-color) ;
         /* Light gray background */
         border-left: 3px solid var(--primary-color);
     }

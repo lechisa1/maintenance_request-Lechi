@@ -47,21 +47,21 @@
                             <td>{{ $request->user->department->name }}</td>
                             <td>
                                 <span
-                                    class="badge 
-                                @if ($request->priority === 'high') bg-danger 
-                                @elseif($request->priority === 'medium') bg-warning text-dark 
-                                @else bg-secondary @endif">
+                                    class="text 
+                                @if ($request->priority === 'high') text-danger 
+                                @elseif($request->priority === 'medium') text-warning 
+                                @else text-secondary @endif">
                                     {{ ucfirst($request->priority) }}
                                 </span>
                             </td>
                             <td>
                                 <span
-                                    class="badge 
-                                @if ($request->status === 'pending') bg-warning text-dark 
-                                @elseif ($request->status === 'in_progress') bg-primary 
-                                @elseif ($request->status === 'completed') bg-success 
-                                @elseif ($request->status === 'rejected') bg-danger 
-                                @else bg-secondary @endif">
+                                    class="text 
+                                @if ($request->status === 'pending') text-warning 
+                                @elseif ($request->status === 'in_progress') text-info 
+                                @elseif ($request->status === 'completed') text-success 
+                                @elseif ($request->status === 'rejected') text-danger 
+                                @else text-secondary @endif">
                                     {{ ucfirst($request->status) }}
                                 </span>
                             </td>
@@ -83,7 +83,7 @@
                                     <div class="col-12 border-bottom py-1"><strong>Requester Phone:</strong>
                                         {{ $request->user->phone }}</div>
                                              <div class="col-12 border-bottom py-1"><strong>Job Position:</strong>
-                                                    {{ $request->user->job_position }}</div>
+                                                    {{ $request->user->jobPosition->title ?? 'N/A' }}</div>
                                     <div class="col-12 border-bottom py-1"><strong>Item:</strong>
                                         {{ $request->item?->name ?? 'N/A' }}</div>
                                     <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>

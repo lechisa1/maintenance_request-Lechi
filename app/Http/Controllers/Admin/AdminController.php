@@ -4,6 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Sector;
+use App\Models\Division;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,6 +16,8 @@ public function dashboard()
 {
     $totalUsers = User::count(); // Total number of users
     $totalDepartments = Department::count(); // Total number of departments
+    $totalSector=Sector::count();
+    $totalDivision=Division::count();
     $auth = auth()->user();
     $ad=$auth->hasRole('admin');
     if (!$auth || !$auth->hasRole('admin')) {
@@ -21,7 +25,7 @@ public function dashboard()
     }
     $usersPerDepartment = Department::withCount('users')->get(); // Each department with user count
 
-    return view('admin.dashboard', compact('totalUsers', 'totalDepartments', 'usersPerDepartment','ad'));
+    return view('admin.dashboard', compact('totalUsers', 'totalDepartments', 'usersPerDepartment','ad','totalSector','totalDivision'));
 }
 
 }

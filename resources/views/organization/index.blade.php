@@ -1,9 +1,9 @@
 @extends('admin.layout.app')
 
 @section('content')
-    <div class="container py-4 bg-white shadow-2xl mt-5">
+    <div class="container py-4 card bg-white shadow-5xl mt-5">
         <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 ml-5">
             <div>
                 <h1 class="h2 fw-bold text-primary ">
                     <i class="bi bi-diagram-3-fill text-primary me-2"></i>Organizational Structure

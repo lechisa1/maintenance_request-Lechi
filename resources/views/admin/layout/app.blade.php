@@ -31,16 +31,25 @@
    
     color: #11245A !important;
 }
+#password-requirements input[type="checkbox"] {
+  accent-color: lightgray; /* default color */
+  pointer-events: none; /* prevent interaction even though not disabled */
+}
+
+#password-requirements input[type="checkbox"]:checked {
+  accent-color: green;
+}
+
 .bg-success{
         background-color: #11245A !important;
     border-color: #11245A !important;
 }
 /* Hover effect for better interactivity */
 .table thead.bg-blue th:hover {
-    background-color: #0bd79a; /* Slightly darker on hover */
+    background-color: #590bd7; /* Slightly darker on hover */
 }
 /* Main Content Adjustments */
-#main-content {
+/* #main-content {
     margin-left: var(--sidebar-width);
     padding: 20px;
     min-height: 100vh;
@@ -48,14 +57,14 @@
     z-index: 1;
     background-color: #f8f9fa;
     transition: all 0.3s ease;
-}
+} */
 
 /* Card and Form Containers */
-.card {
+/* .card {
     overflow: visible !important;
     position: relative;
     z-index: 2;
-}
+} */
 
 .card-body {
     overflow: visible !important;
