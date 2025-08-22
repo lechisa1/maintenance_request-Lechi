@@ -30,9 +30,9 @@ class MaintenanceRequestController extends Controller
 
         // Add "Unknown Cause" as a custom option
         // Check if "Unknown Cause" already exists before adding it
-        if (!$categories->contains('name', 'Unknown Cause')) {
-            $categories->push((object) ['id' => 'unknown', 'name' => 'Unknown Cause']);
-        }
+        // if (!$categories->contains('name', 'Unknown Cause')) {
+        //     $categories->push((object) ['id' => 'unknown', 'name' => 'Unknown Cause']);
+        // }
 
         $items = Item::all();
         return view('maintenance_requests.create', compact('categories', 'items'));
@@ -222,7 +222,7 @@ class MaintenanceRequestController extends Controller
         $req->supervisor_status = 'approved';
         $req->save();
         $directors = \App\Models\User::whereHas('roles', function ($query) {
-            $query->where('name', 'director');
+            $query->where('name', 'Ict_director');
         })->get();
 
         foreach ($directors as $director) {
@@ -387,7 +387,7 @@ class MaintenanceRequestController extends Controller
             }
         } else {
             $directors = \App\Models\User::whereHas('roles', function ($query) {
-                $query->where('name', 'director');
+                $query->where('name', 'Ict_director');
             })->get();
 
             foreach ($directors as $director) {

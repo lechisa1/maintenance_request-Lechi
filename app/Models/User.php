@@ -76,7 +76,7 @@ public function directedDepartment()
     }
 public function isDirector()
 {
-    return $this->hasRole('director');
+    return $this->hasRole('Ict_director');
 }
 
 public function isTechnician()
@@ -116,4 +116,29 @@ public function subordinates()
             'password' => 'hashed',
         ];
     }
+    public function scopeSearch($query, $searchTerm)
+{
+    $searchTerm = strtolower($searchTerm);
+    
+    return $query->where(function($q) use ($searchTerm) {
+        $q->whereRaw('LOWER(name) LIKE ?', ["%{$searchTerm}%"])
+          ->orWhereRaw('LOWER(email) LIKE ?', ["%{$searchTerm}%"])
+          ->orWhereRaw('LOWER(phone) LIKE ?', ["%{$searchTerm}%"])
+          ->orWhereHas('roles', function($roleQuery) use ($searchTerm) {
+              $roleQuery->whereRaw('LOWER(name) LIKE ?', ["%{$searchTerm}%"]);
+          })
+          ->orWhereHas('department', function($deptQuery) use ($searchTerm) {
+              $deptQuery->whereRaw('LOWER(name) LIKE ?', ["%{$searchTerm}%"]);
+          })
+          ->orWhereHas('sector', function($sectorQuery) use ($searchTerm) {
+              $sectorQuery->whereRaw('LOWER(name) LIKE ?', ["%{$searchTerm}%"]);
+          })
+          ->orWhereHas('division', function($divQuery) use ($searchTerm) {
+              $divQuery->whereRaw('LOWER(name) LIKE ?', ["%{$searchTerm}%"]);
+          })
+          ->orWhereHas('jobPosition', function($jobQuery) use ($searchTerm) {
+              $jobQuery->whereRaw('LOWER(title) LIKE ?', ["%{$searchTerm}%"]);
+          });
+    });
+}
 }

@@ -83,10 +83,30 @@ use Illuminate\Support\Facades\DB;
 
 class OrganizationController extends Controller
 {
-public function index()
+public function index(Request $request)
 {
-    $sectors = Sector::with(['divisions.departments', 'departments'])->get();
+    $query = Sector::with(['divisions.departments', 'departments']);
+    $searchTerm = $request->search ?? null; // Initialize searchTerm
     
+    // Add search functionality
+    if (!empty($searchTerm)) {
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('name', 'LIKE', "%{$searchTerm}%")
+              ->orWhereHas('divisions', function($divisionQuery) use ($searchTerm) {
+                  $divisionQuery->where('name', 'LIKE', "%{$searchTerm}%")
+                               ->orWhereHas('departments', function($deptQuery) use ($searchTerm) {
+                                   $deptQuery->where('name', 'LIKE', "%{$searchTerm}%");
+                               });
+              })
+              ->orWhereHas('departments', function($deptQuery) use ($searchTerm) {
+                  $deptQuery->where('name', 'LIKE', "%{$searchTerm}%");
+              });
+        });
+    }
+    
+    $sectors = $query->get();
+    
+    // Calculate totals
     $totalDivisions = $sectors->sum(function($sector) {
         return $sector->divisions->count();
     });
@@ -98,7 +118,7 @@ public function index()
                });
     });
     
-    return view('organization.index', compact('sectors', 'totalDivisions', 'totalDepartments'));
+    return view('organization.index', compact('sectors', 'totalDivisions', 'totalDepartments', 'searchTerm'));
 }
 
     public function create()

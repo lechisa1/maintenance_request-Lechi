@@ -9,87 +9,56 @@ use App\Models\MaintenanceRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\MaintenanceRequestRejected;
 use App\Notifications\TechnicianAssignedNotification;
+use App\Traits\MaintenanceRequestSearch;
+use Termwind\Components\Raw;
 
 class DirectorController extends Controller
 {
-public function directorDashboard()
-{
-    // Changed: Remove department filter to get ALL requests
-    $departmentRequests = MaintenanceRequest::query();  // Now gets all requests
-    
-    $maintenances = $departmentRequests->latest()->paginate(5);
-
-    // All these counts will now be for ALL requests
-    $total = (clone $departmentRequests)->count();
-    $completed = (clone $departmentRequests)->where('status', 'completed')->count();
-    $pending = (clone $departmentRequests)->where('status', 'pending')->count();
-    $inProgress = (clone $departmentRequests)->where('status', 'in_progress')->count();
-    $notFixed = (clone $departmentRequests)->where('status', 'not_fixed')->count();
-    $rejected = (clone $departmentRequests)->where('status', 'rejected')->count();
-    $assigned = (clone $departmentRequests)->where('status', 'assigned')->count();
-
-    $statusCounts = (clone $departmentRequests)
-        ->selectRaw('status, COUNT(*) as count')
-        ->groupBy('status')
-        ->pluck('count', 'status')
-        ->toArray();
-
-    return view('director.dashboard', compact(
-        'maintenances',
-        'total',
-        'assigned',
-        'notFixed',
-        'rejected',
-        'completed',
-        'pending',
-        'inProgress',
-        'statusCounts'
-    ));
-}
-    // public function directorDashboard()
-    // {
-    //     $director = auth()->user();
-    //     $departmentId = $director->department_id;
-
-
-    //     $departmentRequests = MaintenanceRequest::whereHas('user', function ($query) use ($departmentId) {
-    //         $query->where('department_id', $departmentId);
-    //     });
-
-
-    //     $maintenances = $departmentRequests->latest()->paginate(5);
-
-
-    //     $total = (clone $departmentRequests)->count();
-    //     $completed = (clone $departmentRequests)->where('status', 'completed')->count();
-    //     $pending = (clone $departmentRequests)->where('status', 'pending')->count();
-    //     $inProgress = (clone $departmentRequests)->where('status', 'in_progress')->count();
-    //     $notFixed = (clone $departmentRequests)->where('status', 'not_fixed')->count();
-    //     $rejected = (clone $departmentRequests)->where('status', 'rejected')->count();
-    //     $assigned = (clone $departmentRequests)->where('status', 'assigned')->count();
-
-    //     $statusCounts = (clone $departmentRequests)
-    //         ->selectRaw('status, COUNT(*) as count')
-    //         ->groupBy('status')
-    //         ->pluck('count', 'status')
-    //         ->toArray();
-
-    //     return view('director.dashboard', compact(
-    //         'maintenances',
-    //         'total',
-    //         'assigned',
-    //         'notFixed',
-    //         'rejected',
-    //         'completed',
-    //         'pending',
-    //         'inProgress',
-    //         'statusCounts'
-    //     ));
-    // }
-
-    public function maintenenceRequestPending()
+    use MaintenanceRequestSearch;
+    public function directorDashboard(Request $request)
     {
-        $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item'])->whereIn('status', ['pending','not_fixed'])->latest()->paginate(10);
+        // Changed: Remove department filter to get ALL requests
+        $departmentRequests = MaintenanceRequest::query();  // Now gets all requests
+        if ($request->has('search') && !empty($request->search)) {
+            $query = $this->applyMaintenanceRequestSearch($query, $request->search);
+        }
+        $maintenances = $departmentRequests->latest()->paginate(5);
+
+        // All these counts will now be for ALL requests
+        $total = (clone $departmentRequests)->count();
+        $completed = (clone $departmentRequests)->where('status', 'completed')->count();
+        $pending = (clone $departmentRequests)->where('status', 'pending')->count();
+        $inProgress = (clone $departmentRequests)->where('status', 'in_progress')->count();
+        $notFixed = (clone $departmentRequests)->where('status', 'not_fixed')->count();
+        $rejected = (clone $departmentRequests)->where('status', 'rejected')->count();
+        $assigned = (clone $departmentRequests)->where('status', 'assigned')->count();
+
+        $statusCounts = (clone $departmentRequests)
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        return view('director.dashboard', compact(
+            'maintenances',
+            'total',
+            'assigned',
+            'notFixed',
+            'rejected',
+            'completed',
+            'pending',
+            'inProgress',
+            'statusCounts'
+        ));
+    }
+
+
+    public function maintenenceRequestPending(Request $request)
+    {
+        $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item'])->whereIn('status', ['pending', 'not_fixed'])->latest()->paginate(10);
+                if ($request->has('search') && !empty($request->search)) {
+            $query = $this->applyMaintenanceRequestSearch($query, $request->search);
+        }
         return view('maintenance_requests.pending_maintenance', compact('pendingRequest'));
     }
 
@@ -100,7 +69,6 @@ public function directorDashboard()
 
         $technicians = User::whereHas('roles', function ($q) use ($maintenanceRequest) {
             $q->where('name', 'technician');
-
         })
             ->withCount(['assignedRequests' => function ($query) {
                 $query->whereHas('maintenanceRequest', function ($q) {
@@ -138,8 +106,6 @@ public function directorDashboard()
                             $q->where('name', 'technician');
                         })
                         ->exists();
-
-
                 }
             ],
             'director_notes' => 'nullable|string|max:500',
@@ -176,7 +142,7 @@ public function directorDashboard()
                 'director_id' => auth()->id(),
                 'technician_id' => $techId,
                 'director_notes' => $validated['director_notes'],
-                'expected_completion_date' =>now(),
+                'expected_completion_date' => now(),
                 'assigned_at' => now(),
             ]);
 
@@ -223,7 +189,7 @@ public function directorDashboard()
             'updates.user'
         ])->findOrFail($id);
 
-        
+
         return view('maintenance_requests.show', compact('maintenanceRequest'));
     }
 
@@ -306,26 +272,33 @@ public function directorDashboard()
 
         return view('director.status.completed', compact('completedRequests'));
     }
-    public function getPendingRequests()
-    {
-
-        $director = auth()->user();
-        $check = auth()->user()->roles->first()->name;
-        if (!$check) {
-            abort(403, 'Unauthorized access');
-        }
-        $directorDepartmentId = $director->department->id;
-
-
-        $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item', 'item.categories', 'latestAssignment'])->whereIn('status', ['pending','not_fixed'])
-            ->where('user_feedback', 'pending')
-
-            ->latest()->paginate(10);
-
-
-        return view('director.status.pending', compact('pendingRequest'));
+public function getPendingRequests(Request $request)
+{
+    $director = auth()->user();
+    $check = auth()->user()->roles->first()->name;
+    
+    if (!$check) {
+        abort(403, 'Unauthorized access');
     }
-    public function getRejectedRequests()
+
+    $directorDepartmentId = $director->department->id;
+    
+    // Initialize the query
+    $query = MaintenanceRequest::with(['user', 'categories', 'item', 'item.categories', 'latestAssignment'])
+                ->whereIn('status', ['pending', 'not_fixed'])
+                ->where('user_feedback', 'pending');
+
+    // Apply search if search term exists
+    if ($request->has('search') && !empty($request->search)) {
+        $query = $this->applyMaintenanceRequestSearch($query, $request->search);
+    }
+
+    // Get paginated results
+    $pendingRequest = $query->latest()->paginate(10);
+
+    return view('director.status.pending', compact('pendingRequest'));
+}
+    public function getRejectedRequests(Request $request)
     {
 
         $director = auth()->user();
@@ -336,16 +309,19 @@ public function directorDashboard()
         $directorDepartmentId = $director->department->id;
 
 
-        $pendingRequest = MaintenanceRequest::with(['user', 'item', 'latestAssignment', 'categories', 'item.categories', 'rejectedBy'])->where('status', 'rejected')
+        $query = MaintenanceRequest::with(['user', 'item', 'latestAssignment', 'categories', 'item.categories', 'rejectedBy'])->where('status', 'rejected')
             ->where('user_feedback', 'pending')
-            ->orWhere('user_feedback', 'rejected')
+            ->orWhere('user_feedback', 'rejected');
+                if ($request->has('search') && !empty($request->search)) {
+        $query = $this->applyMaintenanceRequestSearch($query, $request->search);
+    }
 
-            ->latest()->paginate(10);
+             $pendingRequest=$query->latest()->paginate(10);
 
 
         return view('director.status.rejected', compact('pendingRequest'));
     }
-    public function getInProgressRequests()
+    public function getInProgressRequests(Request $request)
     {
 
         $director = auth()->user();
@@ -356,15 +332,17 @@ public function directorDashboard()
         $directorDepartmentId = $director->department->id;
 
 
-        $InProgressRequests = MaintenanceRequest::with('user', 'item', 'latestAssignment', 'categories', 'item.categories')->where('status', 'in_progress')
+        $query = MaintenanceRequest::with('user', 'item', 'latestAssignment', 'categories', 'item.categories')->where('status', 'in_progress');
 
-
-            ->latest()->paginate(10);
+    if ($request->has('search') && !empty($request->search)) {
+        $query = $this->applyMaintenanceRequestSearch($query, $request->search);
+    }
+           $InProgressRequests= $query ->latest()->paginate(10);
 
 
         return view('director.status.in_progress', compact('InProgressRequests'));
     }
-    public function getAssignedRequests()
+    public function getAssignedRequests(Request $request)
     {
 
         $director = auth()->user();
@@ -375,10 +353,12 @@ public function directorDashboard()
         $directorDepartmentId = $director->department->id;
 
 
-        $AssignedRequests = MaintenanceRequest::with('user', 'item', 'latestAssignment', 'categories', 'item.categories')->where('status', 'assigned')
+        $query = MaintenanceRequest::with('user', 'item', 'latestAssignment', 'categories', 'item.categories')->where('status', 'assigned');
 
-
-            ->latest()->paginate(10);
+    if ($request->has('search') && !empty($request->search)) {
+        $query = $this->applyMaintenanceRequestSearch($query, $request->search);
+    }
+    $AssignedRequests= $query->latest()->paginate(10);
 
 
         return view('director.status.assigned', compact('AssignedRequests'));

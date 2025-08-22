@@ -1,18 +1,40 @@
-@extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : (Auth::user()->roles->first()->name === 'employer' ? 'employeers.dashboard.layout' : 'employeers.dashboard.layout'))))
+@extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'Ict_director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : (Auth::user()->roles->first()->name === 'employer' ? 'employeers.dashboard.layout' : 'employeers.dashboard.layout'))))
 @section('content')
     <div class="container py-5">
         <div class="card shadow-lg border-0 rounded-4 bg-white">
             <div class="card-body px-4 py-4">
 
-                <h4 class="text-primary my-3 text-center">Assigned Requests List</h4>
-                {{-- <a href="{{ route('requests.create') }}" class="btn btn-sm btn-primary">
-                        <i class="bi bi-plus-circle me-1"></i> Add Request
-                    </a> --}}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="text-primary my-3">Assigned Requests List</h4>
 
-                <div class="gap-3 mb-3"><input type="text" class="form-control" id="searchInput" placeholder="🔍 Search..."
-                        onkeyup="filterTable()" style="max-width: 250px;margin-left:70%">
+                    <!-- Search Form -->
+                    <form method="GET" action="{{ url()->current() }}" class="d-flex">
+                        <div class="input-group" style="max-width: 300px;">
+                            <input type="text" name="search" class="form-control rounded-pill shadow-sm"
+                                placeholder=" Search requests..." value="{{ request('search') }}"
+                                aria-label="Search maintenance requests">
+                            <button type="submit" class="btn btn-primary rounded-pill ms-2">
+                                <i class="bi bi-search me-1"></i> Search
+                            </button>
+                            @if (request('search'))
+                                <a href="{{ url()->current() }}" class="btn btn-outline-secondary rounded-pill ms-2">
+                                    <i class="bi bi-x-lg me-1"></i> Clear
+                                </a>
+                            @endif
+                        </div>
+                    </form>
                 </div>
+                @if (request('search'))
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Showing results for: <strong>"{{ request('search') }}"</strong>
+                        <a href="{{ url()->current() }}" class="float-end text-decoration-none">
+                            <small>Clear search</small>
+                        </a>
+                    </div>
+                @endif
 
+        
                 <div class="table-responsive rounded-3 shadow-sm">
                     <table class="table table-hover align-middle mb-0" id="requestsTable">
                         <thead class="bg-blue text-white text-center"
@@ -23,7 +45,7 @@
                                 <th>Ticket ID</th>
                                 {{-- <th>Item Name</th> --}}
                                 <th>Requester</th>
-                                {{-- <th>Department</th> --}}
+                            <th>Job Position</th>
                                 {{-- <th>Phone</th> --}}
                                 <th>Priority</th>
                                 {{-- <th>Requested At</th> --}}
@@ -42,9 +64,33 @@
                                         </button>
                                         {{ $key + 1 }}
                                     </td>
-                                    <td>{{ $request->ticket_number }}</td>
-                                    {{-- <td>{{ $request->item ? $request->item->name : 'N/A' }}</td> --}}
-                                    <td>{{ $request->user->name }}</td>
+                                    <td>
+                                        @if (request('search') && str_contains(strtolower($request->ticket_number), strtolower(request('search'))))
+                                            {!! preg_replace('/(' . preg_quote(request('search'), '/') . ')/i', '<mark>$0</mark>', $request->ticket_number) !!}
+                                        @else
+                                            {{ $request->ticket_number }}
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        @if (request('search') && str_contains(strtolower($request->user->name), strtolower(request('search'))))
+                                            {!! preg_replace('/(' . preg_quote(request('search'), '/') . ')/i', '<mark>$0</mark>', $request->user->name) !!}
+                                        @else
+                                            {{ $request->user->name }}
+                                        @endif
+                                        </td>
+                                        <td>
+                                            @if (request('search') &&
+                                                    str_contains(strtolower($request->user->jobPosition->title ?? ''), strtolower(request('search'))))
+                                                {!! preg_replace(
+                                                    '/(' . preg_quote(request('search'), '/') . ')/i',
+                                                    '<mark>$0</mark>',
+                                                    $request->user->jobPosition->title ?? 'N/A',
+                                                ) !!}
+                                            @else
+                                                {{ $request->user->jobPosition->title ?? 'N/A' }}
+                                            @endif
+                                        </td>
                                     {{-- <td>{{ $request->user->department->name }}</td>
                                         <td>{{ $request->user->phone }}</td> --}}
                                     <td>
@@ -87,13 +133,12 @@
                                             <div class="col-12 border-bottom py-1"><strong>Item:</strong>
                                                 {{ $request->item?->name ?? 'N/A' }}</div>
                                             <div class="col-12 border-bottom py-1"><strong>Description:</strong>
-                                                {{ $request->description }}</div>
-                                            <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
-                                                {{ $request->requested_at->format('M d, Y h:i A') }}</div>
-                                            <div class="col-12 border-bottom py-1"><strong>Job Position:</strong>
-                                                {{ $request->user->jobPosition->title ?? 'N/A' }}</div>
-                                            <div class="col-12 border-bottom py-1"><strong>Department:</strong>
-                                                {{ $request->user->department->name }}</div>
+                                                @if (request('search') && str_contains(strtolower($request->description), strtolower(request('search'))))
+                                                    {!! preg_replace('/(' . preg_quote(request('search'), '/') . ')/i', '<mark>$0</mark>', $request->description) !!}
+                                                @else
+                                                    {{ $request->description }}
+                                                @endif
+                                            </div>
                                             <div class="col-12 border-bottom py-1"><strong>Issue:</strong>
                                                 @if ($request->categories && $request->categories->count())
                                                     @foreach ($request->categories as $category)
@@ -103,6 +148,20 @@
                                                     <span class="badge bg-info text-dark">Uknown Cause</span>
                                                 @endif
                                             </div>
+                                            <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
+                                                {{ $request->requested_at->format('M d, Y h:i A') }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Department:</strong>
+                                                @if (request('search') && str_contains(strtolower($request->user->department->name), strtolower(request('search'))))
+                                                    {!! preg_replace('/(' . preg_quote(request('search'), '/') . ')/i', '<mark>$0</mark>', $request->user->department->name) !!}
+                                                @else
+                                                    {{ $request->user->department->name }}
+                                                @endif
+                                            </div>
+                                            <div class="col-12 border-bottom py-1"><strong>Sector:</strong>
+                                                {{ $request->user->sector->name ?? 'None' }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Division:</strong>
+                                                {{ $request->user->division->name ?? 'None' }}</div>
+                                           
                                             <div class="col-12 border-bottom py-1"><strong>Assigned At:</strong>
                                                 {{ $request->latestAssignment->assigned_at }}</div>
                                             <div class="col-12 border-bottom py-1"><strong>Assigned To:</strong>

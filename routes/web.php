@@ -101,7 +101,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 
-
+        Route::get('maintenance/pendings', [MaintenanceRequestController::class, 'division_director_request_view'])->middleware('permission:approve_staff_request')->name('division_director_request_view');
     Route::get(
         '/categories',
         [MaintenanceCategoryController::class, 'index']
@@ -129,7 +129,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/requests/detail/show/{id}', [DirectorController::class, 'show'])->name('requests.show');
 
-    Route::middleware(['auth', 'role:director'])->prefix('director')->group(function () {
+    Route::middleware(['auth', 'role:Ict_director'])->prefix('director')->group(function () {
         Route::get('director/dashboard', [DirectorController::class, 'directorDashboard'])->name('director.dashboard');
 
         Route::get('maintenance/pending', [DirectorController::class, 'maintenenceRequestPending'])->name('maintenance_request_pending');
@@ -178,7 +178,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('employeers/maintenance/completed', [EmployeeController::class, 'completedRequests'])->name('employer.completed');
         Route::get('employeers/maintenance/in_progress', [EmployeeController::class, 'inProgressRequests'])->name('employer.in_progress');
         Route::get('employeers/maintenance/assigned', [EmployeeController::class, 'assignedRequests'])->name('employer.assigned');
-        Route::get('maintenance/pendings', [MaintenanceRequestController::class, 'division_director_request_view'])->name('division_director_request_view');
+
     });
 });
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

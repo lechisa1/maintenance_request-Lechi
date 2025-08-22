@@ -12,12 +12,25 @@
                 </div>
 
                 <div class="d-flex justify-content-end mb-3">
-                    <input type="text" class="form-control w-25 shadow-sm rounded-pill" id="searchInput"
-                        placeholder="🔍 Search..." onkeyup="filterTable()">
+                    <form method="GET" action="{{ route('users_index') }}" class="w-25 position-relative">
+                        <input type="text" name="search" class="form-control shadow-sm rounded-pill ps-4"
+                            placeholder=" Search..." value="{{ request('search') }}" aria-label="Search users">
+                        <button type="submit"
+                            class="btn btn-link position-absolute top-50 start-0 translate-middle-y ms-2 p-0"
+                            style="z-index: 10;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        @if (request('search'))
+                            <a href="{{ route('users_index') }}"
+                                class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-2 p-0"
+                                style="z-index: 10;" title="Clear search">
+                                <i class="bi bi-x-lg text-danger"></i>
+                            </a>
+                        @endif
+                    </form>
                 </div>
-
                 <div class="table-responsive rounded-3 shadow-sm">
-                    <table class="table table-hover align-middle mb-0" id="requestsTable">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="bg-blue text-white text-center"
                             style="background: linear-gradient(90deg, #0d6efd, #6610f2); position: sticky; top: 0; z-index: 1;">
                             <tr>
@@ -33,9 +46,9 @@
                             @forelse($users as $key => $user)
                                 <tr class="text-center">
                                     <td class="fw-bold">{{ $key + 1 }}</td>
-                                    <td>{{ $user->name }}</td>
+                                    <td class="capitalize-text">{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{ $user->roles->first()->name ?? 'No role' }}</td>
+                                    <td class="capitalize-text">{{ $user->roles->first()->name ?? 'No role' }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-sm btn-light border shadow-sm rounded-circle"
@@ -57,11 +70,13 @@
                                                 </div>
                                                 <div class="dropdown-item-text mb-2">
                                                     <div class="small text-muted">Sector</div>
-                                                    <div class="fw-semibold">{{ $user->sector->name ?? 'None' }}</div>
+                                                    <div class="fw-semibold capitalize-text">
+                                                        {{ $user->sector->name ?? 'None' }}</div>
                                                 </div>
                                                 <div class="dropdown-item-text mb-2">
                                                     <div class="small text-muted">Division</div>
-                                                    <div class="fw-semibold">{{ $user->division->name ?? 'None' }}</div>
+                                                    <div class="fw-semibold capitalize-text">
+                                                        {{ $user->division->name ?? 'None' }}</div>
                                                 </div>
                                                 <div class="dropdown-item-text">
                                                     <div class="small text-muted">Job Position</div>
@@ -78,12 +93,12 @@
                                                 data-bs-toggle="tooltip" title="Edit">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-<button class="btn btn-sm btn-outline-danger rounded-circle"
-        data-bs-toggle="modal" data-bs-target="#deleteModal"
-        data-user-id="{{ $user->id }}"
-        data-url="{{ route('delete_user', $user->id) }}" title="Delete">
-    <i class="bi bi-trash"></i>
-</button>
+                                            <button class="btn btn-sm btn-outline-danger rounded-circle"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                data-user-id="{{ $user->id }}"
+                                                data-url="{{ route('delete_user', $user->id) }}" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
 
                                         </div>
                                     </td>
@@ -108,19 +123,20 @@
 
 
     </div>
+    <script>
+        // Get all elements with the class 'capitalize-text'
+        const elements = document.querySelectorAll('.capitalize-text');
+
+        elements.forEach(element => {
+            // Replace underscores with spaces and capitalize each word
+            element.textContent = element.textContent
+                .replace(/_/g, ' ') // Replace underscores with spaces
+                .replace(/\b\w/g, char => char.toUpperCase()); // Capitalize the first letter of each word
+        });
+    </script>
 
 
     <script>
-        function filterTable() {
-            const input = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.querySelectorAll("#requestsTable tbody tr");
-
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(input) ? "" : "none";
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const deleteModal = document.getElementById('deleteModal');
             deleteModal.addEventListener('show.bs.modal', function(event) {
@@ -163,4 +179,3 @@
         </div>
     </div>
 </div>
-

@@ -68,14 +68,66 @@
                 </div>
             </div>
         </div>
-
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body py-3">
+                <form method="GET" action="{{ route('organization.index') }}" class="row g-3 align-items-center">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" name="search" class="form-control border-start-0"
+                                placeholder="Search sectors, divisions, or departments..." value="{{ $searchTerm ?? '' }}"
+                                aria-label="Search organization structure">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </div>
+                    @if (!empty($searchTerm))
+                        <div class="col-md-2">
+                            <a href="{{ route('organization.index') }}" class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-x-lg me-1"></i> Clear
+                            </a>
+                        </div>
+                    @endif
+                </form>
+            </div>
+        </div>
         <!-- Organization Structure -->
         <div class="card shadow-sm border-0">
             <div class="card-header bg-success border-bottom py-3">
                 <h5 class="mb-0 text-white text-center">
                     <i class="bi bi-diagram-3-fill text-white me-2 "></i>Structure Overview
                 </h5>
+                @if (!empty($searchTerm))
+                    <span class="badge bg-white text-success">
+                        Search results for: "{{ $searchTerm }}"
+                    </span>
+                @endif
             </div>
+                       <div class="card-body p-0">
+                @if($sectors->isEmpty())
+                    <div class="text-center py-5">
+                        @if(!empty($searchTerm))
+                            <i class="bi bi-search fs-1 text-muted"></i>
+                            <h5 class="mt-3 text-muted">No matching results found</h5>
+                            <p class="text-muted">Your search for "{{ $searchTerm }}" didn't match any sectors, divisions or departments</p>
+                            <a href="{{ route('organization.index') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Clear Search
+                            </a>
+                        @else
+                            <i class="bi bi-diagram-3 fs-1 text-muted"></i>
+                            <h5 class="mt-3 text-muted">No Organization Structure Found</h5>
+                            <p class="text-muted">Please set up your organization structure</p>
+                            <a href="{{ route('organization.create') }}" class="btn btn-primary">
+                                <i class="bi bi-plus-lg me-2"></i>Add Structure
+                            </a>
+                        @endif
+                    </div>
+               @else
             <div class="card-body p-0">
                 <div class="accordion accordion-flush" id="structureAccordion">
                     @foreach ($sectors as $sIndex => $sector)
@@ -292,38 +344,39 @@
                     @endforeach
                 </div>
             </div>
+@endif
         </div>
     </div>
 
     <!-- Floating Action Button -->
-    <div class="position-fixed bottom-3 end-3 z-3">
-        <div class="dropup">
-            <button class="btn btn-primary btn-lg rounded-circle shadow-lg p-3" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="bi bi-plus-lg fs-4"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                <li>
-                    <a class="dropdown-item rounded-3 d-flex align-items-center py-2"
-                        href="{{ route('organization.create') }}">
-                        <i class="bi bi-building me-2"></i>Add New Sector
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item rounded-3 d-flex align-items-center py-2"
-                        href="{{ route('organization.create') }}">
-                        <i class="bi bi-collection me-2"></i>Add New Division
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item rounded-3 d-flex align-items-center py-2"
-                        href="{{ route('organization.create') }}">
-                        <i class="bi bi-people-fill me-2"></i>Add New Department
-                    </a>
-                </li>
-            </ul>
-        </div>
+<div class="position-fixed bottom-5 end-3 z-10">
+    <div class="dropup">
+        {{-- <button class="btn btn-primary btn-lg rounded-circle shadow-lg p-3" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="bi bi-plus-lg fs-4"></i>
+        </button> --}}
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+            <li>
+                <a class="dropdown-item rounded-3 d-flex align-items-center py-2"
+                    href="{{ route('organization.create') }}">
+                    <i class="bi bi-building me-2"></i>Add New Sector
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item rounded-3 d-flex align-items-center py-2"
+                    href="{{ route('organization.create') }}">
+                    <i class="bi bi-collection me-2"></i>Add New Division
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item rounded-3 d-flex align-items-center py-2"
+                    href="{{ route('organization.create') }}">
+                    <i class="bi bi-people-fill me-2"></i>Add New Department
+                </a>
+            </li>
+        </ul>
     </div>
+</div>
 
     <!-- Delete Confirmation Script -->
     <script>

@@ -9,9 +9,29 @@ use Illuminate\Http\Request;
 class RoleController extends Controller
 {
     //
-    public function listOfRoles()
+public function listOfRoles(Request $request)
 {
-    $roles = Role::with('permissions')->get();
+    $query = Role::with('permissions')->latest();
+    
+    // Add search functionality
+    if ($request->has('search') && !empty($request->search)) {
+        $searchTerm = $request->search;
+        
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('name', 'LIKE', "%{$searchTerm}%")
+              ->orWhereHas('permissions', function($permissionQuery) use ($searchTerm) {
+                  $permissionQuery->where('name', 'LIKE', "%{$searchTerm}%");
+              });
+        });
+    }
+    
+    $roles = $query->paginate(10); // Adjust pagination as needed
+    
+    // Append search parameter to pagination links if it exists
+    if ($request->has('search')) {
+        $roles->appends(['search' => $request->search]);
+    }
+    
     return view('role.list', compact('roles'));
 }
     public function addRoleForm()

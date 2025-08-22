@@ -169,7 +169,7 @@
 
                     {{-- Submit Button --}}
                     <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm">
+                        <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
                             <i class="bi bi-check-circle me-1"></i> Update User
                         </button>
                     </div>

@@ -32,7 +32,7 @@ public function run(): void
                 'email_verified_at' => now(),
             ]
         );
-        $director->assignRole('director');
+        $director->assignRole('Ict_director');
 
         $technician = User::firstOrCreate(
             ['email' => 'technician@gmail.com'],

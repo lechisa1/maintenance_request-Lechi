@@ -17,18 +17,37 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
     //
-    public function index()
-    {
-        $users = User::with('reportsTo','division','sector')->latest()->paginate(10);
-        $departments = Department::all();
-        // Get the count of users for each department
-        $departmentUserCount = Department::withCount('users')->get();
-        $totalUsers = User::count();
-        // Get the count of users for each role using Spatie's relationship
-        $roleUserCount = \Spatie\Permission\Models\Role::withCount(['users'])->get();
+public function index(Request $request)
+{
+    $query = User::with('reportsTo', 'division', 'sector', 'roles')
+                ->latest();
+    
+    // Add search functionality
 
-        return view('usermanagement.index', compact('users', 'departments', 'departmentUserCount', 'roleUserCount', 'totalUsers'));
+// In your controller
+if ($request->has('search') && !empty($request->search)) {
+    $query->search(strtolower($request->search));
+}
+    $users = $query->paginate(10);
+    
+    // Append search parameter to pagination links if it exists
+    if ($request->has('search')) {
+        $users->appends(['search' => $request->search]);
     }
+    
+    $departments = Department::all();
+    $departmentUserCount = Department::withCount('users')->get();
+    $totalUsers = User::count();
+    $roleUserCount = \Spatie\Permission\Models\Role::withCount(['users'])->get();
+
+    return view('usermanagement.index', compact(
+        'users', 
+        'departments', 
+        'departmentUserCount', 
+        'roleUserCount', 
+        'totalUsers'
+    ));
+}
     public function getDivisions($id)
     {
         $divisions = Division::where('sector_id', $id)->get();

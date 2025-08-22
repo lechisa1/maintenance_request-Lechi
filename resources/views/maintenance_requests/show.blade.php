@@ -1,7 +1,7 @@
 @php
     if (auth()->user()->hasRole('admin')) {
         $layout = 'admin.layout.app';
-    } elseif (auth()->user()->hasRole('director')) {
+    } elseif (auth()->user()->hasRole('Ict_director')) {
         $layout = 'director.layout.layout';
     } elseif (auth()->user()->hasRole('technician')) {
         $layout = 'technician.dashboard.layout';
@@ -200,7 +200,7 @@
                 </div>
 
                 <!-- Work Logs Section -->
-                @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('director'))
+                @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('Ict_director'))
                 @if ($maintenanceRequest->workLogs->isNotEmpty())
                     <div class="card shadow-lg border-0 rounded-4 mt-4">
                         <div
@@ -326,11 +326,11 @@
                             </div>
                         </div>
                         @endif --}}
-@if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('director'))
+@if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('Ict_director'))
                                 @if ($assignment->director_notes)
                                     <div class="col-12">
                                         <div class="card bg-light border-0 rounded-3 p-3">
-                                            <h6 class="text-success mb-2">Director Notes</h6>
+                                            <h6 class="text-success mb-2">Director Remark</h6>
                                             <p class="mb-0">{{ $assignment->director_notes }}</p>
                                         </div>
                                     </div>
@@ -393,7 +393,7 @@
                 @endif
 
                 <!-- Action Button for Director -->
-                @if ($maintenanceRequest->status === 'pending' && auth()->user()->hasRole('director'))
+                @if ($maintenanceRequest->status === 'pending' && auth()->user()->hasRole('Ict_director'))
                     <div class="d-grid">
                         <a href="{{ route('requests.showAssignForm', $maintenanceRequest->id) }}"
                             class="btn btn-primary btn-lg rounded-pill shadow-sm py-3">
@@ -401,7 +401,7 @@
                         </a>
                     </div>
                 @endif
-                 @if ($maintenanceRequest->status === 'not_fixed' && auth()->user()->hasRole('director'))
+                 @if ($maintenanceRequest->status === 'not_fixed' && auth()->user()->hasRole('Ict_director'))
                     <div class="d-grid">
                         <a href="{{ route('requests.showAssignForm', $maintenanceRequest->id) }}"
                             class="btn btn-primary btn-lg rounded-pill shadow-sm py-3">

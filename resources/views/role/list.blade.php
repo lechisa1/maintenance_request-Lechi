@@ -1,91 +1,3 @@
-{{-- @extends('admin.layout.app')
-
-@section('content')
-    <div class="container py-4 card bg-white mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-0">Roles & Permissions</h2>
-            <a href="{{ route('roles_create') }}" class="btn btn-success">Add New Role</a>
-        </div>
-
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
-        @forelse($roles as $role)
-            <div class="card mb-4 shadow-sm border-0">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-0"><i class="bi bi-person-badge me-2"></i>{{ ucfirst($role->name) }}</h5>
-
-                    </div>
-                    <div>
-                        <a href="{{ route('edit_role', $role->id) }}" class="btn btn-sm btn-primary me-1">Edit</a>
-                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                            data-role-id="{{ $role->id }}" data-url="{{ route('delete_role', $role->id) }}">
-                            Delete
-                        </button>
-
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h6 class="mb-3">Permissions</h6>
-                    <div class="row">
-                        @forelse($role->permissions as $permission)
-                            <div class="col-md-4 mb-2">
-                                <div class="card bg-light border-0 shadow-sm p-2">
-                                    <div class="card-body py-2 px-3">
-                                        <span
-                                            class="text-primary">{{ ucwords(str_replace('_', ' ', $permission->name)) }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col">
-                                <span class="text-muted">No permissions assigned.</span>
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="alert alert-info">No roles found.</div>
-        @endforelse
-    </div>
-
-
-    <script>
-        const deleteModal = document.getElementById('deleteModal');
-        deleteModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const url = button.getAttribute('data-url'); // Laravel route
-            const form = document.getElementById('deleteRoleForm');
-            form.action = url;
-        });
-    </script>
-
-@endsection
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form method="POST" id="deleteRoleForm">
-            @csrf
-            @method('DELETE')
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this role? This action cannot be undone.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div> --}}
 
 @extends('admin.layout.app')
 
@@ -100,7 +12,36 @@
                     <i class="bi bi-plus-circle me-1"></i> Add New Role
                 </a>
             </div>
-
+<!-- Add search form here -->
+<div class="px-4 py-3 border-bottom bg-light">
+    <form method="GET" action="{{ route('roles_with_permission') }}" class="row g-2 align-items-center">
+        <div class="col-md-8">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" 
+                       name="search" 
+                       class="form-control border-start-0" 
+                       placeholder="Search roles or permissions..." 
+                       value="{{ request('search') }}"
+                       aria-label="Search roles">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-search me-1"></i> Search
+            </button>
+        </div>
+        @if(request('search'))
+        <div class="col-md-2">
+            <a href="{{ route('roles_with_permission') }}" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-x-lg me-1"></i> Clear
+            </a>
+        </div>
+        @endif
+    </form>
+</div>
             <div class="card-body px-0 pb-0 bg-white">
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show mx-3 rounded-3" role="alert">
@@ -117,9 +58,9 @@
                                 <button class="accordion-button collapsed bg-transparent shadow-none" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#role-{{ $role->id }}"
                                     aria-expanded="false" aria-controls="role-{{ $role->id }}">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center ">
                                         <span class="badge bg-primary rounded-pill me-3">{{ $index + 1 }}</span>
-                                        <h5 class="mb-0 fw-semibold">{{ ucfirst($role->name) }}</h5>
+                                        <h5 class="mb-0 fw-semibold capitalize-text ">{{ ucfirst($role->name) }}</h5>
                                     </div>
                                 </button>
                                 <div class="d-flex">
@@ -169,16 +110,24 @@
                                 </div>
                             </div>
                         </div>
-                    @empty
-                        <div class="text-center py-5">
-                            <i class="bi bi-shield-slash fs-1 text-muted"></i>
-                            <h5 class="mt-3 text-muted">No Roles Found</h5>
-                            <p class="text-muted">Create your first role to get started</p>
-                            <a href="{{ route('roles_create') }}" class="btn btn-primary rounded-pill mt-2">
-                                <i class="bi bi-plus-circle me-1"></i> Create Role
-                            </a>
-                        </div>
-                    @endforelse
+@empty
+    <div class="text-center py-5">
+        @if(request('search'))
+            <i class="bi bi-search fs-1 text-muted"></i>
+            <h5 class="mt-3 text-muted">No roles found matching your search</h5>
+            <a href="{{ route('roles_with_permission') }}" class="btn btn-outline-primary rounded-pill mt-2">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Search
+            </a>
+        @else
+            <i class="bi bi-shield-slash fs-1 text-muted"></i>
+            <h5 class="mt-3 text-muted">No Roles Found</h5>
+            <p class="text-muted">Create your first role to get started</p>
+            <a href="{{ route('roles_create') }}" class="btn btn-primary rounded-pill mt-2">
+                <i class="bi bi-plus-circle me-1"></i> Create Role
+            </a>
+        @endif
+    </div>
+@endforelse
                 </div>
             </div>
         </div>
@@ -212,6 +161,18 @@
         }
     });
 </script>
+<script>
+  // Get all elements with the class 'capitalize-text'
+  const elements = document.querySelectorAll('.capitalize-text');
+
+  elements.forEach(element => {
+    // Replace underscores with spaces and capitalize each word
+    element.textContent = element.textContent
+      .replace(/_/g, ' ')                // Replace underscores with spaces
+      .replace(/\b\w/g, char => char.toUpperCase());  // Capitalize the first letter of each word
+  });
+</script>
+
 @endsection
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

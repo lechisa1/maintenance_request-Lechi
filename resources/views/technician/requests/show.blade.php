@@ -1,4 +1,4 @@
-@extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : 'employeers.dashboard.layout')))
+@extends(Auth::user()->roles->first()->name === 'admin' ? 'admin.layout.app' : (Auth::user()->roles->first()->name === 'Ict_director' ? 'director.layout.layout' : (Auth::user()->roles->first()->name === 'technician' ? 'technician.dashboard.layout' : 'employeers.dashboard.layout')))
 @section('title', 'Request #' . $request->id)
 
 @section('content')
@@ -153,7 +153,7 @@
                                 </div>
                             @endif
                         @endif
-                        @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('director'))
+                        @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('Ict_director'))
                             @if ($request->status === 'assigned')
                                 <div class="text-center mt-4">
                                     <a href="{{ route('tecknician_work_form', $request->id) }}"
@@ -180,7 +180,7 @@
                 </div>
 
                 <!-- Work Logs Section -->
-                @if ((auth()->user()->hasRole('technician') || auth()->user()->hasRole('director')) && $request->workLogs->count())
+                @if ((auth()->user()->hasRole('technician') || auth()->user()->hasRole('Ict_director')) && $request->workLogs->count())
                     <div class="card shadow-lg border-0 rounded-4 mb-4">
                         <div class="card-header bg-gradient-primary bg-opacity-10 border-bottom py-3">
                             <div class="d-flex align-items-center">
@@ -192,7 +192,7 @@
                         </div>
 
                         <div class="card-body">
-                            @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('director'))
+                            @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('Ict_director'))
                                 @forelse($request->workLogs as $log)
                                     <div class="timeline-item mb-4 pb-4 border-bottom">
                                         <div class="d-flex align-items-start">
@@ -386,7 +386,7 @@
                                     </div>
                                 </div>
                                 
-                                @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('director'))
+                                @if (auth()->user()->hasRole('technician') || auth()->user()->hasRole('Ict_director'))
                                     @if ($request->latestAssignment->director_notes)
                                         <div class="col-12">
                                             <div class="card bg-light border-0 rounded-3 p-3">
