@@ -29,7 +29,7 @@
                         </div>
                         <div>
                             <span
-                                class="badge rounded-pill bg-{{ $maintenanceRequest->priority == 'high' ? 'danger' : ($maintenanceRequest->priority == 'medium' ? 'warning' : 'success') }} py-2 px-3">
+                                class="badge rounded-2 bg-{{ $maintenanceRequest->priority == 'high' ? 'danger' : ($maintenanceRequest->priority == 'medium' ? 'warning' : 'success') }} py-2 px-3">
                                 <i
                                     class="fas fa-{{ $maintenanceRequest->priority == 'high' ? 'exclamation-triangle' : ($maintenanceRequest->priority == 'medium' ? 'exclamation-circle' : 'check-circle') }} me-1"></i>
                                 {{ ucfirst($maintenanceRequest->priority) }} Priority
@@ -48,7 +48,7 @@
                 <div class="row g-4">
                     <!-- Request Information Card -->
                     <div class="col-md-6">
-                        <div class="card shadow-sm border-0 rounded-4 h-100">
+                        <div class="card shadow-sm border-0 rounded-3 h-100">
                             <div class="card-header bg-primary bg-opacity-10 border-bottom d-flex align-items-center py-3">
                                 <i class="fas fa-info-circle text-primary me-2 fs-4"></i>
                                 <h5 class="mb-0 text-primary">Request Information</h5>

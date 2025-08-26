@@ -8,7 +8,7 @@ class Sector extends Model
 {
     //
     protected $fillable=[
-        'name'
+        'name','organization_id'
     ];
     public function divisions()
 {
@@ -20,5 +20,9 @@ public function departments()
 }
     public function users() {
         return $this->hasMany(User::class);
+    }
+   public function organization()
+    {
+        return $this->belongsTo(Organization::class);
     }
 }

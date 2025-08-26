@@ -19,7 +19,7 @@ class UserController extends Controller
     //
 public function index(Request $request)
 {
-    $query = User::with('reportsTo', 'division', 'sector', 'roles')
+    $query = User::with('reportsTo', 'division', 'sector', 'roles','sector.organization')
                 ->latest();
     
     // Add search functionality

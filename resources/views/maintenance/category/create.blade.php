@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="col-12 text-end mt-3">
-                    <button type="submit" class="btn btn-primary btn-lg px-4 rounded-pill shadow-sm"
+                    <button type="submit" class="btn btn-primary btn-lg px-4 rounded-2 shadow-sm"
                         onclick="this.innerHTML='<span class=\'spinner-border spinner-border-sm\'></span> Submitting...';">
                         <i class="bi bi-plus-circle me-1"></i> Add Category
                     </button>

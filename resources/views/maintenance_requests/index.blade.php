@@ -13,13 +13,13 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-primary fw-bold mb-0">Maintenance Request List</h3>
-                    <a href="{{ route('requests.create') }}" class="btn btn-primary rounded-pill shadow-sm">
+                    <a href="{{ route('requests.create') }}" class="btn btn-primary rounded-2 shadow-sm">
                         <i class="bi bi-plus-circle me-1"></i> Maintenance Request
                     </a>
                 </div>
 
                 <div class="d-flex justify-content-end mb-3">
-                    <input type="text" class="form-control w-25 shadow-sm rounded-pill" id="searchInput"
+                    <input type="text" class="form-control w-25 shadow-sm rounded-3" id="searchInput"
                         placeholder="🔍 Search..." onkeyup="filterTable()">
                 </div>
 

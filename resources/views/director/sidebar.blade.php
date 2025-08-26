@@ -20,16 +20,16 @@
         <div class="px-3 pt-3">
             <div class="mb-2">
                 <div class="text-white fw-bold text-uppercase text-xs mb-2">Home</div>
-                                @if(auth()->user()->can('view_dashboard') )
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('director.dashboard') }}" class="nav-link active">
-                            <i class="bi bi-speedometer2"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
+                @if (auth()->user()->can('view_dashboard'))
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="{{ route('director.dashboard') }}" class="nav-link active">
+                                <i class="bi bi-speedometer2"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
 
-                </ul>
+                    </ul>
                 @endif
             </div>
 
@@ -44,38 +44,39 @@
                         </a>
                         <div class="collapse" id="usersMenu">
                             <ul class="nav flex-column ps-3">
-                                                                @if(auth()->user()->can('approve_request') || auth()->user()->can('assign_request_to_technician'))
-                                <li class="nav-item">
-                                    <a href="{{ route('pending_maintenance') }}"
-                                        class="nav-link  bi bi-hourglass-split text-info">
-                                        Pending Approval</a>
-                                </li>
+                                @if (auth()->user()->can('approve_request') || auth()->user()->can('assign_request_to_technician'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('pending_maintenance') }}"
+                                            class="nav-link  bi bi-hourglass-split text-info">
+                                            Pending Approval</a>
+                                    </li>
                                 @endif
-                                @if(auth()->user()->can('view_assigned_requests') )
-                                <li class="nav-item">
-                                    <a href="{{ route('assigned_maintenance') }}"
-                                        class="nav-link bi bi-arrow-right-circle text-warning">Assigned To Technician</a>
-                                </li>
+                                @if (auth()->user()->can('view_assigned_requests'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('assigned_maintenance') }}"
+                                            class="nav-link bi bi-arrow-right-circle text-warning">Assigned To
+                                            Technician</a>
+                                    </li>
                                 @endif
 
-                                @if(auth()->user()->can('view_all_division_equests') )
-                                <li class="nav-item">
-                                    <a href="{{ route('in_progress_maintenance') }}"
-                                        class="nav-link bi bi-arrow-repeat text-pink">
-                                        Work in Progress </a>
-                                </li>
+                                @if (auth()->user()->can('view_all_division_equests'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('in_progress_maintenance') }}"
+                                            class="nav-link bi bi-arrow-repeat text-pink">
+                                            Work in Progress </a>
+                                    </li>
                                 @endif
-                                                        @if(auth()->user()->can('view_all_division_equests') )
-                                <li class="nav-item">
-                                    <a href="{{ route('completed_maintenance') }}"
-                                        class="nav-link bi bi-check-circle text-success">Completed Tasks</a>
-                                </li>
+                                @if (auth()->user()->can('view_all_division_requests'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('completed_maintenance') }}"
+                                            class="nav-link bi bi-check-circle text-success">Completed Tasks</a>
+                                    </li>
                                 @endif
-                                @if(auth()->user()->can('view_all_division_equests') )
-                                <li class="nav-item">
-                                    <a href="{{ route('rejected_maintenance') }}"
-                                        class="nav-link bi bi-slash-circle text-danger">Rejected Requests</a>
-                                </li>
+                                @if (auth()->user()->can('view_all_division_requests'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('rejected_maintenance') }}"
+                                            class="nav-link bi bi-slash-circle text-danger">Rejected Requests</a>
+                                    </li>
                                 @endif
                             </ul>
                         </div>
@@ -98,93 +99,71 @@
                             </ul>
                         </div>
                     </li> --}}
-                    @if(auth()->user()->can('view_categories') )
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#productsMenu">
-                            <i class="bi bi-tools"></i>
-                            <span>Maintenance Type</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse" id="productsMenu">
-                            <ul class="nav flex-column ps-3">
-                                <li class="nav-item">
-                                    <a href="{{ route('categories.index') }}"
-                                        class="nav-link bi bi-hammer text-info">Maintenance
-                                        Category</a>
-                                </li>
-
-
-                            </ul>
-                        </div>
-                    </li>
-@endif
-                    @if(auth()->user()->can('view_items') )
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ItemRegister">
-                            <i class="bi bi-laptop"></i>
-                            <span>Asset Management</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse" id="ItemRegister">
-                            <ul class="nav flex-column ps-3">
-                                <li class="nav-item">
-                                    <a href="{{ route('item_index') }}" class="nav-link bi bi-box text-info">
-                                        Registered Items</a>
-                                </li>
-
-
-                            </ul>
-                        </div>
-                    </li>
-@endif
-                @if (auth()->user()->can('approve_staff_request') || auth()->user()->can('reject_staff_request'))
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
-                    <i class="bi bi-people"></i>
-                    <span>Staff Requests</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <div class="collapse" id="pendingMenu">
-                    <ul class="nav flex-column ps-3">
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('supervisor_requests') }}" class="nav-link"
-                                title="Needs Approval (Hardware)">
+                    @if (auth()->user()->can('view_categories'))
+                        <li class="nav-item mt-2">
+                            <a href="{{ route('categories.index') }}" class="nav-link">
                                 <i class="bi bi-tools"></i>
-                                <span>Needs Approval (Hardware)</span>
+                                <span>Maintenance Type</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('division_director_request_view') }}" class="nav-link">
-                                <i class="bi bi-eye"></i>
-                                <span>View Staff Requests</span>
+                    @endif
+
+                    @if (auth()->user()->can('view_items'))
+                                            <li class="nav-item mt-2">
+                            <a href="{{ route('item_index') }}" class="nav-link">
+                                <i class="bi bi-laptop"></i>
+                                <span>Item Management</span>
                             </a>
                         </li>
-                    </ul>
-                </div>
-            </li>
-            @endif
+                        {{-- <li class="nav-item mt-2">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#ItemRegister">
+                                <i class="bi bi-laptop"></i>
+                                <span>Asset Management</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="ItemRegister">
+                                <ul class="nav flex-column ps-3">
+                                    <li class="nav-item">
+                                        <a href="{{ route('item_index') }}" class="nav-link bi bi-box text-info">
+                                            Registered Items</a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                        </li> --}}
+                    @endif
+                    @if (auth()->user()->can('approve_staff_request') || auth()->user()->can('reject_staff_request'))
+                        <li class="nav-item mt-2">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#pendingMenu">
+                                <i class="bi bi-people"></i>
+                                <span>Staff Requests</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="pendingMenu">
+                                <ul class="nav flex-column ps-3">
+
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('supervisor_requests') }}" class="nav-link"
+                                            title="Needs Approval (Hardware)">
+                                            <i class="bi bi-tools"></i>
+                                            <span>Needs Approval (Hardware)</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('division_director_request_view') }}" class="nav-link">
+                                            <i class="bi bi-eye"></i>
+                                            <span>View Staff Requests</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    @endif
                 </ul>
             </div>
 
-            {{-- <div class="mb-2">
-                <div class="text-white fw-bold text-uppercase text-xs mb-2">System</div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('logout') }}" class="nav-link">
-                            <i class="bi bi-gear"></i>
-                            <span>Settings</span>
-                        </a>
 
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="bi bi-question-circle"></i>
-                            <span>Help</span>
-                        </a>
-                    </li>
-                </ul>
-            </div> --}}
         </div>
     </div>

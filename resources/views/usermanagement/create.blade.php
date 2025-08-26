@@ -142,7 +142,7 @@
 
                         {{-- Submit --}}
                         <div class="col-12 text-end mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-3 px-3 shadow-sm">
                                 <i class="bi bi-save me-2"></i>Save User
                             </button>
                         </div>

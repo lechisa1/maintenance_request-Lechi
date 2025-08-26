@@ -9,14 +9,14 @@
                     <!-- Search Form -->
                     <form method="GET" action="{{ url()->current() }}" class="d-flex">
                         <div class="input-group" style="max-width: 300px;">
-                            <input type="text" name="search" class="form-control rounded-pill shadow-sm"
+                            <input type="text" name="search" class="form-control rounded-3 shadow-sm"
                                 placeholder=" Search requests..." value="{{ request('search') }}"
                                 aria-label="Search maintenance requests">
-                            <button type="submit" class="btn btn-primary rounded-pill ms-2">
+                            <button type="submit" class="btn btn-primary rounded-3 ms-2">
                                 <i class="bi bi-search me-1"></i> Search
                             </button>
                             @if (request('search'))
-                                <a href="{{ url()->current() }}" class="btn btn-outline-secondary rounded-pill ms-2">
+                                <a href="{{ url()->current() }}" class="btn btn-outline-secondary rounded-3 ms-2">
                                     <i class="bi bi-x-lg me-1"></i> Clear
                                 </a>
                             @endif

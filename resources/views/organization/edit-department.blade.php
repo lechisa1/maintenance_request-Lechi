@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-lg border-0">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-success text-white text-center">
                     <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Department</h5>
                 </div>
                 <div class="card-body">
@@ -26,7 +26,7 @@
                             <a href="{{ route('organization.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle me-1"></i> Cancel
                             </a>
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-check-circle me-1"></i> Update
                             </button>
                         </div>

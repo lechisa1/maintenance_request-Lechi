@@ -6,14 +6,14 @@
             <div class="card-body px-4 py-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-primary fw-bold mb-0"><span class="bi bi-people">Users List</span></h3>
-                    <a href="{{ route('create_users') }}" class="btn btn-primary rounded-pill shadow-sm">
+                    <a href="{{ route('create_users') }}" class="btn btn-primary rounded-2 shadow-sm">
                         <i class="bi bi-plus-circle me-1"></i> Add New User
                     </a>
                 </div>
 
                 <div class="d-flex justify-content-end mb-3">
                     <form method="GET" action="{{ route('users_index') }}" class="w-25 position-relative">
-                        <input type="text" name="search" class="form-control shadow-sm rounded-pill ps-4"
+                        <input type="text" name="search" class="form-control shadow-sm rounded-3 ps-4"
                             placeholder=" Search..." value="{{ request('search') }}" aria-label="Search users">
                         <button type="submit"
                             class="btn btn-link position-absolute top-50 start-0 translate-middle-y ms-2 p-0"
@@ -81,6 +81,11 @@
                                                 <div class="dropdown-item-text">
                                                     <div class="small text-muted">Job Position</div>
                                                     <div class="fw-semibold">{{ $user->jobPosition->title ?? 'N/A' }}</div>
+                                                </div>
+                                                {{-- here user organization --}}
+                                                  <div class="dropdown-item-text">
+                                                    <div class="small text-muted">Institute</div>
+                                                    <div class="fw-semibold">{{ $user->sector->organization->name ?? 'N/A' }}</div>
                                                 </div>
                                             </div>
                                         </div>

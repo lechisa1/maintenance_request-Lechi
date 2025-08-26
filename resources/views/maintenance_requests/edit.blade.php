@@ -22,7 +22,7 @@
                 <div class="col-md-4">
                     <label for="item_id" class="form-label fw-semibold">Item</label>
                     <select name="item_id" id="item_id"
-                        class="form-select rounded-pill @error('item_id') is-invalid @enderror" required>
+                        class="form-select rounded-sm @error('item_id') is-invalid @enderror" required>
                         <option value="">Select an Item</option>
                         @foreach ($items as $item)
                             <option value="{{ $item->id }}"
@@ -42,7 +42,7 @@
                 <div class="col-md-4">
                     <label for="priority" class="form-label fw-semibold">Priority</label>
                     <select id="priority" name="priority"
-                        class="form-select rounded-pill @error('priority') is-invalid @enderror" required>
+                        class="form-select rounded-sm @error('priority') is-invalid @enderror" required>
                         <option value="low"
                             {{ old('priority', $maintenanceRequest->priority) === 'low' ? 'selected' : '' }}>Low</option>
                         <option value="medium"
@@ -59,7 +59,7 @@
 
                 <div class="col-md-4">
                     <label class="form-label fw-semibold">Reason</label>
-                    <div class="bg-light border rounded-3 p-2">
+                    <div class="bg-light border rounded p-2">
                         @php
                             $selectedCategories = old(
                                 'categories',
@@ -87,7 +87,7 @@
                 <div class="col-md-4">
                     <label for="attachments" class="form-label fw-semibold">Attachments</label>
                     <input type="file" name="attachments[]" id="attachments"
-                        class="form-control rounded-pill @error('attachments') is-invalid @enderror" multiple
+                        class="form-control rounded-sm @error('attachments') is-invalid @enderror" multiple
                         onchange="previewFiles()">
                     @if ($maintenanceRequest->attachments && is_array($maintenanceRequest->attachments))
                         <div class="mt-2">
@@ -113,7 +113,7 @@
                 <div class="col-md-8">
                     <label for="description" class="form-label fw-semibold">Description</label>
                     <textarea name="description" id="description" rows="3"
-                        class="form-control rounded-4 @error('description') is-invalid @enderror"
+                        class="form-control rounded-sm @error('description') is-invalid @enderror"
                         placeholder="Describe the issue clearly...">{{ old('description', $maintenanceRequest->description) }}</textarea>
 
                     @error('description')

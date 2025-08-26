@@ -205,14 +205,15 @@
 
     .nav-link:hover,
     .nav-link.active {
-        color:var(--secondary-color);
-        background-color:var(--primary-color) ;
+        color:white;
+        background-color:#11245A ;
         /* Light gray background */
         border-left: 3px solid var(--primary-color);
+        border-radius: 12px;
     }
 
     .nav-link i {
-        color: var(--primary-color);
+        color: white;
         /* Icons in primary color */
         margin-right: 0.5rem;
         font-size: 1.0rem;

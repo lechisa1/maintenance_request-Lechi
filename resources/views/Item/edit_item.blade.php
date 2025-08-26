@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="col-12 text-end mt-3">
-                    <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-2">
                         <i class="bi bi-save me-1"></i> Update Item
                     </button>
                 </div>

@@ -33,7 +33,7 @@
 }
 /* Hover effect for better interactivity */
 .table thead.bg-blue th:hover {
-    background-color: #0bd79a; /* Slightly darker on hover */
+    background-color: #11246A; /* Slightly darker on hover */
 }
 #password-requirements input[type="checkbox"] {
   accent-color: lightgray; /* default color */

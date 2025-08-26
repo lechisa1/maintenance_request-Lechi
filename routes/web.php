@@ -3,7 +3,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -13,8 +12,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\Admin\AdminController;
-// use App\Http\Controllers\technician\TechnicianController;
 use App\Http\Controllers\NotificationController;
+// use App\Http\Controllers\technician\TechnicianController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrganizationLabelController;
 use App\Http\Controllers\MaintenanceRequestController;
 use App\Http\Controllers\MaintenanceCategoryController;
 
@@ -94,6 +95,27 @@ Route::middleware(['auth'])->group(function () {
         Route::get('department/{department}/edit', [OrganizationController::class, 'editDepartment'])->name('organization.department.edit');
         Route::put('department/{department}', [OrganizationController::class, 'updateDepartment'])->name('organization.department.update');
         Route::delete('department/{department}', [OrganizationController::class, 'destroyDepartment'])->name('organization.department.destroy');
+// In your routes file (web.php)
+//here adding division to sector
+    Route::get('/sector/{sector}/add-division', [OrganizationController::class, 'addDivisionToSector'])->name('organization.sector.add-division');
+    Route::post('/sector/{sector}/store-division', [OrganizationController::class, 'storeDivisionToSector'])->name('organization.sector.store-division');
+    //here adding department to division
+    Route::get('/division/{division}/add-department', [OrganizationController::class, 'addDepartmentToDivision'])->name('organization.division.add-department');
+    Route::post('/division/{division}/store-department', [OrganizationController::class, 'storeDepartmentToDivision'])->name('organization.division.store-department');
+
+    //direct adding department to sector
+        Route::get('/sector/to/{sector}/add-department', [OrganizationController::class, 'addDepartmentToSector'])->name('organization.sector.add-department');
+    Route::post('/sector/to/{sector}/store-department', [OrganizationController::class, 'storeDepartmentToSector'])->name('organization.sector.store-department');
+
+
+    // route for craeting organization name
+
+            Route::get('/organization/data/create', [OrganizationController::class, 'createOrganization'])->name('organization.name.create');
+    Route::post('/organization/data/store', [OrganizationController::class, 'storeOrganization'])->name('organization.name.store');
+        //dynamic naming organization
+        Route::get('/labels', [OrganizationLabelController::class, 'index'])->name('labels.index');
+        Route::post('/labels', [OrganizationLabelController::class, 'update'])->name('labels.update');
+
     });
     Route::post('/requests/{maintenanceRequest}/assign', [DirectorController::class, 'assign'])->name('requests.assign');
     Route::post('/requests/{maintenanceRequest}/reject', [DirectorController::class, 'rejectRequest'])->name('requests.reject');

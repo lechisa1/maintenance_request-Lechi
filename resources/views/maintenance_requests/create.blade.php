@@ -24,7 +24,7 @@ d{{-- @extends('admin.layout.app') --}}
                     <div class="col-md-4">
                         <label for="item_id" class="form-label fw-semibold">Item</label>
                         <select name="item_id" id="item_id"
-                            class="form-select rounded-pill @error('item_id') is-invalid @enderror" required>
+                            class="form-select rounded-sm @error('item_id') is-invalid @enderror" required>
                             <option value="">Select an Item</option>
                             @foreach ($items as $item)
                                 <option value="{{ $item->id }}" {{ old('item_id') == $item->id ? 'selected' : '' }}>
@@ -41,7 +41,7 @@ d{{-- @extends('admin.layout.app') --}}
                     <div class="col-md-4">
                         <label for="priority" class="form-label fw-semibold">Priority</label>
                         <select name="priority" id="priority"
-                            class="form-select rounded-pill @error('priority') is-invalid @enderror" required>
+                            class="form-select rounded-sm @error('priority') is-invalid @enderror" required>
                             <option value="">Select Priority</option>
                             <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
                             <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
@@ -57,7 +57,7 @@ d{{-- @extends('admin.layout.app') --}}
                     {{-- Categories --}}
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Reason</label>
-                        <div class="bg-light border rounded-3 p-2">
+                        <div class="bg-light border rounded p-2">
                             @foreach ($categories as $category)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="categories[]"
@@ -78,7 +78,7 @@ d{{-- @extends('admin.layout.app') --}}
                     <div class="col-md-8">
                         <label for="description" class="form-label fw-semibold">Description</label>
                         <textarea name="description" id="description" rows="3"
-                            class="form-control rounded-4 @error('description') is-invalid @enderror"
+                            class="form-control rounded @error('description') is-invalid @enderror"
                             placeholder="Describe the issue clearly...">{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -89,7 +89,7 @@ d{{-- @extends('admin.layout.app') --}}
                     <div class="col-md-4">
                         <label for="attachments" class="form-label fw-semibold">Attachments</label>
                         <input type="file" name="attachments[]" id="attachments"
-                            class="form-control rounded-pill @error('attachments') is-invalid @enderror" multiple
+                            class="form-control rounded-sm @error('attachments') is-invalid @enderror" multiple
                             onchange="previewFiles()">
                         @error('attachments')
                             <div class="text-danger small">{{ $message }}</div>
@@ -99,9 +99,9 @@ d{{-- @extends('admin.layout.app') --}}
 
                     {{-- Submit --}}
                     <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn btn-lg btn-primary rounded-pill shadow-sm px-5"
+                        <button type="submit" class="btn btn-lg btn-primary rounded-sm shadow-sm px-3"
                             onclick="this.innerHTML='<span class=\'spinner-border spinner-border-sm\'></span> Submitting...';">
-                            <i class="bi bi-down"></i> Submit Request
+                            <i class="bi bi-down"></i> Send Request
                         </button>
                     </div>
                 </div>

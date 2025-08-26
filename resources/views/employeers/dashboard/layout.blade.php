@@ -41,7 +41,7 @@
 
 /* Hover effect for better interactivity */
 .table thead.bg-blue th:hover {
-    background-color: #1841b4; /* Slightly darker on hover */
+    background-color: #11246A; /* Slightly darker on hover */
 }
 </style>
 </head>

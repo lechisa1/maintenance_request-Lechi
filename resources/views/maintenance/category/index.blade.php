@@ -5,7 +5,7 @@
             <div class="card-body px-4 py-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-primary fw-bold mb-0">Issue Categories</h3>
-                    <a href="{{ route('categories.create') }}" class="btn btn-primary rounded-pill shadow-sm">
+                    <a href="{{ route('categories.create') }}" class="btn btn-primary rounded-2 shadow-sm">
                         <i class="bi bi-plus-circle me-1"></i> Category Issue
                     </a>
                 </div>

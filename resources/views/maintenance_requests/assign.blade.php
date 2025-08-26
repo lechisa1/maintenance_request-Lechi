@@ -55,7 +55,7 @@
 
                             {{-- Submit Button --}}
                             <div class="col-12 text-end mt-3">
-                                <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill" id="assignButton">
+                                <button type="submit" class="btn btn-primary btn-lg px-4 rounded-2" id="assignButton">
                                     <i class="bi bi-person-check-fill me-1"></i> Assign Technician
                                 </button>
                             </div>

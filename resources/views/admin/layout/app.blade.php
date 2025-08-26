@@ -31,6 +31,10 @@
    
     color: #11245A !important;
 }
+.bg-primary{
+    background-color: #11245A,
+    
+}
 #password-requirements input[type="checkbox"] {
   accent-color: lightgray; /* default color */
   pointer-events: none; /* prevent interaction even though not disabled */
@@ -46,8 +50,9 @@
 }
 /* Hover effect for better interactivity */
 .table thead.bg-blue th:hover {
-    background-color: #590bd7; /* Slightly darker on hover */
+    background-color: #11246A; /* Slightly darker on hover */
 }
+
 /* Main Content Adjustments */
 /* #main-content {
     margin-left: var(--sidebar-width);
@@ -106,7 +111,9 @@
     overflow: visible !important;
     position: relative;
 }
-
+.tab-content{
+    background-color: #11245A
+}
 /* Fix for accordion items */
 .accordion-item {
     overflow: visible;
@@ -117,6 +124,33 @@
     padding: 20px;
     background-color: #f9f9f9;
 }
+/* Tabs background default */
+#progressSteps .nav-link {
+    background-color: #e9ecef; /* light gray when inactive */
+    color: #11245A;
+    font-weight: 500;
+    border-radius: 0; /* flat edges since they are justified */
+}
+
+/* Active tab */
+#progressSteps .nav-link.active {
+    background-color: #11245A !important;
+    color: #fff !important;
+}
+
+/* Hover state */
+#progressSteps .nav-link:hover:not(.active):not(.disabled) {
+    background-color: #dce3f5;
+    color: #11245A;
+}
+
+/* Disabled tabs */
+#progressSteps .nav-link.disabled {
+    background-color: #f8f9fa !important;
+    color: #6c757d !important;
+    opacity: 1;
+}
+
 </style>
 </head>
 

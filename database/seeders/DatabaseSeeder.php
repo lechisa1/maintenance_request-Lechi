@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             JobPositionSeeder::class,
             OrganizationSeeder::class,
+            OrganizationUnitLabelsSeeder::class,
+            OrganizationNameSeeder::class
         ]);
 
         User::factory()->create([

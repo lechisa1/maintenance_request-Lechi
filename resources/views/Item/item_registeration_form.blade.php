@@ -17,7 +17,7 @@
                     <div class="col-md-6">
                         <label for="name" class="form-label fw-semibold">Item Name</label>
                         <input type="text" name="name" id="name"
-                            class="form-control shadow-sm rounded-3 {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                            class="form-control shadow-sm rounded-2 {{ $errors->has('name') ? 'is-invalid' : '' }}"
                             placeholder="Enter item name" value="{{ old('name') }}" required>
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
@@ -41,7 +41,7 @@
                             ];
                         @endphp
                         <select name="unit" id="unit"
-                            class="form-select shadow-sm rounded-3 {{ $errors->has('unit') ? 'is-invalid' : '' }}">
+                            class="form-select shadow-sm rounded-2 {{ $errors->has('unit') ? 'is-invalid' : '' }}">
                             <option value="">Select Unit</option>
                             @foreach ($units as $key => $label)
                                 <option value="{{ $key }}" {{ old('unit') == $key ? 'selected' : '' }}>
@@ -75,7 +75,7 @@
 
                     <!-- Submit Button -->
                     <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg px-4 rounded-pill shadow"
+                        <button type="submit" class="btn btn-primary btn-lg px-4 rounded-2 shadow"
                             onclick="this.innerHTML='<span class=\'spinner-border spinner-border-sm\'></span> Submitting...';">
                             <i class="bi bi-plus-circle me-2"></i> Register Item
                         </button>
