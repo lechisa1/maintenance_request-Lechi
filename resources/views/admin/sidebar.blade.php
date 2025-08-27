@@ -79,7 +79,7 @@
                                         Lists</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('organization.create') }}"
+                                    <a href="{{ route('organization.name.index') }}"
                                         class="nav-link bi bi-plus  fs-6">Add
                                         Organization Unit
                                     </a>

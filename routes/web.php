@@ -103,12 +103,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/division/{division}/add-department', [OrganizationController::class, 'addDepartmentToDivision'])->name('organization.division.add-department');
     Route::post('/division/{division}/store-department', [OrganizationController::class, 'storeDepartmentToDivision'])->name('organization.division.store-department');
 
-    //direct adding department to sector
+    //direct adding department to sector 
         Route::get('/sector/to/{sector}/add-department', [OrganizationController::class, 'addDepartmentToSector'])->name('organization.sector.add-department');
     Route::post('/sector/to/{sector}/store-department', [OrganizationController::class, 'storeDepartmentToSector'])->name('organization.sector.store-department');
 
-
+       Route::get('/organization/created/index', [OrganizationController::class, 'organizationIndex'])->name('organization.name.index');
     // route for craeting organization name
+
+    Route::get('/organization/name/edit/{id}/edit', [OrganizationController::class, 'editOrganization'])->name('organization.name.edit');
+    Route::put('/organization/name/{id}', [OrganizationController::class, 'updateOrganization'])->name('organization.name.update');
+    Route::delete('/organization/name/delete/{id}', [OrganizationController::class, 'destroyOrganization'])->name('organization.name.destroy');
 
             Route::get('/organization/data/create', [OrganizationController::class, 'createOrganization'])->name('organization.name.create');
     Route::post('/organization/data/store', [OrganizationController::class, 'storeOrganization'])->name('organization.name.store');

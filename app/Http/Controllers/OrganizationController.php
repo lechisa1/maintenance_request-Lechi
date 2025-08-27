@@ -345,7 +345,41 @@ public function addDepartmentToDivision(Division $division)
         'name' => $request->name
     ]);
 
-    return redirect()->route('organization.index')->with('success', 'Organization created successfully');
+    return redirect()->route('organization.name.index')->with('success', 'Organization created successfully');
 }
+public function organizationIndex()
+{
+    $organizations = Organization::latest()->get();
+    return view('organization.organizationName.index', compact('organizations'));
+}
+    public function editOrganization($id)
+    {
+    $organization = Organization::findOrFail($id);
+    return response()->json($organization); // for AJAX
+    }
+        public function updateOrganization(Request $request, $id)
+    {
+        $organization = Organization::findOrFail($id);
 
+        $request->validate([
+            'name' => 'required|string|unique:organizations,name,' . $organization->id,
+        ]);
+
+        $organization->update([
+            'name' => $request->name
+        ]);
+
+        return redirect()
+            ->route('organization.name.index')
+            ->with('success', 'Organization updated successfully!');
+    }
+        public function destroyOrganization($id)
+    {
+        $organization = Organization::findOrFail($id);
+        $organization->delete();
+
+        return redirect()
+            ->route('organization.name.index')
+            ->with('success', 'Organization deleted successfully!');
+    }
 }
