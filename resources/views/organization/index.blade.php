@@ -129,7 +129,7 @@
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-0">{{ $sector->name }}</h6>
                                                 <small class="text-muted">
-                                                    Organization: {{ $sector->organization?->name ?? 'N/A' }} •
+                                                    {{ $labels['organization'] }}: {{ $sector->organization?->name ?? 'N/A' }} •
                                                     {{ $sector->divisions->count() }} {{ $labels['division'] }} •
                                                     {{ $sector->departments->where('division_id', null)->count() }} Direct
                                                     {{ $labels['department'] }}

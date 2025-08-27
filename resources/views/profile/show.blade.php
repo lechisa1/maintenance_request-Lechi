@@ -7,7 +7,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <div class="card-header bg-success text-white d-flex align-items-center">
                         <img src="{{ $user->avatar_url ?? 'https://static.vecteezy.com/system/resources/previews/006/487/917/original/man-avatar-icon-free-vector.jpg' }}"
                             alt="{{ $user->name }}" class="rounded-circle me-3"
                             style="width:60px; height:60px; object-fit:cover; border: 2px solid white;">

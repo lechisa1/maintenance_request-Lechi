@@ -143,65 +143,65 @@
                     </a>
 
                     <!-- Theme Color Options -->
-                    <div id="themeOptions" class="px-3 pb-2 d-flex flex-wrap gap-2" style="display: none;">
-                        <!-- Light -->
+                    {{-- <div id="themeOptions" class="px-3 pb-2 d-flex flex-wrap gap-2" style="display: none;">
+                        
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#ffffff" class="form-check-input">
                             <span class="color-swatch" style="background-color: #ffffff;" title="Light"></span>
                             Light
                         </label>
 
-                        <!-- Dark -->
+                        
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#121212" class="form-check-input">
                             <span class="color-swatch" style="background-color: #121212;" title="Dark"></span> Dark
                         </label>
 
-                        <!-- Blue -->
+                       
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#1E90FF" class="form-check-input">
                             <span class="color-swatch" style="background-color: #1E90FF;" title="Dodger Blue"></span>
                             Blue
                         </label>
 
-                        <!-- Green -->
+                        
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#198754" class="form-check-input">
                             <span class="color-swatch" style="background-color: #198754;"
                                 title="Emerald Green"></span> Green
                         </label>
 
-                        <!-- Purple -->
+                        
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value=" #11245A" class="form-check-input">
                             <span class="color-swatch" style="background-color:  #11245A;" title="Match"></span>
                             Match
                         </label>
-                        {{-- match --}}
+                        
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#6f42c1" class="form-check-input">
                             <span class="color-swatch" style="background-color: #6f42c1;" title="Purple"></span>
                             Purple
                         </label>
-                        <!-- Orange -->
+                    
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#fd7e14" class="form-check-input">
                             <span class="color-swatch" style="background-color: #fd7e14;" title="Orange"></span>
                             Orange
                         </label>
 
-                        <!-- Teal -->
+                       
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#20c997" class="form-check-input">
                             <span class="color-swatch" style="background-color: #20c997;" title="Teal"></span> Teal
                         </label>
 
-                        <!-- Pink -->
+                       
                         <label class="form-check d-flex align-items-center gap-1">
                             <input type="radio" name="themeColor" value="#e83e8c" class="form-check-input">
                             <span class="color-swatch" style="background-color: #e83e8c;" title="Pink"></span> Pink
                         </label>
-                    </div>
+                    </div> --}}
 
 
 
