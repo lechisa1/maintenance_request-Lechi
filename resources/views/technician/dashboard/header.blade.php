@@ -21,6 +21,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+            {{-- @if (session('success'))
+        <div class="notification show" style="background: #4CC9F0; display: block;">
+            <i class="fas fa-check-circle"></i> {{ session('success') }}
+        </div>
+    @endif --}}
 
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" role="alert">
@@ -201,7 +206,7 @@
 
 
 
-                    <a class="dropdown-item py-2" href="{{route('change_password_form')}}">
+                    <a class="dropdown-item py-2" href="{{ route('change_password_form') }}">
                         <i class="bi bi-list-check me-2"></i> Change Password
                     </a>
 
@@ -220,18 +225,18 @@
 
 <script>
     function isDarkColor(hexColor) {
-    // Remove hash if present
-    const color = hexColor.replace('#', '');
+        // Remove hash if present
+        const color = hexColor.replace('#', '');
 
-    const r = parseInt(color.substr(0, 2), 16);
-    const g = parseInt(color.substr(2, 2), 16);
-    const b = parseInt(color.substr(4, 2), 16);
+        const r = parseInt(color.substr(0, 2), 16);
+        const g = parseInt(color.substr(2, 2), 16);
+        const b = parseInt(color.substr(4, 2), 16);
 
-    // Standard luminance formula
-    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+        // Standard luminance formula
+        const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
 
-    return luminance < 128; // Adjust this threshold if needed
-}
+        return luminance < 128; // Adjust this threshold if needed
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         // Auto-dismiss alerts after 3 seconds
@@ -300,63 +305,63 @@
             themeOptions.style.display = themeOptions.style.display === 'none' ? 'block' : 'none';
         });
 
-document.querySelectorAll('input[name="themeColor"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        const selectedColor = this.value;
-        const isDark = isDarkColor(selectedColor);
+        document.querySelectorAll('input[name="themeColor"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const selectedColor = this.value;
+                const isDark = isDarkColor(selectedColor);
 
-        headers.forEach(header => {
-            header.style.backgroundColor = selectedColor;
-            header.style.color = isDark ? '#ffffff' : '#000000';
-            header.classList.remove('bg-light', 'bg-dark');
-        });
+                headers.forEach(header => {
+                    header.style.backgroundColor = selectedColor;
+                    header.style.color = isDark ? '#ffffff' : '#000000';
+                    header.classList.remove('bg-light', 'bg-dark');
+                });
 
-        sidebars.forEach(sidebar => {
-            sidebar.style.backgroundColor = selectedColor;
-            sidebar.style.color = isDark ? '#ffffff' : '#000000';
-            sidebar.classList.remove('bg-light', 'bg-dark');
+                sidebars.forEach(sidebar => {
+                    sidebar.style.backgroundColor = selectedColor;
+                    sidebar.style.color = isDark ? '#ffffff' : '#000000';
+                    sidebar.classList.remove('bg-light', 'bg-dark');
 
-            // Optional: also change sidebar link or icon colors
-            sidebar.querySelectorAll('a, i, span, li, .nav-link, .nav-item').forEach(el => {
-                el.style.color = isDark ? '#ffffff' : '#000000';
+                    // Optional: also change sidebar link or icon colors
+                    sidebar.querySelectorAll('a, i, span, li, .nav-link, .nav-item')
+                        .forEach(el => {
+                            el.style.color = isDark ? '#ffffff' : '#000000';
+                        });
+                });
+
+                localStorage.setItem('themeColor', selectedColor);
             });
         });
 
-        localStorage.setItem('themeColor', selectedColor);
-    });
-});
-
 
         // Load theme color from localStorage
-const savedColor = localStorage.getItem('themeColor');
-if (savedColor) {
-    const isDark = isDarkColor(savedColor);
+        const savedColor = localStorage.getItem('themeColor');
+        if (savedColor) {
+            const isDark = isDarkColor(savedColor);
 
-    headers.forEach(header => {
-        header.style.backgroundColor = savedColor;
-        header.style.color = isDark ? '#ffffff' : '#000000';
-        header.classList.remove('bg-light', 'bg-dark');
-    });
+            headers.forEach(header => {
+                header.style.backgroundColor = savedColor;
+                header.style.color = isDark ? '#ffffff' : '#000000';
+                header.classList.remove('bg-light', 'bg-dark');
+            });
 
-    sidebars.forEach(sidebar => {
-        sidebar.style.backgroundColor = savedColor;
-        sidebar.style.color = isDark ? '#ffffff' : '#000000';
-        sidebar.classList.remove('bg-light', 'bg-dark');
+            sidebars.forEach(sidebar => {
+                sidebar.style.backgroundColor = savedColor;
+                sidebar.style.color = isDark ? '#ffffff' : '#000000';
+                sidebar.classList.remove('bg-light', 'bg-dark');
 
-        sidebar.querySelectorAll('a, i, span, li, .nav-link, .nav-item').forEach(el => {
-            el.style.color = isDark ? '#ffffff' : '#000000';
-        });
-    });
+                sidebar.querySelectorAll('a, i, span, li, .nav-link, .nav-item').forEach(el => {
+                    el.style.color = isDark ? '#ffffff' : '#000000';
+                });
+            });
 
-    const selectedInput = document.querySelector(`input[name="themeColor"][value="${savedColor}"]`);
-    if (selectedInput) {
-        selectedInput.checked = true;
-    }
-}
+            const selectedInput = document.querySelector(`input[name="themeColor"][value="${savedColor}"]`);
+            if (selectedInput) {
+                selectedInput.checked = true;
+            }
+        }
 
     });
     // here profile image upload
-    
 </script>
 <script>
     const csrfToken = '{{ csrf_token() }}';
@@ -388,53 +393,61 @@ if (savedColor) {
             formData.append('_token', csrfToken);
 
             fetch(uploadRoute, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(async response => {
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(errorText || 'Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Upload response:', data);
-                if (data.success) {
-                    document.querySelectorAll('.profile-image').forEach(img => {
-                        img.src = data.avatar_url + '?t=' + Date.now();
-                    });
-                    showToast(data.message, 'success');
-                } else {
-                    showToast(data.message || 'Upload failed', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Upload error:', error);
-                showToast('Upload failed: ' + error.message, 'error');
-            });
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(async response => {
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(errorText || 'Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Upload response:', data);
+                    if (data.success) {
+                        document.querySelectorAll('.profile-image').forEach(img => {
+                            img.src = data.avatar_url + '?t=' + Date.now();
+                        });
+                        showToast(data.message, 'success');
+                    } else {
+                        showToast(data.message || 'Upload failed', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Upload error:', error);
+                    showToast('Upload failed: ' + error.message, 'error');
+                });
         }
 
-function showToast(message, type) {
+        function showToast(message, type) {
             // Implement your toast notification here or use an existing one
             const toast = document.createElement('div');
-            toast.className = toast align-items-center text-white bg-${type} border-0;
+            toast.className = toast align - items - center text - white bg - $ {
+                type
+            }
+            border - 0;
             toast.setAttribute('role', 'alert');
             toast.setAttribute('aria-live', 'assertive');
             toast.setAttribute('aria-atomic', 'true');
 
-            toast.innerHTML = 
-            <div class="d-flex">
-                <div class="toast-body">
-                    ${message}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        ;
+            toast.innerHTML = <
+                div class = "d-flex" >
+                <
+                div class = "toast-body" >
+                $ {
+                    message
+                } <
+                /div> <
+                button type = "button"
+            class = "btn-close btn-close-white me-2 m-auto"
+            data - bs - dismiss = "toast"
+            aria - label = "Close" > < /button> <
+                /div>;
 
             const toastContainer = document.getElementById('toastContainer') || createToastContainer();
             toastContainer.appendChild(toast);
@@ -457,4 +470,3 @@ function showToast(message, type) {
         }
     });
 </script>
-

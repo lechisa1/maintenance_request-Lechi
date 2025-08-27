@@ -15,7 +15,7 @@
                     </ol>
                 </nav>
             </div>
-            <a href="{{ route('organization.create') }}" class="btn btn-primary px-2 py-2">
+            <a href="{{ route ('organization.create') }}" class="btn btn-primary px-2 py-2">
                 <i class="bi bi-plus-lg me-2"></i>Add Structure
             </a>
         </div>
@@ -390,7 +390,7 @@
     </div>
 
     <!-- Scripts -->
-    @push('scripts')
+    
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
@@ -409,6 +409,6 @@
                 tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
             });
         </script>
-    @endpush
+    
 
 @endsection

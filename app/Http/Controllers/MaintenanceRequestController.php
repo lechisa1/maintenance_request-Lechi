@@ -28,40 +28,11 @@ class MaintenanceRequestController extends Controller
 
         $categories = Category::all();
 
-        // Add "Unknown Cause" as a custom option
-        // Check if "Unknown Cause" already exists before adding it
-        // if (!$categories->contains('name', 'Unknown Cause')) {
-        //     $categories->push((object) ['id' => 'unknown', 'name' => 'Unknown Cause']);
-        // }
 
         $items = Item::all();
         return view('maintenance_requests.create', compact('categories', 'items'));
     }
-    // public function addSupervisorLetter()
-    // {
-    //     $user = Auth::user();
 
-    //     // Fetch the ID of the "hardware replacement" category
-    //     $hardwareCategory = Category::where('name', 'Hardware Replecement')->first();
-
-    //     // Skip if not found
-    //     if (!$hardwareCategory) {
-    //         return redirect()->back()->with('error', 'Hardware replacement category not found.');
-    //     }
-
-
-    //     $requests = MaintenanceRequest::with('categories')->where('status', 'pending')
-    //         ->whereHas('categories', function ($q) use ($hardwareCategory) {
-    //             $q->where('category_id', $hardwareCategory->id);
-    //         })
-    //         ->whereHas('user', function ($q) use ($user) {
-    //             $q->where('reports_to', $user->id);
-    //         })
-    //         ->with('user.department')
-    //         ->get();
-
-    //     return view('supervisor_requests', compact('requests'));
-    // }
     public function addSupervisorLetter()
     {
         $user = Auth::user();
@@ -134,26 +105,7 @@ class MaintenanceRequestController extends Controller
     }
 
 
-    // public function requestFromStaff()
-    // {
-    //     $user = Auth::user();
 
-    //     // Fetch the "Hardware Replacement" category
-    //     $hardwareCategory = Category::where('name', 'Hardware Replecement')->first();
-
-    //     $requests = MaintenanceRequest::with('categories')
-    //         ->where('status', 'pending')
-    //         ->whereDoesntHave('categories', function ($q) use ($hardwareCategory) {
-    //             $q->where('category_id', $hardwareCategory->id);
-    //         })
-    //         ->whereHas('user', function ($q) use ($user) {
-    //             $q->where('reports_to', $user->id);
-    //         })
-    //         ->with('user.department')
-    //         ->get();
-
-    //     return view('supervisor_requests', compact('requests'));
-    // }
     public function requestFromStaff()
     {
         $user = Auth::user();
@@ -248,75 +200,7 @@ class MaintenanceRequestController extends Controller
     }
 
     //this work fine 
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
 
-    //         'item_id' => 'required|exists:items,id',
-    //         'description' => 'required|string',
-
-    //         'priority' => 'required|in:low,medium,high,emergency',
-    //         'categories' => 'nullable|array',
-    //         'attachments.*' => 'file|max:2048|mimes:jpg,jpeg,png,pdf,doc,docx',
-    //     ]);
-    //     $randomId = rand(10000, 99999);
-
-    //     $ticketNumber = 'REQ-' . now()->format('Ymd') . '-' . auth()->id() . '-' . mt_rand(1000, 9999);
-    //     $maintenanceRequest = auth()->user()->maintenanceRequests()->create([
-
-    //         'item_id' => $validated['item_id'],
-    //         'description' => $validated['description'],
-
-    //         'priority' => $validated['priority'],
-    //         'status' => 'pending',
-    //         'ticket_number' => $randomId,
-    //     ]);
-
-    //     if (isset($validated['categories'])) {
-
-    //         $selectedCategories = array_diff($validated['categories'], ['unknown']);
-
-    //         $maintenanceRequest->categories()->sync($selectedCategories);
-
-
-    //         if (in_array('unknown', $validated['categories'])) {
-
-    //             $maintenanceRequest->update(['has_unknown_cause' => true]);
-    //         }
-    //     }
-
-
-    //     if ($request->hasFile('attachments')) {
-    //         foreach ($request->file('attachments') as $file) {
-    //             $path = $file->store('attachments', 'public');
-
-    //             $maintenanceRequest->attachments()->create([
-    //                 'user_id' => auth()->id(),
-    //                 'file_path' => $path,
-    //                 'file_type' => $file->getMimeType(),
-    //                 'original_name' => $file->getClientOriginalName(),
-    //             ]);
-    //         }
-    //     }
-    //     // Log the creation
-    //     $maintenanceRequest->updates()->create([
-    //         'user_id' => auth()->id(),
-    //         'update_text' => 'Request created',
-    //         'update_type' => 'creation',
-    //         'request_id' => $maintenanceRequest->id,
-    //     ]);
-    //     // Notify the Director(s)
-    //     $directors = \App\Models\User::whereHas('roles', function ($query) {
-    //         $query->where('name', 'director');
-    //     })->get();
-
-    //     foreach ($directors as $director) {
-    //         $director->notify(new \App\Notifications\RequestCreatedNotification($maintenanceRequest));
-    //     }
-
-    //     return redirect()->route('requests_indexs', $maintenanceRequest)
-    //         ->with('success', 'Maintenance request submitted successfully!');
-    // }
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -362,6 +246,12 @@ class MaintenanceRequestController extends Controller
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $path = $file->store('attachments', 'public');
+                //use this instead of above if u want to use obs
+
+                // $path = $file->store('attachments', 'obs');
+                // optional: get full URL if you want public link
+                // $url = Storage::disk('obs')->url($path);
+ 
                 $maintenanceRequest->attachments()->create([
                     'user_id' => auth()->id(),
                     'file_path' => $path,
@@ -544,6 +434,12 @@ class MaintenanceRequestController extends Controller
             'item',
             'user.jobPosition'
         ])->findOrFail($id);
+        //use this for file storing on obs and if your backet is private
+//         foreach ($maintenanceRequest->attachments as $attachment) {
+//     $attachment->temporary_url = Storage::disk('obs')
+//         ->temporaryUrl($attachment->file_path, now()->addMinutes(10));
+// }
+
 
         return view('maintenance_requests.show', compact('maintenanceRequest'));
     }

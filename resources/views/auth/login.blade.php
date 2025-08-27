@@ -4,124 +4,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login – Maintenance Request System</title>
-
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Google Fonts -->
+    <title>Login - MRS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="{{ asset('css/login.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
 
 </head>
 
-<body class="vh-100 d-flex align-items-center justify-content-center bg-light border-2">
-    <div class="container">
-        <div class="row shadow rounded-3 overflow-hidden bg-white" style="max-width: 700px; margin: auto; min-height: 400px;">
-            
-            <!-- Left Section (Branding) -->
-            <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center bg-purple  p-4 border-end">
-                <img src="{{ asset('image/logo.png') }}" class="img-fluid mb-15" style="max-width: 120px;" alt="Logo">
-                <h2 class="fw-bold">Maintenance Request System</h2>
-             
-            </div>
-
-            <!-- Right Section (Login Form) -->
-            <div class="col-md-6 p-4">
-                <h4 class="text-center mb-0" style="color: var(--primary-color)"></h4>
-                <p class="text-muted text-center">Please login to your account</p>
-
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        @foreach ($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0">
-                                <i class="bi bi-envelope-fill text-muted"></i>
-                            </span>
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                name="email" value="{{ old('email') }}" required autofocus placeholder="Enter your email">
-                        </div>
-                        @error('email')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0">
-                                <i class="bi bi-lock-fill text-muted"></i>
-                            </span>
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                                name="password" required placeholder="Enter your password">
-                            <button class="btn btn-outline-secondary toggle-password" type="button">
-                                <i class="bi bi-eye-fill"></i>
-                            </button>
-                        </div>
-                        @error('password')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                {{ old('remember') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="remember">Remember Me</label>
-                        </div>
-                        <a href="#" class="forgot-password">Forgot Password?</a>
-                    </div>
-
-                    <div class="d-grid mb-3">
-                        <button type="submit" class="btn btn-primary btn-login">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
-                        </button>
-                    </div>
-
-                    <div class="divider text-center my-3">
-                        <span class="divider-text text-muted">or continue with</span>
-                    </div>
-
-                    <div class="d-grid">
-                        <button type="button" class="btn btn-outline-primary">
-                            <i class="bi bi-google me-2"></i>Google
-                        </button>
-                    </div>
-                </form>
-
-                {{-- <div class="text-center mt-4">
-                    <small class="text-muted">© {{ date('Y') }} Maintenance Request System. All rights reserved.</small>
-                </div> --}}
-            </div>
-
+<body>
+<div class="login-card">
+    @if(session('success'))
+        <div class="notification show" style="background: #4CC9F0; display: block;">
+            <i class="fas fa-check-circle"></i> {{ session('success') }}
         </div>
+    @endif
+
+    @if(session('error'))
+        <div class="notification show" style="background: #F72585; display: block;">
+            <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+        </div>
+    @endif
+    <div class="card-header">
+        <div class="logo-container">
+            <img src="{{ asset('image/logo.png') }}" alt="Logo">
+        </div>
+        <h1 class="title">Maintenance Request System</h1>
+        <p class="subtitle">Sign in to access your account</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/login.js') }}"></script>
-</body>
+    {{-- Display session messages here --}}
+   
 
+    <form method="POST" action="{{ route('login') }}" class="login-form">
+        @csrf
+        <div class="form-group">
+            <div class="input-with-icon">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-with-icon">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+        </div>
+
+        <div class="remember-forgot">
+            <div class="remember-me">
+                <input type="checkbox" name="remember" id="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            <a href="{{ route('password.request') }}" class="forgot-password">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Sign In</button>
+    </form>
+</div>
+
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Login successful! Redirecting...
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            const passwordToggle = document.querySelector('.password-toggle');
+            const passwordInput = document.getElementById('password');
+
+            passwordToggle.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    passwordToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    passwordInput.type = 'password';
+                    passwordToggle.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            });
+
+            // Form submission
+            const loginForm = document.querySelector('.login-form');
+            const notification = document.getElementById('notification');
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Simple validation
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                if (!email || !password) {
+                    showNotification('Please fill in all fields', 'error');
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    showNotification('Please enter a valid email address', 'error');
+                    return;
+                }
+
+                // Show success notification
+                showNotification('Login successful! Redirecting...', 'success');
+
+                // Simulate redirect
+                setTimeout(() => {
+                    window.location.href = '#dashboard'; // Replace with actual URL
+                }, 2000);
+            });
+
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            function showNotification(message, type) {
+                notification.innerHTML =
+                    `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+                notification.style.background = type === 'success' ? '#4CC9F0' : '#F72585';
+
+                notification.classList.add('show');
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Add focus effects to form inputs
+            const formControls = document.querySelectorAll('.form-control');
+
+            formControls.forEach(control => {
+                control.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+
+                control.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+        });
+    </script>
+</body>
 
 </html>

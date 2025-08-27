@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance Req</title>
+    <title>MRS</title>
+    <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -25,7 +26,7 @@
 
 /* Hover effect for better interactivity */
 .table thead.bg-blue th:hover {
-    background-color: #0bd79a; /* Slightly darker on hover */
+    background-color: #11246A; /* Slightly darker on hover */
 }
 button{
     background-color:  #11245A

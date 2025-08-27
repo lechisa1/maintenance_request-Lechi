@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mb-3">
-                    <input type="text" class="form-control w-25 shadow-sm rounded-pill" id="searchInput"
+                    <input type="text" class="form-control w-25 shadow-sm rounded-3" id="searchInput"
                         placeholder="🔍 Search..." onkeyup="filterTable()">
                 </div>
 

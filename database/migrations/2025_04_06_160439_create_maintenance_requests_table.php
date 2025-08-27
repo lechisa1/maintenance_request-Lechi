@@ -14,9 +14,9 @@ return new class extends Migration
     Schema::create('maintenance_requests', function (Blueprint $table) {
     $table->id();
     $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // The employer who made the request
-    $table->string('title');
+    
     $table->text('description');
-    $table->string('location');
+   
     $table->enum('priority', ['low', 'medium', 'high', 'emergency'])->default('medium');
     $table->enum('status', ['pending', 'assigned', 'in_progress', 'completed', 'rejected','not_fixed'])->default('pending');
     $table->timestamp('requested_at')->useCurrent();

@@ -59,6 +59,18 @@ return [
             'throw' => false,
             'report' => false,
         ],
+        //  New OBS disk
+    'obs' => [
+        'driver' => 's3',
+        'key' => env('OBS_ACCESS_KEY_ID'),
+        'secret' => env('OBS_SECRET_ACCESS_KEY'),
+        'region' => env('OBS_DEFAULT_REGION', 'af-south-1'),
+        'bucket' => env('OBS_BUCKET'),
+        'endpoint' => env('OBS_ENDPOINT'), // e.g. https://obs.af-south-1.myhuaweicloud.com
+        'url' => env('OBS_URL'), // optional, for Storage::url()
+        'use_path_style_endpoint' => true, // OBS usually needs this
+        'throw' => true,
+    ],
 
     ],
 
