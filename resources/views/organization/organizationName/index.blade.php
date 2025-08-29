@@ -105,7 +105,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete <strong id="deleteOrgName"></strong>?
+                        Are you sure you want to delete <strong id="deleteOrgName"></strong>? This action cannot be undone
                     </div>
                     <div class="modal-footer d-flex justify-content-end">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

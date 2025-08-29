@@ -169,7 +169,7 @@
                                                     {{ $request->maintenanceRequest->requested_at->format('M d, Y h:i A') }}
                                                 </div>
                                                 <div class="col-12 border-bottom py-1"><strong>Requester
-                                                        Department:</strong>
+                                                        {{ $labels['department'] }}:</strong>
                                                     {{ $request->maintenanceRequest->user->department->name }}</div>
                                                 <div class="col-12 border-bottom py-1"><strong>Assigned At:</strong>
                                                     {{ $request->maintenanceRequest->latestAssignment->assigned_at->format('M d, Y h:i A') }}

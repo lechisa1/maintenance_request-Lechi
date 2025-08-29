@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Termwind\Components\Raw;
 use App\Models\MaintenanceRequest;
+use App\Helpers\OrganizationHelper;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\MaintenanceRequestSearch;
 use App\Notifications\MaintenanceRequestRejected;
 use App\Notifications\TechnicianAssignedNotification;
-use App\Traits\MaintenanceRequestSearch;
-use Termwind\Components\Raw;
 
 class DirectorController extends Controller
 {
@@ -38,7 +39,7 @@ class DirectorController extends Controller
             ->groupBy('status')
             ->pluck('count', 'status')
             ->toArray();
-
+$labels = OrganizationHelper::labels();
         return view('director.dashboard', compact(
             'maintenances',
             'total',
@@ -48,18 +49,20 @@ class DirectorController extends Controller
             'completed',
             'pending',
             'inProgress',
-            'statusCounts'
+            'statusCounts',
+            'labels'
         ));
     }
 
 
     public function maintenenceRequestPending(Request $request)
     {
+    $labels = OrganizationHelper::labels();
         $pendingRequest = MaintenanceRequest::with(['user', 'categories', 'item'])->whereIn('status', ['pending', 'not_fixed'])->latest()->paginate(10);
                 if ($request->has('search') && !empty($request->search)) {
             $query = $this->applyMaintenanceRequestSearch($query, $request->search);
         }
-        return view('maintenance_requests.pending_maintenance', compact('pendingRequest'));
+        return view('maintenance_requests.pending_maintenance', compact('pendingRequest','labels'));
     }
 
     public function showAssignForm($id)
@@ -174,6 +177,7 @@ class DirectorController extends Controller
     }
     public function show($id)
     {
+    $labels = OrganizationHelper::labels();
         $maintenanceRequest = MaintenanceRequest::with([
             'user',
             'assignments.technician',
@@ -190,7 +194,7 @@ class DirectorController extends Controller
         ])->findOrFail($id);
 
 
-        return view('maintenance_requests.show', compact('maintenanceRequest'));
+        return view('maintenance_requests.show', compact('maintenanceRequest','labels'));
     }
 
     public function rejectRequest(Request $request, MaintenanceRequest $maintenanceRequest)
@@ -211,6 +215,7 @@ class DirectorController extends Controller
 
     public function index()
     {
+    $labels = OrganizationHelper::labels();
         $director = auth()->user();
         $departmentId = $director->department_id;
 
@@ -251,7 +256,7 @@ class DirectorController extends Controller
             ],
         ];
 
-        return view('requests.index', compact('chartData'));
+        return view('requests.index', compact('chartData','labels'));
     }
     public function getCompletedRequests()
     {
@@ -269,14 +274,14 @@ class DirectorController extends Controller
 
             ->latest()->paginate(10);
 
-
-        return view('director.status.completed', compact('completedRequests'));
+$labels = OrganizationHelper::labels();
+        return view('director.status.completed', compact('completedRequests','labels'));
     }
 public function getPendingRequests(Request $request)
 {
     $director = auth()->user();
     $check = auth()->user()->roles->first()->name;
-    
+    $labels = OrganizationHelper::labels();
     if (!$check) {
         abort(403, 'Unauthorized access');
     }
@@ -296,12 +301,13 @@ public function getPendingRequests(Request $request)
     // Get paginated results
     $pendingRequest = $query->latest()->paginate(10);
 
-    return view('director.status.pending', compact('pendingRequest'));
+    return view('director.status.pending', compact('pendingRequest','labels'));
 }
     public function getRejectedRequests(Request $request)
     {
 
         $director = auth()->user();
+        $labels = OrganizationHelper::labels();
         $check = auth()->user()->roles->first()->name;
         if (!$check) {
             abort(403, 'Unauthorized access');
@@ -319,11 +325,11 @@ public function getPendingRequests(Request $request)
              $pendingRequest=$query->latest()->paginate(10);
 
 
-        return view('director.status.rejected', compact('pendingRequest'));
+        return view('director.status.rejected', compact('pendingRequest','labels'));
     }
     public function getInProgressRequests(Request $request)
     {
-
+$labels = OrganizationHelper::labels();
         $director = auth()->user();
         $check = auth()->user()->roles->first()->name;
         if (!$check) {
@@ -340,11 +346,11 @@ public function getPendingRequests(Request $request)
            $InProgressRequests= $query ->latest()->paginate(10);
 
 
-        return view('director.status.in_progress', compact('InProgressRequests'));
+        return view('director.status.in_progress', compact('InProgressRequests','labels'));
     }
     public function getAssignedRequests(Request $request)
     {
-
+$labels = OrganizationHelper::labels();
         $director = auth()->user();
         $check = auth()->user()->roles->first()->name;
         if (!$check) {
@@ -361,6 +367,6 @@ public function getPendingRequests(Request $request)
     $AssignedRequests= $query->latest()->paginate(10);
 
 
-        return view('director.status.assigned', compact('AssignedRequests'));
+        return view('director.status.assigned', compact('AssignedRequests','labels'));
     }
 }

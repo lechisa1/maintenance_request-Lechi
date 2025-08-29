@@ -51,9 +51,9 @@
                     {{-- Department --}}
 {{-- Sector --}}
 <div class="col-md-4">
-    <label for="sector_id" class="form-label fw-semibold">Sector</label>
+    <label for="sector_id" class="form-label fw-semibold">{{ $labels['sector'] }}</label>
     <select name="sector_id" id="sector_id" class="form-select @error('sector_id') is-invalid @enderror">
-        <option value="" disabled>Select Sector</option>
+        <option value="" disabled>Select {{ $labels['sector'] }}</option>
         @foreach ($sectors as $sector)
             <option value="{{ $sector->id }}"
                 {{ old('sector_id', $user->sector_id) == $sector->id ? 'selected' : '' }}>
@@ -68,9 +68,9 @@
 
 {{-- Division --}}
 <div class="col-md-4">
-    <label for="division_id" class="form-label fw-semibold">Division</label>
+    <label for="division_id" class="form-label fw-semibold">{{ $labels['division'] }}</label>
     <select name="division_id" id="division_id" class="form-select @error('division_id') is-invalid @enderror">
-        <option value="" disabled>Select Division</option>
+        <option value="" disabled>Select {{ $labels['division'] }}</option>
         @foreach ($divisions as $division)
             @if ($division->sector_id == old('sector_id', $user->sector_id))
                 <option value="{{ $division->id }}"
@@ -87,9 +87,9 @@
 
 {{-- Department --}}
 <div class="col-md-4">
-    <label for="department_id" class="form-label fw-semibold">Department</label>
+    <label for="department_id" class="form-label fw-semibold">{{ $labels['department'] }}</label>
     <select name="department_id" id="department_id" class="form-select @error('department_id') is-invalid @enderror">
-        <option value="" disabled>Select Department</option>
+        <option value="" disabled>Select {{ $labels['department'] }}</option>
         @foreach ($departments as $department)
             @if ($department->division_id == old('division_id', $user->division_id))
                 <option value="{{ $department->id }}"

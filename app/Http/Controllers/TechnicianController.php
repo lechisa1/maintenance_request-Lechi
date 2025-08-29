@@ -9,10 +9,11 @@ use App\Models\Assignment;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\MaintenanceRequest;
+use App\Helpers\OrganizationHelper;
+use App\Notifications\NotFixedNotification;
 use App\Notifications\WorkCompletedNotification;
 use App\Notifications\WorkInProgressNotification;
 use App\Notifications\MaintenanceNotFixedNotification;
-use App\Notifications\NotFixedNotification;
 
 class TechnicianController extends Controller
 {
@@ -21,7 +22,7 @@ class TechnicianController extends Controller
     {
         $technicianId = auth()->id();
 
-
+$labels = OrganizationHelper::labels();
         $requests = MaintenanceRequest::whereHas('assignments', function ($query) use ($technicianId) {
             $query->where('technician_id', $technicianId);
         });
@@ -57,16 +58,18 @@ class TechnicianController extends Controller
             'completedThisWeek',
             'weeklyData',
             'statusBreakdown',
-            'avgResolutionTime'
+            'avgResolutionTime','labels'
         ));
     }
     public function workProgressIndex()
     {
-        return view('technician.tecknician_work_form');
+    $labels = OrganizationHelper::labels();
+        return view('technician.tecknician_work_form',compact('labels'));
     }
 
 public function show(MaintenanceRequest $request)
 {
+$labels = OrganizationHelper::labels();
     $isDirector = User::where('id', auth()->id())
         ->whereHas('roles', function ($q) {
             $q->where('name', 'technician');
@@ -110,11 +113,13 @@ public function show(MaintenanceRequest $request)
     return view('technician.requests.show', [
         'request' => $request,
         'technicians' => $technicians,
-        'isDirector' => $isDirector
+        'isDirector' => $isDirector,
+        'labels'=>$labels
     ]);
 }
     public function assignedRequests()
     {
+    $labels = OrganizationHelper::labels();
         $requests = MaintenanceRequest::with(['user', 'assignments', 'item'])
             ->whereHas('assignments', function ($query) {
                 $query->where('technician_id', auth()->id());
@@ -124,13 +129,14 @@ public function show(MaintenanceRequest $request)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('technician.requests.index', compact('requests'));
+        return view('technician.requests.index', compact('requests','labels'));
     }
     public function technicianWorkProgress(MaintenanceRequest $request)
     {
-      
+      $labels = OrganizationHelper::labels();
         return view('technician.tecknician_work_form', [
-            'request' => $request->load(['assignments'])
+            'request' => $request->load(['assignments']),
+            'labels'=>$labels
         ]);
     }
 
@@ -215,7 +221,7 @@ public function show(MaintenanceRequest $request)
     }
     public function completedTask()
     {
-
+$labels = OrganizationHelper::labels();
         $completed = Assignment::with([
             'maintenanceRequest.categories',
             'maintenanceRequest.user',
@@ -225,13 +231,15 @@ public function show(MaintenanceRequest $request)
             ->whereHas('maintenanceRequest', fn($q) => $q->where('status', 'completed'))
             ->latest()->paginate(10);
         return view('technician.tasks.completed', [
-            'requests' => $completed
+            'requests' => $completed,
+            'labels'=>$labels
         ]);
     }
 
 
     public function inProgressTask()
     {
+    $labels = OrganizationHelper::labels();
         $inProgress = Assignment::with([
             'maintenanceRequest.categories',
             'maintenanceRequest.user',
@@ -242,7 +250,8 @@ public function show(MaintenanceRequest $request)
             ->latest()->paginate(10);
 
         return view('technician.tasks.inProgress', [
-            'requests' => $inProgress
+            'requests' => $inProgress,
+            'labels'=>$labels
         ]);
     }
 }

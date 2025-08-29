@@ -3,16 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>MRS</title>
     <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}">
-    <!-- Bootstrap 5 CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+  
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Custom CSS -->
+   
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 <style>
     .table thead.bg-blue th {
@@ -22,7 +22,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    padding: 12px 8px; /* Slightly larger padding */
+    padding: 12px 8px; 
 }
 .btn-primary {
     background-color: #11245A !important;
@@ -32,9 +32,9 @@
    
     color: #11245A !important;
 }
-/* Hover effect for better interactivity */
+
 .table thead.bg-blue th:hover {
-    background-color: #11246A; /* Slightly darker on hover */
+    background-color: #11246A; 
 }
 #password-requirements input[type="checkbox"] {
   accent-color: lightgray; /* default color */
@@ -64,12 +64,12 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    
 
     @include('technician.dashboard.footer')
-    <!-- Bootstrap Bundle with Popper -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Chart.js -->
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 

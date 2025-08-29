@@ -157,7 +157,7 @@
                             @if ($request->status === 'assigned')
                                 <div class="text-center mt-4">
                                     <a href="{{ route('tecknician_work_form', $request->id) }}"
-                                        class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">
+                                        class="btn btn-primary rounded-3 px-2 py-2 shadow-sm">
                                         <i class="fas fa-plus-circle me-2"></i> Add Progress Update
                                     </a>
                                 </div>
@@ -298,7 +298,7 @@
                             <!-- Assigned -->
                             @if ($request->latestAssignment)
                                 <div class="timeline-item mb-4">
-                                    <div class="timeline-badge bg-info"></div>
+                                    <div class="timeline-badge bg-primary"></div>
                                     <div class="timeline-content">
                                         <div class="d-flex justify-content-between">
                                             <h6 class="mb-1 fw-semibold">Assigned to Technician</h6>
@@ -363,7 +363,7 @@
                                 <div class="col-12">
                                     <div class="d-flex align-items-start">
                                         <div class="bg-light rounded-3 p-3 me-3">
-                                            <i class="fas fa-user-cog text-info fs-4"></i>
+                                            <i class="fas fa-user-cog text-primary fs-4"></i>
                                         </div>
                                         <div>
                                             <h6 class="text-muted mb-1">Assigned Technician</h6>
@@ -376,7 +376,7 @@
                                 <div class="col-12">
                                     <div class="d-flex align-items-start">
                                         <div class="bg-light rounded-3 p-3 me-3">
-                                            <i class="fas fa-user-tie text-warning fs-4"></i>
+                                            <i class="fas fa-user-tie text-primary fs-4"></i>
                                         </div>
                                         <div>
                                             <h6 class="text-muted mb-1">Assigned By</h6>

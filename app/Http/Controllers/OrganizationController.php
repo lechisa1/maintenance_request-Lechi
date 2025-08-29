@@ -194,7 +194,8 @@ public function editSector(Sector $sector)
 
 {
        $organizations = Organization::all();
-    return view('organization.edit-sector', compact('sector','organizations'));
+       $labels = OrganizationHelper::labels();
+    return view('organization.edit-sector', compact('sector','organizations','labels'));
 }
 
 // Update sector
@@ -223,7 +224,8 @@ public function destroySector(Sector $sector)
 
 public function editDivision(Division $division)
 {
-    return view('organization.edit-division', compact('division'));
+    $labels = OrganizationHelper::labels();
+    return view('organization.edit-division', compact('division','labels'));
 }
 
 public function updateDivision(Request $request, Division $division)
@@ -246,7 +248,8 @@ public function destroyDivision(Division $division)
 
 public function editDepartment(Department $department)
 {
-    return view('organization.edit-department', compact('department'));
+    $labels = OrganizationHelper::labels();
+    return view('organization.edit-department', compact('department','labels'));
 }
 
 public function updateDepartment(Request $request, Department $department)
@@ -266,7 +269,8 @@ public function destroyDepartment(Department $department)
 }
   public function addDivisionToSector(Sector $sector)
     {
-        return view('organization.add_div_to_sector.add-division', compact('sector'));
+        $labels = OrganizationHelper::labels();
+        return view('organization.add_div_to_sector.add-division', compact('sector','labels'));
     }
     
     public function storeDivisionToSector(Request $request, Sector $sector)
@@ -332,7 +336,8 @@ public function addDepartmentToDivision(Division $division)
             ->with('success', 'Department added successfully to ' . $sector->name);
     }
     public function createOrganization(){
-        return view('organization.organizationName.create_organization');
+        $labels = OrganizationHelper::labels();
+        return view('organization.organizationName.create_organization',compact('labels'));
 
     }
     public function storeOrganization(Request $request)
@@ -350,12 +355,14 @@ public function addDepartmentToDivision(Division $division)
 public function organizationIndex()
 {
     $organizations = Organization::latest()->get();
-    return view('organization.organizationName.index', compact('organizations'));
+    $labels = OrganizationHelper::labels();
+    return view('organization.organizationName.index', compact('organizations','labels'));
 }
     public function editOrganization($id)
     {
+        $labels = OrganizationHelper::labels();
     $organization = Organization::findOrFail($id);
-    return response()->json($organization); // for AJAX
+    return response()->json($organization,$labels); // for AJAX
     }
         public function updateOrganization(Request $request, $id)
     {

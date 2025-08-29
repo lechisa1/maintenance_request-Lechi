@@ -150,16 +150,16 @@
                                             </div>
                                             <div class="col-12 border-bottom py-1"><strong>Requested At:</strong>
                                                 {{ $request->requested_at->format('M d, Y h:i A') }}</div>
-                                            <div class="col-12 border-bottom py-1"><strong>Department:</strong>
+                                            <div class="col-12 border-bottom py-1"><strong>{{ $labels['department'] }}:</strong>
                                                 @if (request('search') && str_contains(strtolower($request->user->department->name), strtolower(request('search'))))
                                                     {!! preg_replace('/(' . preg_quote(request('search'), '/') . ')/i', '<mark>$0</mark>', $request->user->department->name) !!}
                                                 @else
                                                     {{ $request->user->department->name }}
                                                 @endif
                                             </div>
-                                            <div class="col-12 border-bottom py-1"><strong>Sector:</strong>
+                                            <div class="col-12 border-bottom py-1"><strong>{{ $labels['sector'] }}:</strong>
                                                 {{ $request->user->sector->name ?? 'None' }}</div>
-                                            <div class="col-12 border-bottom py-1"><strong>Division:</strong>
+                                            <div class="col-12 border-bottom py-1"><strong>{{ $labels['division'] }}:</strong>
                                                 {{ $request->user->division->name ?? 'None' }}</div>
                                            
                                             <div class="col-12 border-bottom py-1"><strong>Assigned At:</strong>

@@ -179,7 +179,7 @@
                                         <i class="fas fa-building text-primary"></i>
                                     </div>
                                     <div>
-                                        <h6 class="text-muted mb-1">Division</h6>
+                                        <h6 class="text-muted mb-1">{{ $labels['department'] }}</h6>
                                         <p class="mb-0">{{ $maintenanceRequest->user->department->name }}</p>
                                     </div>
                                 </div>
@@ -264,15 +264,15 @@
                     <div class="card shadow-lg border-0 rounded-4 mb-4">
                         <div
                             class="card-header bg-gradient-success bg-opacity-10 border-bottom d-flex align-items-center py-3">
-                            <i class="fas fa-tasks text-success me-2 fs-4"></i>
-                            <h5 class="mb-0 text-success">Assignment Details</h5>
+                            <i class="fas fa-tasks text-primary me-2 fs-4"></i>
+                            <h5 class="mb-0 text-primary">Assignment Details</h5>
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-12">
                                     <div class="d-flex align-items-start">
                                         <div class="bg-light rounded-3 p-3 me-3">
-                                            <i class="fas fa-user-cog text-success fs-4"></i>
+                                            <i class="fas fa-user-cog text-primary fs-4"></i>
                                         </div>
                                         <div>
                                             <h6 class="text-muted mb-1">Assigned Technician(s)</h6>
@@ -286,7 +286,7 @@
                                 <div class="col-12">
                                     <div class="d-flex align-items-start">
                                         <div class="bg-light rounded-3 p-3 me-3">
-                                            <i class="fas fa-user-tie text-success fs-4"></i>
+                                            <i class="fas fa-user-tie text-primary fs-4"></i>
                                         </div>
                                         <div>
                                             <h6 class="text-muted mb-1">Assigned By</h6>
@@ -298,7 +298,7 @@
                                 <div class="col-12">
                                     <div class="d-flex align-items-start">
                                         <div class="bg-light rounded-3 p-3 me-3">
-                                            <i class="fas fa-calendar-check text-success fs-4"></i>
+                                            <i class="fas fa-calendar-check text-primary fs-4"></i>
                                         </div>
                                         <div>
                                             <h6 class="text-muted mb-1">Assignment Date</h6>
@@ -330,7 +330,7 @@
                                 @if ($assignment->director_notes)
                                     <div class="col-12">
                                         <div class="card bg-light border-0 rounded-3 p-3">
-                                            <h6 class="text-success mb-2">Director Remark</h6>
+                                            <h6 class="text-primary mb-2">Director Remark</h6>
                                             <p class="mb-0">{{ $assignment->director_notes }}</p>
                                         </div>
                                     </div>
@@ -340,7 +340,7 @@
                                     <div class="col-12">
                                         <div class="d-flex align-items-start">
                                             <div class="bg-light rounded-3 p-3 me-3">
-                                                <i class="fas fa-check-circle text-success fs-4"></i>
+                                                <i class="fas fa-check-circle text-primary fs-4"></i>
                                             </div>
                                             <div>
                                                 <h6 class="text-muted mb-1">Completed At</h6>

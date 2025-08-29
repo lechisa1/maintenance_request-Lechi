@@ -49,9 +49,9 @@
                         {{-- Department --}}
                         {{-- Sector --}}
                         <div class="col-md-4">
-                            <label for="sector_id" class="form-label">Sector<span class="text-danger">*</span></label>
+                            <label for="sector_id" class="form-label">{{ $labels['sector'] }}<span class="text-danger">*</span></label>
                             <select name="sector_id" id="sector_id" class="form-select">
-                                <option value="" disabled selected>Select Sector</option>
+                                <option value="" disabled selected>Select {{ $labels['sector'] }}</option>
                                 @foreach ($sectors as $sector)
                                     <option value="{{ $sector->id }}">{{ $sector->name }}</option>
                                 @endforeach
@@ -60,17 +60,17 @@
 
                         {{-- Division --}}
                         <div class="col-md-4">
-                            <label for="division_id" class="form-label">Division</label>
+                            <label for="division_id" class="form-label">{{ $labels['division'] }}</label>
                             <select name="division_id" id="division_id" class="form-select">
-                                <option value="" disabled selected>Select Division</option>
+                                <option value="" disabled selected>Select {{ $labels['division'] }}</option>
                             </select>
                         </div>
 
                         {{-- Department --}}
                         <div class="col-md-4">
-                            <label for="department_id" class="form-label">Department</label>
+                            <label for="department_id" class="form-label">{{ $labels['department'] }}</label>
                             <select name="department_id" id="department_id" class="form-select">
-                                <option value="" disabled selected>Select Department</option>
+                                <option value="" disabled selected>Select {{ $labels['department'] }}</option>
                             </select>
                         </div>
 

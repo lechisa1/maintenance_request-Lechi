@@ -6,7 +6,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
                 <div class="card shadow-lg border-0 rounded-4 ">
-                    <div class="card-header bg-primary text-white rounded-top-4">
+                    <div class="card-header bg-success text-white rounded-top-4">
                         <h4 class="mb-0"><i class="bi bi-shield-lock me-2"></i> Change Password</h4>
                     </div>
                     <div class="card-body p-4">
@@ -21,8 +21,8 @@
                                 <label class="form-label">Current Password</label>
                                 <div class="input-group">
                                     <input type="password" name="current_password" id="current_password"
-                                        class="form-control rounded-start-pill @error('current_password') is-invalid @enderror">
-                                    <span class="input-group-text bg-white border rounded-end-pill"
+                                        class="form-control rounded-start-2 @error('current_password') is-invalid @enderror">
+                                    <span class="input-group-text bg-white border border-green-600 rounded-end-2"
                                         onclick="toggleVisibility('current_password')">
                                         <i class="bi bi-eye-slash" id="eye_current_password"></i>
                                     </span>
@@ -36,9 +36,9 @@
                                 <label class="form-label">New Password</label>
                                 <div class="input-group">
                                     <input type="password" name="new_password" id="new_password"
-                                        class="form-control rounded-start-pill @error('new_password') is-invalid @enderror"
+                                        class="form-control rounded-start-2 @error('new_password') is-invalid @enderror"
                                         onkeyup="checkPasswordStrength(this.value)">
-                                    <span class="input-group-text bg-white border rounded-end-pill"
+                                    <span class="input-group-text bg-white border border-green-600 rounded-end-2"
                                         onclick="toggleVisibility('new_password')">
                                         <i class="bi bi-eye-slash" id="eye_new_password"></i>
                                     </span>
@@ -63,15 +63,15 @@
                                 <label class="form-label">Confirm New Password</label>
                                 <div class="input-group">
                                     <input type="password" name="new_password_confirmation" id="confirm_password"
-                                        class="form-control rounded-start-pill">
-                                    <span class="input-group-text bg-white border rounded-end-pill"
+                                        class="form-control rounded-start-2">
+                                    <span class="input-group-text bg-white border border-green-600 rounded-end-2"
                                         onclick="toggleVisibility('confirm_password')">
                                         <i class="bi bi-eye-slash" id="eye_confirm_password"></i>
                                     </span>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary rounded-pill px-4">
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 justify-end">
                                 <i class="bi bi-save me-1"></i> Update Password
                             </button>
                         </form>

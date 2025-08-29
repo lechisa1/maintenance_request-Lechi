@@ -6,7 +6,7 @@
             <div class="col-md-8">
                 <div class="card shadow-lg border-0">
                     <div class="card-header bg-success text-white text-center">
-                        <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Sector</h5>
+                        <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit {{ $labels['sector'] }}</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('organization.sector.update', $sector) }}" method="POST"

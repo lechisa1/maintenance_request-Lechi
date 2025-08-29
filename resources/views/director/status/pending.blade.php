@@ -163,7 +163,7 @@
                                                 @endif
                                             </div>
                                             <div class="col-12 border-bottom py-1"><strong>Requested At:</strong> {{ $request->requested_at->format('M d, Y h:i A') }}</div>
-                                            <div class="col-12 border-bottom py-1"><strong>Requester Department:</strong> {{ $request->user->department->name }}</div>
+                                            <div class="col-12 border-bottom py-1"><strong>Requester {{ $labels['department'] }}:</strong> {{ $request->user->department->name }}</div>
                                         </div>
                                     </td>
                                 </tr>

@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Department;
-use App\Models\Division;
 use App\Models\Sector;
+use App\Models\Division;
+use App\Models\Department;
 use App\Models\JobPosition;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\OrganizationHelper;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+
 class UserController extends Controller
 {
     //
@@ -39,13 +41,15 @@ if ($request->has('search') && !empty($request->search)) {
     $departmentUserCount = Department::withCount('users')->get();
     $totalUsers = User::count();
     $roleUserCount = \Spatie\Permission\Models\Role::withCount(['users'])->get();
+     $labels = OrganizationHelper::labels();
 
     return view('usermanagement.index', compact(
         'users', 
         'departments', 
         'departmentUserCount', 
         'roleUserCount', 
-        'totalUsers'
+        'totalUsers',
+        'labels'
     ));
 }
     public function getDivisions($id)
@@ -69,7 +73,8 @@ if ($request->has('search') && !empty($request->search)) {
         $job_positions = JobPosition::all();
         $users = User::where('id', '!=', $loggedInUser->id)->get(); // Exclude the logged-in user
         $departments = Department::all();
-        return view('usermanagement.create', compact('departments', 'roles', 'users', 'job_positions', 'sectors'));
+        $labels = OrganizationHelper::labels();
+        return view('usermanagement.create', compact('departments', 'roles', 'users', 'job_positions', 'sectors','labels'));
     }
 
     public function store(Request $request)
@@ -120,9 +125,10 @@ if ($request->has('search') && !empty($request->search)) {
         $roles = Role::all();
         $sectors = Sector::all();
         $job_positions = JobPosition::all();
+        $labels = OrganizationHelper::labels();
         $users = User::where('id', '!=', $user->id)->get();
         // $users = User::where('id', '!=', $loggedInUser->id)->get(); 
-        return view('usermanagement.edit', compact('user', 'departments', 'roles', 'users', 'job_positions','sectors','divisions'));
+        return view('usermanagement.edit', compact('user', 'departments', 'roles', 'users', 'job_positions','sectors','divisions','labels'));
     }
     public function update(Request $request, User $user)
     {

@@ -65,16 +65,16 @@
                                                 </div>
 
                                                 <div class="dropdown-item-text mb-2">
-                                                    <div class="small text-muted">Department</div>
+                                                    <div class="small text-muted">{{ $labels['department'] }}</div>
                                                     <div class="fw-semibold">{{ $user->department->name ?? 'N/A' }}</div>
                                                 </div>
                                                 <div class="dropdown-item-text mb-2">
-                                                    <div class="small text-muted">Sector</div>
+                                                    <div class="small text-muted">{{ $labels['sector'] }}</div>
                                                     <div class="fw-semibold capitalize-text">
                                                         {{ $user->sector->name ?? 'None' }}</div>
                                                 </div>
                                                 <div class="dropdown-item-text mb-2">
-                                                    <div class="small text-muted">Division</div>
+                                                    <div class="small text-muted">{{ $labels['division'] }}</div>
                                                     <div class="fw-semibold capitalize-text">
                                                         {{ $user->division->name ?? 'None' }}</div>
                                                 </div>
@@ -84,7 +84,7 @@
                                                 </div>
                                                 {{-- here user organization --}}
                                                   <div class="dropdown-item-text">
-                                                    <div class="small text-muted">Institute</div>
+                                                    <div class="small text-muted">{{ $labels['organization'] }}</div>
                                                     <div class="fw-semibold">{{ $user->sector->organization->name ?? 'N/A' }}</div>
                                                 </div>
                                             </div>

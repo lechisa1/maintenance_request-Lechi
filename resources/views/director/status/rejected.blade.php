@@ -25,7 +25,7 @@
                         <th>#</th>
                         <th>Ticket Id</th>
                         <th>Requested By</th>
-                        <th>Department</th>
+                        <th>{{ $labels['department'] }}</th>
                         <th>Priority</th>
                         <th>Status</th>
                         <th>View</th>
